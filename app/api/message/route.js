@@ -7,7 +7,6 @@ export const GET = withApiAuthRequired(async function shows(req) {
     const { accessToken } = await getAccessToken(req, res, {
       scopes: []
     });
-    const apiPort = process.env.API_PORT || 3010;
     const response = await fetch(`https://grade-backend.use3w.com/api/private`, {
       headers: {
         Authorization: `Bearer ${accessToken}`

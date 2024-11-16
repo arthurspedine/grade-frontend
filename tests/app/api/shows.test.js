@@ -2,7 +2,7 @@
  * @jest-environment node
  */
 
-import { GET as shows } from '../../../app/api/backend/route';
+import { GET as shows } from '../../../app/api/message/route';
 
 const req = jest.fn();
 const res = (() => {
@@ -12,7 +12,7 @@ const res = (() => {
   return mock;
 })();
 
-describe('/api/backend', () => {
+describe('/api/message', () => {
   afterAll(() => {
     delete global.fetch;
   });

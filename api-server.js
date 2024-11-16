@@ -38,7 +38,7 @@ const checkJwt = jwt({
   algorithms: ['RS256']
 });
 
-app.get('/api/shows', checkJwt, (req, res) => {
+app.get('/api/message', checkJwt, (req, res) => {
   res.send({
     msg: 'Your access token was successfully validated!'
   });
