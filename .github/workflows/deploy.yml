@@ -1,0 +1,77 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'  # Use a compatible Node.js version
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install performance-now
+        run: npm install performance-now
+
+      - name: Polyfill performance API
+        run: echo "global.performance = require('performance-now');" > polyfill.js
+
+      - name: Build the application
+        run: node -r ./polyfill.js ./node_modules/.bin/next build
+
+      - name: Clean work folder by remote commands via SSH
+        uses: appleboy/ssh-action@v0.1.1
+        with:
+          host: ${{ secrets.REMOTE_IP }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            rm -rf ~/app/front/grade-frontend/*
+            rm -rf ~/app/front/grade-frontend/.*
+
+      - name: Copy files via SSH
+        uses: appleboy/scp-action@v0.1.1
+        with:
+          host: ${{ secrets.REMOTE_IP }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          source: "/home/runner/work/grade-frontend/grade-frontend/*"
+          target: "/home/actions/app/front/grade-frontend/"
+
+      - name: Copy hidden files via SSH
+        uses: appleboy/scp-action@v0.1.1
+        with:
+          host: ${{ secrets.REMOTE_IP }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          source: "/home/runner/work/grade-frontend/grade-frontend/.*"
+          target: "/home/actions/app/front/grade-frontend/"
+
+      - name: Depoy via remote commands via SSH
+        uses: appleboy/ssh-action@v0.1.1
+        with:
+          host: ${{ secrets.REMOTE_IP }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            mv ~/app/front/grade-frontend/github/workspace/*  ~/app/front/grade-frontend/
+            mv ~/app/front/grade-frontend/github/workspace/.*  ~/app/front/grade-frontend/
+            rm -rf ~/app/front/grade-frontend/github/
+            cd ~/app/front/grade-frontend
+            cp ../.env.local .env.local
+            pm2 restart grade
