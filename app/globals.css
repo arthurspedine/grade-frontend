@@ -36,4 +36,5 @@ p code {
 
 .result-block-container .result-block {
   opacity: 1;
+  max-width: 400px;
 }
