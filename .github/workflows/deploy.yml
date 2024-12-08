@@ -21,14 +21,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Install performance-now
-        run: npm install performance-now
-
-      - name: Polyfill performance API
-        run: echo "global.performance = require('performance-now');" > polyfill.js
-
       - name: Build the application
-        run: node -r ./polyfill.js ./node_modules/.bin/next build
+        run: node ./node_modules/.bin/next build
 
       - name: Clean work folder by remote commands via SSH
         uses: appleboy/ssh-action@v0.1.1
