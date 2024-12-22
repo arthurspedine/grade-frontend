@@ -8,11 +8,12 @@ import { Skeleton } from '../ui/skeleton'
 
 export function Header() {
   const { user, isLoading } = useUser()
-  const isLoadinga = true
 
   return (
     <header className='flex items-center justify-between pr-14 max-w-[1440px] mx-auto w-full'>
-      <Image src={grade_logo} alt='Grade logo' className='w-36' />
+      <Link href={'/'}>
+        <Image src={grade_logo} alt='Grade logo' className='w-36' />
+      </Link>
       {isLoading && (
         <div className='flex items-center gap-4'>
           <ul className='flex space-x-4'>
@@ -26,7 +27,11 @@ export function Header() {
       {user && !isLoading && (
         <div className='flex items-center gap-4'>
           <ul className='flex space-x-4'>
-            <li>Turmas</li>
+            <li>
+              <Link href={'/classes'} className='hover:underline'>
+                Turmas
+              </Link>
+            </li>
             <li>Avaliações</li>
           </ul>
 
