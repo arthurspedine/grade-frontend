@@ -7,24 +7,24 @@ import { Input } from '@/components/ui/input'
 import { DialogTrigger } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
-import { handleAddNewClass } from '../handle-add-new-class'
+import { handleEditClass } from '../_http/handle-edit-class'
 
-export function AddClassForm() {
+export function EditClassForm({ id, name }: { id: string; name: string }) {
   const { register, handleSubmit, formState } = useForm<GenericClassFormType>({
     resolver: zodResolver(genericClassFormSchema),
   })
 
-  function handleSubmitNewClass(data: GenericClassFormType) {
+  function handleSubmitEditClass(data: GenericClassFormType) {
     data.name = data.name.toLocaleUpperCase()
 
-    const handleRequest = handleAddNewClass(data)
+    const handleRequest = handleEditClass(data, id)
     toast.promise(handleRequest, {
-      loading: 'Adicionando turma...',
+      loading: 'Editando turma...',
       success: () => {
         setTimeout(() => {
           window.location.reload()
         }, 1000)
-        return 'Turma adicionada com sucesso.'
+        return 'Turma editada com sucesso.'
       },
       error: 'Algo deu errado. Por favor, tente novamente mais tarde.',
       position: 'top-center',
@@ -35,7 +35,7 @@ export function AddClassForm() {
   return (
     <form
       className='flex flex-col space-y-2'
-      onSubmit={handleSubmit(handleSubmitNewClass)}
+      onSubmit={handleSubmit(handleSubmitEditClass)}
     >
       <div className='flex flex-col space-y-1'>
         <label className='text-base font-medium' htmlFor='name'>
@@ -45,8 +45,14 @@ export function AddClassForm() {
           id='name'
           type='text'
           placeholder='Digite aqui'
+          defaultValue={name}
           {...register('name')}
         />
+        {formState.errors.name && (
+          <p className='text-destructive text-sm'>
+            {formState.errors.name.message}
+          </p>
+        )}
       </div>
       <div className='w-full flex space-x-4'>
         <DialogTrigger asChild>
@@ -55,7 +61,7 @@ export function AddClassForm() {
           </Button>
         </DialogTrigger>
         <Button variant={'green'} className='grow'>
-          Adicionar
+          Editar
         </Button>
       </div>
     </form>
