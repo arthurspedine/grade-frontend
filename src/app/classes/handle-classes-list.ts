@@ -6,7 +6,7 @@ export default async function handleClassesList() {
   const accessToken = await getAccessToken()
 
   try {
-    const res = await fetch('http://localhost:3010/classes', {
+    const res = await fetch(`${process.env.BACKEND_URL}/classes`, {
       method: 'GET',
       credentials: 'include',
       cache: 'no-cache',

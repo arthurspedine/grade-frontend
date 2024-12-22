@@ -29,6 +29,7 @@ export default async function ClassesPage() {
       ) : (
         <div>
           {classesList.length > 0 ? (
+            // WHEN THE USER HAS AT LEAST ONE CLASS
             <div>
               {classesList.map(c => (
                 <div key={c.id}>
@@ -39,6 +40,7 @@ export default async function ClassesPage() {
               ))}
             </div>
           ) : (
+            // WHEN THE USER DOESN'T HAVE ANY CLASSES
             <p className='text-muted-foreground text-center pt-16'>
               Parece que você ainda não adicionou turmas na sua conta.{' '}
               <Dialog>
