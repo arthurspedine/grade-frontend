@@ -1,8 +1,8 @@
 'use server'
-import type { AddClassType } from '@/schemas'
+import type { GenericClassFormType } from '@/schemas'
 import { getAccessToken } from '@auth0/nextjs-auth0'
 
-export async function handleAddNewClass(data: AddClassType) {
+export async function handleAddNewClass(data: GenericClassFormType) {
   const accessToken = await getAccessToken()
 
   try {
