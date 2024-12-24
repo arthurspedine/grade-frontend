@@ -4,6 +4,7 @@ import { UserProvider } from '@auth0/nextjs-auth0/client'
 import { Poppins } from 'next/font/google'
 import { Header } from '@/components/header'
 import type { Metadata } from 'next'
+import { Toaster } from 'sonner'
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -28,6 +29,7 @@ export default function RootLayout({
           <UserProvider>
             <Header />
             {children}
+            <Toaster theme='light' richColors />
           </UserProvider>
           {/* FOOTER */}
         </main>
