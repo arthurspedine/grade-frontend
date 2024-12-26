@@ -1,9 +1,9 @@
 'use server'
 
-import { getAccessToken } from '@auth0/nextjs-auth0'
+import { getToken } from '@/app/helper/get-token'
 
 export default async function handleClassesList() {
-  const accessToken = await getAccessToken()
+  const accessToken: string = await getToken()
 
   try {
     const res = await fetch(`${process.env.BACKEND_URL}/classes`, {
@@ -11,7 +11,7 @@ export default async function handleClassesList() {
       credentials: 'include',
       cache: 'no-cache',
       headers: {
-        Authorization: `Bearer ${accessToken.accessToken}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     })
 
@@ -20,11 +20,8 @@ export default async function handleClassesList() {
     }
 
     const response = await res.json()
-
     return response
   } catch (e) {
-    console.error('Error fetching classes:', e)
-
     return { error: 'Unable to retrieve classes at the moment.' }
   }
 }
