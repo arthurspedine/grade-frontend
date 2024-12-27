@@ -1,5 +1,3 @@
-import handleClassesList from './_http/handle-classes-list'
-
 import {
   Table,
   TableBody,
@@ -13,6 +11,7 @@ import { AddClassDialog } from './_components/add-class-dialog'
 import type { ClassType } from '@/types'
 import { DisableClassDialog } from './_components/disable-class-dialog'
 import { EditClassDialog } from './_components/edit-class-dialog'
+import { handleClassesList } from './_http/handle-http-class'
 
 export default async function ClassesPage() {
   const classesList: ClassType[] = await handleClassesList()

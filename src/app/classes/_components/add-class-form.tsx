@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input'
 import { DialogTrigger } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
-import { handleAddNewClass } from '../handle-add-new-class'
+import { addClass } from '../_http/handle-http-class'
 
 export function AddClassForm() {
   const { register, handleSubmit, formState } = useForm<GenericClassFormType>({
@@ -16,8 +16,7 @@ export function AddClassForm() {
 
   function handleSubmitNewClass(data: GenericClassFormType) {
     data.name = data.name.toLocaleUpperCase()
-
-    const handleRequest = handleAddNewClass(data)
+    const handleRequest = addClass(data)
     toast.promise(handleRequest, {
       loading: 'Adicionando turma...',
       success: () => {
@@ -47,6 +46,13 @@ export function AddClassForm() {
           placeholder='Digite aqui'
           {...register('name')}
         />
+        {formState.errors.name ? (
+          <p className='text-destructive text-sm pt-0.5'>
+            {formState.errors.name.message}
+          </p>
+        ) : (
+          ''
+        )}
       </div>
       <div className='w-full flex space-x-4'>
         <DialogTrigger asChild>
