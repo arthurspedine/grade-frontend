@@ -1,11 +1,11 @@
 'use client'
 
-import { genericClassFormSchema, type GenericClassFormType } from '@/schemas'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Input } from '@/components/ui/input'
-import { DialogTrigger } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
+import { DialogTrigger } from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { type GenericClassFormType, genericClassFormSchema } from '@/schemas'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { addClass } from '../_http/handle-http-class'
 

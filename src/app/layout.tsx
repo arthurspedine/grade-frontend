@@ -1,9 +1,9 @@
 import './globals.css'
-import type React from 'react'
-import { UserProvider } from '@auth0/nextjs-auth0/client'
-import { Poppins } from 'next/font/google'
 import { Header } from '@/components/header'
+import { UserProvider } from '@auth0/nextjs-auth0/client'
 import type { Metadata } from 'next'
+import { Poppins } from 'next/font/google'
+import type React from 'react'
 import { Toaster } from 'sonner'
 
 const poppins = Poppins({
