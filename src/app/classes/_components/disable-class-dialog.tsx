@@ -1,14 +1,14 @@
 'use client'
-import type { ClassType } from '@/types'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
+  DialogTrigger,
 } from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
+import type { ClassType } from '@/types'
 import { toast } from 'sonner'
 import { disableClass } from '../_http/handle-http-class'
 

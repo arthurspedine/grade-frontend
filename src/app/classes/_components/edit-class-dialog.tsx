@@ -1,14 +1,14 @@
-import type { ClassType } from '@/types'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
+  DialogTrigger,
 } from '@/components/ui/dialog'
+import type { ClassType } from '@/types'
 import { EditClassForm } from './edit-class-form'
-import { Button } from '@/components/ui/button'
 
 export function EditClassDialog({ id, name, active }: ClassType) {
   return (
