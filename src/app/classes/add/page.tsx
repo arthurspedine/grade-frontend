@@ -1,4 +1,3 @@
-import {} from '@/components/ui/select'
 import getCategoryOptions from '../_http/handle-education-options'
 import { AddClassForm } from './_components/add-class-form'
 
