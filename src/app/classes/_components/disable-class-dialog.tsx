@@ -1,20 +1,20 @@
 'use client'
-import type { ClassType } from '@/types'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
+  DialogTrigger,
 } from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
-import { handleDisableClass } from '../_http/handle-disable-class'
+import type { ClassType } from '@/types'
 import { toast } from 'sonner'
+import { disableClass } from '../_http/handle-http-class'
 
 export function DisableClassDialog({ id, name, active }: ClassType) {
   function handleButtonClick() {
-    const handleRequest = handleDisableClass(id)
+    const handleRequest = disableClass(id)
     toast.promise(handleRequest, {
       loading: 'Desativando turma...',
       success: () => {

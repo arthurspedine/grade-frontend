@@ -1,13 +1,13 @@
 'use client'
 
-import { genericClassFormSchema, type GenericClassFormType } from '@/schemas'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Input } from '@/components/ui/input'
-import { DialogTrigger } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
+import { DialogTrigger } from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { type GenericClassFormType, genericClassFormSchema } from '@/schemas'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import { handleEditClass } from '../_http/handle-edit-class'
+import { updateClass } from '../_http/handle-http-class'
 
 export function EditClassForm({ id, name }: { id: string; name: string }) {
   const { register, handleSubmit, formState } = useForm<GenericClassFormType>({
@@ -17,7 +17,7 @@ export function EditClassForm({ id, name }: { id: string; name: string }) {
   function handleSubmitEditClass(data: GenericClassFormType) {
     data.name = data.name.toLocaleUpperCase()
 
-    const handleRequest = handleEditClass(data, id)
+    const handleRequest = updateClass(id, data)
     toast.promise(handleRequest, {
       loading: 'Editando turma...',
       success: () => {
