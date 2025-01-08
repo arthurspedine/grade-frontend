@@ -1,6 +1,7 @@
 export type ClassType = {
   id: string
   name: string
+  category: string
   active: boolean
 }
 

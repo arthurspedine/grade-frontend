@@ -14,7 +14,9 @@ export function EditClassDialog({ id, name, active }: ClassType) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className='w-full'>Editar</Button>
+        <Button className='w-full' disabled={!active}>
+          Editar
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

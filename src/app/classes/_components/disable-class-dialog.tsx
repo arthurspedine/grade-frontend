@@ -32,7 +32,7 @@ export function DisableClassDialog({ id, name, active }: ClassType) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant={'destructive'} className='w-full'>
+        <Button variant={'destructive'} className='w-full' disabled={!active}>
           Desativar
         </Button>
       </DialogTrigger>
