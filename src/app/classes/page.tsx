@@ -13,6 +13,8 @@ import { DisableClassDialog } from './_components/disable-class-dialog'
 import { EditClassDialog } from './_components/edit-class-dialog'
 import { handleClassesList } from './_http/handle-http-class'
 
+export const dynamic = 'force-dynamic'
+
 export default async function ClassesPage() {
   const classesList: ClassType[] = await handleClassesList()
 
