@@ -1,4 +1,5 @@
 'use server'
+import { Title } from '@/components/title'
 import { isValid } from '@/helper/validate-uuid'
 import { redirect } from 'next/navigation'
 
@@ -11,7 +12,7 @@ export default async function ClassInfoPage({
   }
   return (
     <section className='max-w-[1440px] mx-auto w-full px-8 flex-grow'>
-      <h1>Class {id}</h1>
+      <Title>Class {id}</Title>
     </section>
   )
 }

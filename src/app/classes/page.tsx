@@ -14,6 +14,7 @@ import { handleClassesList } from './_http/handle-http-class'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import getCategoryOptions from './_http/handle-education-options'
+import { Title } from '@/components/title'
 
 export const dynamic = 'force-dynamic'
 
@@ -25,7 +26,7 @@ export default async function ClassesPage() {
   return (
     <section className='max-w-[1440px] mx-auto w-full px-8 flex-grow'>
       <div className='flex justify-between'>
-        <h1 className='font-bold text-2xl'>Turmas</h1>
+        <Title>Turmas</Title>
         {classesList.length > 0 && (
           <Link href={'/classes/add'} className='hover:underline text'>
             Adicionar turma

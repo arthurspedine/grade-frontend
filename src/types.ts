@@ -15,3 +15,8 @@ export type StudentType = {
   rm: string
   name: string
 }
+
+export type ClassInfoType = {
+  details: ClassType
+  students: StudentType[]
+}
