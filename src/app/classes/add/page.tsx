@@ -1,5 +1,5 @@
 import { Title } from '@/components/title'
-import getCategoryOptions from '../_http/handle-education-options'
+import getCategoryOptions from '../_http/handle-category-options'
 import { AddClassForm } from './_components/add-class-form'
 
 export default async function AddClassPage() {

@@ -12,15 +12,7 @@ import {
   SelectContent,
   SelectItem,
 } from '@/components/ui/select'
-import {
-  Table,
-  TableHeader,
-  TableRow,
-  TableHead,
-  TableBody,
-  TableCell,
-  TableCaption,
-} from '@/components/ui/table'
+import {} from '@/components/ui/table'
 import { FileQuestion } from 'lucide-react'
 import {
   Tooltip,
@@ -33,6 +25,7 @@ import { useCSVValidation } from '@/hooks/useStudentUpload'
 import { toast } from 'sonner'
 import { addClass } from '../../_http/handle-http-class'
 import { redirect } from 'next/navigation'
+import { StudentsTable } from '../../_components/students-table'
 
 type AddClassFormProps = {
   categoryList: { key: string; label: string }[]
@@ -204,25 +197,7 @@ export function AddClassForm({ categoryList }: AddClassFormProps) {
           </div>
           <Button variant={'green'}>Adicionar Turma</Button>
         </div>
-        <Table>
-          <TableCaption>Lista de alunos</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead className='w-10'>N°</TableHead>
-              <TableHead className='w-20'>RM</TableHead>
-              <TableHead>Nome</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {students.map((c, i) => (
-              <TableRow key={c.rm}>
-                <TableCell>{i + 1}</TableCell>
-                <TableCell className='font-medium'>{c.rm}</TableCell>
-                <TableCell>{c.name}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+        <StudentsTable students={students} />
       </div>
     </form>
   )

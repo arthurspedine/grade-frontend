@@ -12,7 +12,7 @@ import { DisableClassDialog } from './_components/disable-class-dialog'
 import { handleClassesList } from './_http/handle-http-class'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import getCategoryOptions from './_http/handle-education-options'
+import getCategoryOptions from './_http/handle-category-options'
 import { Title } from '@/components/title'
 
 export const dynamic = 'force-dynamic'

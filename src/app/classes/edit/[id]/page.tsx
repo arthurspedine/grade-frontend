@@ -1,7 +1,7 @@
 'use server'
 import { isValid } from '@/helper/validate-uuid'
 import { redirect } from 'next/navigation'
-import getCategoryOptions from '../../_http/handle-education-options'
+import getCategoryOptions from '../../_http/handle-category-options'
 import { authenticatedFetch } from '@/helper/authenticated-fetch'
 import type { ClassInfoType } from '@/types'
 import { Title } from '@/components/title'
