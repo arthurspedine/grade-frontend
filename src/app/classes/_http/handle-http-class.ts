@@ -7,10 +7,10 @@ export async function handleClassesList() {
   return authenticatedFetch<ClassType[]>('/classes')
 }
 
-export async function addClass(classData: GenericClassFormType) {
+export async function addClass(formData: FormData) {
   return authenticatedFetch<void>('/classes', {
     method: 'POST',
-    body: classData,
+    body: formData,
   })
 }
 

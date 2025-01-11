@@ -4,11 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
-import {
-  genericClassFormSchema,
-  type GenericClassFormType,
-  type StudentType,
-} from '@/schemas'
+import { genericClassFormSchema, type GenericClassFormType } from '@/schemas'
 import {
   Select,
   SelectTrigger,
@@ -32,11 +28,11 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import { addClass } from '../../_http/handle-http-class'
-import { toast } from 'sonner'
-import { redirect } from 'next/navigation'
-import useStudentUpload from '@/hooks/useStudentUpload'
 import { useRef } from 'react'
+import { useCSVValidation } from '@/hooks/useStudentUpload'
+import { toast } from 'sonner'
+import { addClass } from '../../_http/handle-http-class'
+import { redirect } from 'next/navigation'
 
 type AddClassFormProps = {
   categoryList: { key: string; label: string }[]
@@ -48,28 +44,49 @@ export function AddClassForm({ categoryList }: AddClassFormProps) {
     handleSubmit,
     control,
     formState: { errors },
-    setValue,
-    setError,
-    watch,
   } = useForm<GenericClassFormType>({
     resolver: zodResolver(genericClassFormSchema),
-    defaultValues: {
-      students: [],
-    },
   })
 
   const fileInputRef = useRef<HTMLInputElement | null>(null)
+  const { students, fileError, validateCSV, resetValidation } =
+    useCSVValidation()
 
-  const handleFileUpload = useStudentUpload(setValue, setError, () => {
-    if (fileInputRef.current) {
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0]
+
+    if (!file) {
+      resetValidation()
+      return
+    }
+
+    const isValid = await validateCSV(file)
+    if (!isValid && fileInputRef.current) {
       fileInputRef.current.value = ''
     }
-  })
+  }
 
-  function handleSubmitNewClass(data: GenericClassFormType) {
-    data.name = data.name.toLocaleUpperCase()
+  async function handleSubmitNewClass(data: GenericClassFormType) {
+    if (students.length === 0) {
+      toast.error('Selecione um arquivo válido da lista de alunos.', {
+        position: 'top-center',
+        style: { filter: 'none', zIndex: 10 },
+      })
+      return
+    }
 
-    const handleRequest = addClass(data)
+    const formData = new FormData()
+    formData.append('name', data.name)
+    formData.append('category', data.category)
+    if (data.csvFile instanceof FileList) {
+      formData.append('file', data.csvFile[0])
+    } else {
+      console.error('O arquivo não foi selecionado corretamente')
+    }
+
+    const handleRequest = addClass(formData)
     toast.promise(handleRequest, {
       loading: 'Adicionando turma...',
       success: () => {
@@ -83,8 +100,6 @@ export function AddClassForm({ categoryList }: AddClassFormProps) {
       style: { filter: 'none', zIndex: 10 },
     })
   }
-
-  const students: StudentType[] = watch('students', [])
 
   return (
     <form
@@ -103,15 +118,18 @@ export function AddClassForm({ categoryList }: AddClassFormProps) {
                 id='name'
                 type='text'
                 placeholder='Digite aqui'
+                autoCapitalize='on'
                 {...register('name')}
+                onChange={e => {
+                  const { value } = e.target
+                  e.target.value = value.toUpperCase()
+                }}
               />
             </div>
-            {errors.name ? (
+            {errors.name && (
               <p className='text-destructive text-sm pt-0.5'>
                 {errors.name.message}
               </p>
-            ) : (
-              ''
             )}
           </div>
           <div className='w-1/2 flex flex-col items-end space-y-1'>
@@ -143,12 +161,10 @@ export function AddClassForm({ categoryList }: AddClassFormProps) {
                 )}
               />
             </div>
-            {errors.category ? (
+            {errors.category && (
               <p className='text-destructive text-sm pt-0.5'>
                 {errors.category.message}
               </p>
-            ) : (
-              ''
             )}
           </div>
         </div>
@@ -159,9 +175,14 @@ export function AddClassForm({ categoryList }: AddClassFormProps) {
               <Input
                 type='file'
                 accept='.csv'
-                onChange={handleFileUpload}
-                className='w-60'
-                ref={fileInputRef}
+                className={`w-60 ${students.length > 0 ? 'border-green-600' : ''}`}
+                {...register('csvFile', {
+                  onChange: handleFileChange,
+                })}
+                ref={e => {
+                  register('csvFile').ref(e)
+                  fileInputRef.current = e
+                }}
               />
               <TooltipProvider>
                 <Tooltip>
@@ -175,13 +196,13 @@ export function AddClassForm({ categoryList }: AddClassFormProps) {
                 </Tooltip>
               </TooltipProvider>
             </div>
-            {errors.students ? (
+            {(errors.csvFile || fileError) && (
               <p className='text-destructive text-sm pb-2'>
-                {errors.students.message}
+                {errors.csvFile?.message || fileError}
               </p>
-            ) : null}
+            )}
           </div>
-          <Button variant={'green'}>Adicionar</Button>
+          <Button variant={'green'}>Adicionar Turma</Button>
         </div>
         <Table>
           <TableCaption>Lista de alunos</TableCaption>

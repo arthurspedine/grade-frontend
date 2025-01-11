@@ -19,7 +19,8 @@ export const dynamic = 'force-dynamic'
 
 export default async function ClassesPage() {
   const classesList: ClassType[] = await handleClassesList()
-  const categoryList: Record<string, string> = await getCategoryOptions()
+  const categoryList: { key: string; label: string }[] =
+    await getCategoryOptions()
 
   return (
     <section className='max-w-[1440px] mx-auto w-full px-8 flex-grow'>
@@ -51,7 +52,10 @@ export default async function ClassesPage() {
                   <TableCell className='font-medium'>{c.name}</TableCell>
                   <TableCell>{c.active ? 'ATIVA' : 'INATIVA'}</TableCell>
                   <TableCell>
-                    {categoryList[c.category] ?? c.category}
+                    {
+                      categoryList.find(category => category.key === c.category)
+                        ?.label
+                    }
                   </TableCell>
                   <TableCell className='w-full flex justify-end'>
                     <div className='max-w-72 flex-grow flex space-x-2'>

@@ -1,4 +1,4 @@
-import type { StudentType } from '@/schemas'
+import type { StudentType } from '@/types'
 
 interface ValidationError {
   message: string

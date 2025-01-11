@@ -10,3 +10,8 @@ export type FetchOptions = {
   // biome-ignore lint/suspicious/noExplicitAny: receive any context
   body?: any
 }
+
+export type StudentType = {
+  rm: string
+  name: string
+}
