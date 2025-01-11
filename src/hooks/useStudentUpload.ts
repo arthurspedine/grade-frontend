@@ -56,6 +56,7 @@ export const useCSVValidation = () => {
 
   return {
     students,
+    setStudents,
     fileError,
     validateCSV,
     resetValidation: () => {

@@ -1,6 +1,5 @@
 'use server'
 import { authenticatedFetch } from '@/helper/authenticated-fetch'
-import type { GenericClassFormType } from '@/schemas'
 import type { ClassType } from '@/types'
 
 export async function handleClassesList() {
@@ -14,14 +13,10 @@ export async function addClass(formData: FormData) {
   })
 }
 
-export async function updateClass(id: string, classData: GenericClassFormType) {
-  const bodyData = {
-    id: id,
-    name: classData.name,
-  }
+export async function updateClass(classData: FormData) {
   return authenticatedFetch<void>('/classes', {
     method: 'PUT',
-    body: bodyData,
+    body: classData,
   })
 }
 

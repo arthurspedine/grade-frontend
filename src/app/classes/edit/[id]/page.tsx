@@ -1,13 +1,15 @@
+'use server'
 import { isValid } from '@/helper/validate-uuid'
 import { redirect } from 'next/navigation'
 import getCategoryOptions from '../../_http/handle-education-options'
 import { authenticatedFetch } from '@/helper/authenticated-fetch'
 import type { ClassInfoType } from '@/types'
 import { Title } from '@/components/title'
+import { EditClassForm } from './_components/edit-class-form'
 
 export default async function AddClassPage({
   params,
-}: { params: { id: string } }) {
+}: { params: Promise<{ id: string }> }) {
   const { id } = await params
   if (!isValid(id)) {
     redirect('/classes')
@@ -21,7 +23,11 @@ export default async function AddClassPage({
       <Title>
         Editar turma <span className='italic'>{classInfo.details.name}</span>
       </Title>
-      {/* <AddClassForm categoryList={mappedCategoryList} /> */}
+      <EditClassForm
+        categoryList={categoryList}
+        {...classInfo.details}
+        classStudents={classInfo.students}
+      />
     </section>
   )
 }

@@ -9,7 +9,6 @@ import {
 } from '@/components/ui/table'
 import type { ClassType } from '@/types'
 import { DisableClassDialog } from './_components/disable-class-dialog'
-import { EditClassDialog } from './_components/edit-class-dialog'
 import { handleClassesList } from './_http/handle-http-class'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
@@ -63,7 +62,9 @@ export default async function ClassesPage() {
                       <Button variant={'outline'} asChild>
                         <Link href={`/classes/${c.id}`}>Ver turma</Link>
                       </Button>
-                      <EditClassDialog {...c} />
+                      <Button variant={'outline'} asChild>
+                        <Link href={`/classes/edit/${c.id}`}>Editar</Link>
+                      </Button>
                       <DisableClassDialog {...c} />
                     </div>
                   </TableCell>

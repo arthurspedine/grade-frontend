@@ -43,6 +43,12 @@ export class CSVValidator {
       }
     }
 
+    if (!/^\d+$/.test(rm)) {
+      return {
+        message: `Linha ${lineNumber}: O RM deve conter apenas números.`,
+      }
+    }
+
     return { rm, name }
   }
 }
