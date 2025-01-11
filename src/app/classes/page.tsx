@@ -8,19 +8,29 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import type { ClassType } from '@/types'
-import { AddClassDialog } from './_components/add-class-dialog'
 import { DisableClassDialog } from './_components/disable-class-dialog'
-import { EditClassDialog } from './_components/edit-class-dialog'
 import { handleClassesList } from './_http/handle-http-class'
+import { Button } from '@/components/ui/button'
+import Link from 'next/link'
+import getCategoryOptions from './_http/handle-category-options'
+import { Title } from '@/components/title'
+
+export const dynamic = 'force-dynamic'
 
 export default async function ClassesPage() {
   const classesList: ClassType[] = await handleClassesList()
+  const categoryList: { key: string; label: string }[] =
+    await getCategoryOptions()
 
   return (
     <section className='max-w-[1440px] mx-auto w-full px-8 flex-grow'>
       <div className='flex justify-between'>
-        <h1 className='font-bold text-2xl'>Turmas</h1>
-        {classesList.length > 0 && <AddClassDialog text='Adicionar turma' />}
+        <Title>Turmas</Title>
+        {classesList.length > 0 && (
+          <Link href={'/classes/add'} className='hover:underline text'>
+            Adicionar turma
+          </Link>
+        )}
       </div>
 
       <div>
@@ -32,6 +42,7 @@ export default async function ClassesPage() {
               <TableRow>
                 <TableHead className='w-[100px]'>Turma</TableHead>
                 <TableHead>Status</TableHead>
+                <TableHead>Categoria</TableHead>
                 <TableHead className='text-right'>Opções</TableHead>
               </TableRow>
             </TableHeader>
@@ -40,9 +51,20 @@ export default async function ClassesPage() {
                 <TableRow key={c.id}>
                   <TableCell className='font-medium'>{c.name}</TableCell>
                   <TableCell>{c.active ? 'ATIVA' : 'INATIVA'}</TableCell>
+                  <TableCell>
+                    {
+                      categoryList.find(category => category.key === c.category)
+                        ?.label
+                    }
+                  </TableCell>
                   <TableCell className='w-full flex justify-end'>
-                    <div className='max-w-52 flex-grow flex space-x-2'>
-                      <EditClassDialog {...c} />
+                    <div className='max-w-72 flex-grow flex space-x-2'>
+                      <Button variant={'outline'} asChild>
+                        <Link href={`/classes/${c.id}`}>Ver turma</Link>
+                      </Button>
+                      <Button variant={'outline'} asChild>
+                        <Link href={`/classes/edit/${c.id}`}>Editar</Link>
+                      </Button>
                       <DisableClassDialog {...c} />
                     </div>
                   </TableCell>
@@ -54,7 +76,12 @@ export default async function ClassesPage() {
           // WHEN THE USER DOESN'T HAVE ANY CLASSES
           <p className='text-muted-foreground text-center pt-16'>
             Parece que você ainda não adicionou turmas na sua conta.{' '}
-            <AddClassDialog />
+            <Link
+              href={'/classes/add'}
+              className='text-primary hover:underline'
+            >
+              Adicionar uma nova turma
+            </Link>
           </p>
         )}
       </div>

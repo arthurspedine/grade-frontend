@@ -3,11 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"next dev\" \"node api-server\"",
-    "dev:api": "nodemon api-server",
+    "dev": "next dev",
     "build": "next build",
-    "start": "concurrently \"next start\" \"node api-server\"",
-    "start:api": "node api-server"
+    "start": "next start"
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^3.5.0",
@@ -15,21 +13,14 @@
     "@hookform/resolvers": "^3.9.0",
     "@radix-ui/react-dialog": "^1.1.4",
     "@radix-ui/react-label": "^2.1.1",
+    "@radix-ui/react-select": "^2.1.4",
     "@radix-ui/react-slot": "^1.1.0",
+    "@radix-ui/react-tooltip": "^1.1.6",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "concurrently": "^8.2.0",
-    "cors": "^2.8.5",
     "dotenv": "^16.0.3",
-    "express": "^4.18.2",
-    "express-jwt": "^8.0",
-    "helmet": "^7.1.0",
-    "jwks-rsa": "^3.1.0",
     "lucide-react": "^0.464.0",
-    "morgan": "^1.10.0",
     "next": "^15.0.3",
-    "nodemon": "^3.0.0",
-    "postcss": "^8.4.49",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.54.2",
@@ -42,8 +33,7 @@
     "@types/node": "^22.10.1",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
-    "identity-obj-proxy": "^3.0.0",
-    "start-server-and-test": "^2.0.0",
+    "postcss": "^8.4.49",
     "tailwindcss": "^3.4.16",
     "typescript": "^5.7.2"
   }
