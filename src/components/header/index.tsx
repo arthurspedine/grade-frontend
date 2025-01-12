@@ -59,7 +59,11 @@ export function Header() {
                 Turmas
               </Link>
             </li>
-            <li>Avaliações</li>
+            <li>
+              <Link href={'/assessments'} className='hover:underline'>
+                Avaliações
+              </Link>
+            </li>
           </ul>
 
           <div className='relative inline-block text-left'>

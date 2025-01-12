@@ -68,3 +68,20 @@
     @apply bg-background text-foreground;
   }
 }
+
+.scrollbar-custom::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-track {
+  background: hsl(var(--border));
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground));
+  min-height: 48px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.8);
+}
