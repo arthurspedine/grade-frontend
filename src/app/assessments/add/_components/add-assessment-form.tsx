@@ -10,15 +10,18 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { type AddAssessmentFormType, addAssessmentFormSchema } from '@/schemas'
+import {
+  type AddAssessmentFormType,
+  type AssessmentCategoryType,
+  addAssessmentFormSchema,
+} from '@/schemas'
 import type { ClassType } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-
-const MIN_SCORE = 1
-const MAX_SCORE = 100
+import { MAX_SCORE, MIN_SCORE } from '../../_helper/score'
+import { EditCategoryItem } from './edit-category-item'
 
 export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
   const {
@@ -41,10 +44,7 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
   const [selectedClass, setSelectedClass] = useState<ClassType | null>(null)
 
   const [assessmentCategoriesList, setAssessmentCategoriesList] = useState<
-    {
-      name: string
-      score: number
-    }[]
+    AssessmentCategoryType[]
   >([])
 
   const [categoryName, setCategoryName] = useState<string>('')
@@ -148,16 +148,7 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
     const newScore = getCurrentScore() + categoryScore
     if (!isNewScoreValid(newScore)) return
 
-    const categoryDuplicatedName = assessmentCategoriesList.find(
-      c => c.name.toLocaleLowerCase() === categoryName.toLocaleLowerCase()
-    )
-    if (categoryDuplicatedName) {
-      toast.error('Nome da categoria duplicado. Por favor, altere o valor.', {
-        position: 'top-center',
-        style: { filter: 'none', zIndex: 10 },
-      })
-      return
-    }
+    if (isDuplicated(categoryName)) return
 
     const newCategory = { name: categoryName, score: categoryScore }
     setAssessmentCategoriesList(prev => [...prev, newCategory])
@@ -172,7 +163,7 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
 
   function getCurrentScore(): number {
     return assessmentCategoriesList.reduce(
-      (sum, category) => sum + category.score,
+      (sum, category) => sum + Number(category.score),
       0
     )
   }
@@ -194,6 +185,44 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
       return false
     }
     return true
+  }
+
+  function isDuplicated(newCategoryName: string) {
+    const categoryDuplicatedName = assessmentCategoriesList.find(
+      c => c.name.toLocaleLowerCase() === newCategoryName.toLocaleLowerCase()
+    )
+    if (categoryDuplicatedName) {
+      toast.error('Nome da categoria duplicado. Por favor, altere o valor.', {
+        position: 'top-center',
+        style: { filter: 'none', zIndex: 10 },
+      })
+      return true
+    }
+    return false
+  }
+
+  function handleEditCategoryItem(
+    category: AssessmentCategoryType,
+    oldCategory: AssessmentCategoryType,
+    index: number
+  ): boolean {
+    const newScore = getCurrentScore() + category.score - oldCategory.score
+
+    if (!isNewScoreValid(newScore)) return true
+
+    if (
+      category.name.toLocaleLowerCase() !== oldCategory.name.toLocaleLowerCase()
+    ) {
+      if (isDuplicated(category.name)) return true
+    }
+
+    setAssessmentCategoriesList(prev => {
+      const newList = [...prev]
+      newList[index].name = category.name
+      newList[index].score = category.score
+      return newList
+    })
+    return false
   }
 
   async function handleAddAssessmentSubmit(data: AddAssessmentFormType) {
@@ -348,7 +377,7 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
           </div>
           <div className='flex items-center justify-between'>
             <p className='font-medium'>
-              Nota da lista: {getCurrentScore()}/{MAX_SCORE}
+              Nota da lista: {getCurrentScore().toString()}/{MAX_SCORE}
             </p>
 
             {errors.categories && (
@@ -372,23 +401,32 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {assessmentCategoriesList.map((category, i) => (
-              <TableRow key={category.name}>
-                <TableCell className='font-medium'>{category.score}</TableCell>
-                <TableCell>{category.name}</TableCell>
-                <TableCell className='w-full flex justify-end'>
-                  <Button
-                    type='button'
-                    variant={'destructive'}
-                    onClick={() => {
-                      handleRemoveCategoryFromList(i)
-                    }}
-                  >
-                    Remover
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
+            {assessmentCategoriesList.map(
+              (category: AssessmentCategoryType, i) => (
+                <TableRow key={category.name}>
+                  <TableCell className='font-medium'>
+                    {category.score}
+                  </TableCell>
+                  <TableCell>{category.name}</TableCell>
+                  <TableCell className='w-full flex justify-end space-x-4'>
+                    <EditCategoryItem
+                      handleEdit={handleEditCategoryItem}
+                      category={category}
+                      index={i}
+                    />
+                    <Button
+                      type='button'
+                      variant={'destructive'}
+                      onClick={() => {
+                        handleRemoveCategoryFromList(i)
+                      }}
+                    >
+                      Remover
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              )
+            )}
           </TableBody>
         </Table>
       </div>
