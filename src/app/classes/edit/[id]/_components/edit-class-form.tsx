@@ -1,33 +1,33 @@
 'use client'
 
+import { StudentsTable } from '@/app/classes/_components/students-table'
+import { updateClass } from '@/app/classes/_http/handle-http-class'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { type EditClassFormType, editClassFormSchema } from '@/schemas'
 import {
   Select,
-  SelectTrigger,
-  SelectValue,
   SelectContent,
   SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from '@/components/ui/select'
 import {} from '@/components/ui/table'
-import { FileQuestion } from 'lucide-react'
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Controller, useForm } from 'react-hook-form'
-import type { ClassType, StudentType } from '@/types'
-import { useEffect, useRef } from 'react'
 import { useCSVValidation } from '@/hooks/useStudentUpload'
-import { toast } from 'sonner'
+import { type EditClassFormType, editClassFormSchema } from '@/schemas'
+import type { ClassType, StudentType } from '@/types'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { FileQuestion } from 'lucide-react'
 import Link from 'next/link'
-import { updateClass } from '@/app/classes/_http/handle-http-class'
 import { redirect } from 'next/navigation'
-import { StudentsTable } from '@/app/classes/_components/students-table'
+import { useEffect, useRef } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
 type EditClassFormProps = {
   categoryList: { key: string; label: string }[]

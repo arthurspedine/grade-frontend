@@ -1,3 +1,5 @@
+import { Title } from '@/components/title'
+import { Button } from '@/components/ui/button'
 import {
   Table,
   TableBody,
@@ -8,12 +10,10 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import type { ClassType } from '@/types'
-import { DisableClassDialog } from './_components/disable-class-dialog'
-import { handleClassesList } from './_http/handle-http-class'
-import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import { DisableClassDialog } from './_components/disable-class-dialog'
 import getCategoryOptions from './_http/handle-category-options'
-import { Title } from '@/components/title'
+import { handleClassesList } from './_http/handle-http-class'
 
 export const dynamic = 'force-dynamic'
 

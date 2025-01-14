@@ -3,8 +3,8 @@ import { authenticatedFetch } from '@/helper/authenticated-fetch'
 import { isValid } from '@/helper/validate-uuid'
 import type { ClassInfoType } from '@/types'
 import { redirect } from 'next/navigation'
-import getCategoryOptions from '../_http/handle-category-options'
 import { StudentsTable } from '../_components/students-table'
+import getCategoryOptions from '../_http/handle-category-options'
 
 export default async function ClassInfoPage({
   params,

@@ -2,30 +2,30 @@
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Controller, useForm } from 'react-hook-form'
-import { addClassFormSchema, type AddClassFormType } from '@/schemas'
 import {
   Select,
-  SelectTrigger,
-  SelectValue,
   SelectContent,
   SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from '@/components/ui/select'
 import {} from '@/components/ui/table'
-import { FileQuestion } from 'lucide-react'
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import { useRef } from 'react'
 import { useCSVValidation } from '@/hooks/useStudentUpload'
-import { toast } from 'sonner'
-import { addClass } from '../../_http/handle-http-class'
+import { type AddClassFormType, addClassFormSchema } from '@/schemas'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { FileQuestion } from 'lucide-react'
 import { redirect } from 'next/navigation'
+import { useRef } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { StudentsTable } from '../../_components/students-table'
+import { addClass } from '../../_http/handle-http-class'
 
 type AddClassFormProps = {
   categoryList: { key: string; label: string }[]

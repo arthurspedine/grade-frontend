@@ -1,7 +1,7 @@
-import { Title } from '@/components/title'
-import { AddAssessmentForm } from './_components/add-assessment-form'
 import { handleClassesList } from '@/app/classes/_http/handle-http-class'
+import { Title } from '@/components/title'
 import type { ClassType } from '@/types'
+import { AddAssessmentForm } from './_components/add-assessment-form'
 
 export default async function AddAssessmentPage() {
   const classList: ClassType[] = await handleClassesList()

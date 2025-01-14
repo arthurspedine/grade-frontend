@@ -10,7 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { addAssessmentFormSchema, type AddAssessmentFormType } from '@/schemas'
+import { type AddAssessmentFormType, addAssessmentFormSchema } from '@/schemas'
 import type { ClassType } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'

@@ -9,9 +9,9 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import type { ClassType } from '@/types'
+import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { disableClass } from '../_http/handle-http-class'
-import { useRouter } from 'next/navigation'
 
 export function DisableClassDialog({ id, name, active }: ClassType) {
   const router = useRouter()
