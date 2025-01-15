@@ -20,3 +20,12 @@ export type ClassInfoType = {
   details: ClassType
   students: StudentType[]
 }
+
+export type AssessmentDetailsType = {
+  id: string
+  name: string
+  classes: {
+    id: string
+    name: string
+  }[]
+}

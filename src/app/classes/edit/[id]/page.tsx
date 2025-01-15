@@ -1,10 +1,10 @@
 'use server'
+import { Title } from '@/components/title'
+import { authenticatedFetch } from '@/helper/authenticated-fetch'
 import { isValid } from '@/helper/validate-uuid'
+import type { ClassInfoType } from '@/types'
 import { redirect } from 'next/navigation'
 import getCategoryOptions from '../../_http/handle-category-options'
-import { authenticatedFetch } from '@/helper/authenticated-fetch'
-import type { ClassInfoType } from '@/types'
-import { Title } from '@/components/title'
 import { EditClassForm } from './_components/edit-class-form'
 
 export default async function AddClassPage({
