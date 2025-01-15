@@ -1,7 +1,7 @@
 import {
-  withMiddlewareAuthRequired,
   getSession,
   updateSession,
+  withMiddlewareAuthRequired,
 } from '@auth0/nextjs-auth0/edge'
 import { NextResponse } from 'next/server'
 

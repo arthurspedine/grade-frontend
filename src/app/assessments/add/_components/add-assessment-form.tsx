@@ -17,10 +17,12 @@ import {
 } from '@/schemas'
 import type { ClassType } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { redirect } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { MAX_SCORE, MIN_SCORE } from '../../_helper/score'
+import { addAssessment } from '../../_http/handle-http-assessments'
 import { EditCategoryItem } from './edit-category-item'
 
 export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
@@ -226,7 +228,19 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
   }
 
   async function handleAddAssessmentSubmit(data: AddAssessmentFormType) {
-    console.log(data)
+    const handleRequest = addAssessment(data)
+    toast.promise(handleRequest, {
+      loading: 'Adicionando avaliação...',
+      success: () => {
+        setTimeout(() => {
+          redirect('/assessments')
+        }, 1000)
+        return 'Avaliação adicionada com sucesso.'
+      },
+      error: 'Algo deu errado. Por favor, tente novamente mais tarde.',
+      position: 'top-center',
+      style: { filter: 'none', zIndex: 10 },
+    })
   }
 
   return (
