@@ -25,7 +25,7 @@ export default function RootLayout({
         <link rel='icon' href='/favicon.ico' sizes='any' />
       </head>
       <body className={`${poppins.className} antialiased`}>
-        <main className='flex flex-col h-[calc(100dvh)] w-full'>
+        <main className='flex flex-col h-[calc(100dvh)] w-full scroll-smooth'>
           <UserProvider>
             <Header />
             {children}

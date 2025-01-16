@@ -1,11 +1,11 @@
 'use client'
+import { Button } from '@/components/ui/button'
 import { useUser } from '@auth0/nextjs-auth0/client'
 import Image from 'next/image'
-import grade_logo from '/public/grade_logo.svg'
-import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import { Skeleton } from '../ui/skeleton'
 import { useEffect, useRef, useState } from 'react'
+import grade_logo from '/public/grade_logo.svg'
+import { Skeleton } from '../ui/skeleton'
 
 export function Header() {
   const { user, isLoading } = useUser()
@@ -59,7 +59,11 @@ export function Header() {
                 Turmas
               </Link>
             </li>
-            <li>Avaliações</li>
+            <li>
+              <Link href={'/assessments'} className='hover:underline'>
+                Avaliações
+              </Link>
+            </li>
           </ul>
 
           <div className='relative inline-block text-left'>

@@ -9,17 +9,22 @@ export async function authenticatedFetch<T>(
   try {
     const accessToken = await getToken()
 
-    const headers = {
+    const headers: Record<string, string> = {
       Authorization: `Bearer ${accessToken}`,
-      ...(options.body && { 'Content-Type': 'application/json' }),
+    }
+    if (options.body && !(options.body instanceof FormData)) {
+      headers['Content-Type'] = 'application/json'
     }
 
     const response = await fetch(`${process.env.BACKEND_URL}${endpoint}`, {
       ...options,
       credentials: 'include',
       cache: 'no-cache',
-      headers: headers,
-      ...(options.body && { body: JSON.stringify(options.body) }),
+      headers,
+      body:
+        options.body instanceof FormData
+          ? options.body
+          : JSON.stringify(options.body),
     })
 
     if (!response.ok) {

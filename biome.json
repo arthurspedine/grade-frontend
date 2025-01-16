@@ -28,6 +28,9 @@
 			"security": {
 				"noDangerouslySetInnerHtml": "info"
 			},
+			"complexity": {
+				"noStaticOnlyClass": "off"
+			},
 			"correctness": {
 				"noUnusedImports": "error"
 			}
