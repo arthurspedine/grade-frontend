@@ -3,6 +3,8 @@ import { Title } from '@/components/title'
 import type { ClassType } from '@/types'
 import { AddAssessmentForm } from './_components/add-assessment-form'
 
+export const dynamic = 'force-dynamic'
+
 export default async function AddAssessmentPage() {
   const classList: ClassType[] = await handleClassesList()
 
