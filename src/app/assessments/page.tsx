@@ -8,6 +8,8 @@ import {
 import Link from 'next/link'
 import { handleAssessmentsList } from './_http/handle-http-assessments'
 
+export const dynamic = 'force-dynamic'
+
 export default async function AssessmentsPage() {
   const assessmentsList = await handleAssessmentsList()
   return (
