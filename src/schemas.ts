@@ -38,7 +38,7 @@ export const assessmentCategorySchema = z.object({
 export type AssessmentCategoryType = z.infer<typeof assessmentCategorySchema>
 
 export const addAssessmentFormSchema = z.object({
-  name: z.string().min(1, 'O nome da turma é obrigatório.'),
+  name: z.string().min(1, 'O nome da avaliação é obrigatório.'),
   classes: z
     .array(
       z.object({
