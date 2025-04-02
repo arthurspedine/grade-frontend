@@ -60,3 +60,7 @@ function isTokenExpired(token: string) {
     return true
   }
 }
+
+export const config = {
+  matcher: ['/classes', '/classes/:path*', '/api/auth/:path*'],
+}
