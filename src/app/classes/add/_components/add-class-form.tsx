@@ -96,10 +96,11 @@ export function AddClassForm({ categoryList }: AddClassFormProps) {
         setTimeout(() => {
           if (!returnTo) redirect('/classes')
           redirect(returnTo)
-        }, 1000)
+        }, 500)
         return 'Turma adicionada com sucesso.'
       },
-      error: 'Algo deu errado. Por favor, tente novamente mais tarde.',
+      error:
+        'Algo deu errado. Por favor, verifique se os alunos não estão em outras turmas ou tente novamente mais tarde.',
       position: 'top-center',
       style: { filter: 'none', zIndex: 10 },
     })
