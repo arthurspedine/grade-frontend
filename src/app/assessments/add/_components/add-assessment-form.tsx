@@ -399,7 +399,11 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
                 }
               />
             </div>
-
+            {errors.questions?.[questionIndex]?.categories && (
+              <p className='text-destructive text-sm'>
+                {errors.questions[questionIndex].categories.message}
+              </p>
+            )}
             <Table>
               <TableHeader>
                 <TableRow>
