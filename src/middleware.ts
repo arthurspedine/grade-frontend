@@ -62,5 +62,11 @@ function isTokenExpired(token: string) {
 }
 
 export const config = {
-  matcher: ['/classes', '/classes/:path*', '/api/auth/:path*'],
+  matcher: [
+    '/classes',
+    '/classes/:path*',
+    '/api/auth/:path*',
+    '/assessments',
+    '/assessments/:path*',
+  ],
 }

@@ -10,27 +10,28 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
-import {
-  type AssessmentCategoryType,
-  assessmentCategorySchema,
-} from '@/schemas'
+import { type QuestionCategoryType, questionCategorySchema } from '@/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { DialogDescription } from '@radix-ui/react-dialog'
 import { useForm } from 'react-hook-form'
 import { MAX_SCORE, MIN_SCORE } from '../../_helper/score'
+import { Pen } from 'lucide-react'
+import { validateCategoryForm } from '../shared-validation'
 
 export function EditCategoryItem({
   category,
   handleEdit,
-  index,
+  categoryIndex,
+  questionIndex,
 }: {
-  category: AssessmentCategoryType
+  category: QuestionCategoryType
   handleEdit: (
-    category: AssessmentCategoryType,
-    oldCategory: AssessmentCategoryType,
-    index: number
+    category: QuestionCategoryType,
+    categoryIndex: number,
+    questionIndex: number
   ) => boolean
-  index: number
+  categoryIndex: number
+  questionIndex: number
 }) {
   const {
     register,
@@ -38,48 +39,36 @@ export function EditCategoryItem({
     setError,
     clearErrors,
     formState: { errors },
-  } = useForm<AssessmentCategoryType>({
-    resolver: zodResolver(assessmentCategorySchema),
+  } = useForm<QuestionCategoryType>({
+    resolver: zodResolver(questionCategorySchema),
     defaultValues: {
       name: category.name,
       score: category.score,
     },
   })
 
-  const oldName = category.name
-  const oldScore = Number(category.score)
-
   function handleFormSubmit(e: React.MouseEvent) {
     const name = getValues('name')
-    const score = Number(getValues('score'))
-    let error = false
-    if (!name || name === '' || name.trim() === '') {
-      setError('name', { message: 'O nome da categoria é obrigatório.' })
-      error = true
-    } else {
-      clearErrors('name')
-    }
-    if (score < MIN_SCORE || score > MAX_SCORE) {
-      setError('score', {
-        message: `A nota da categoria deve ser entre ${MIN_SCORE} e ${MAX_SCORE}`,
-      })
-      error = true
-    } else {
-      clearErrors('score')
-    }
-    if (error) {
+    const score = getValues('score')
+
+    const validation = validateCategoryForm(name, score, setError, clearErrors)
+
+    if (!validation.isValid) {
       e.preventDefault()
       return
     }
 
-    if (handleEdit({ name, score }, { name: oldName, score: oldScore }, index))
+    if (handleEdit({ name, score }, categoryIndex, questionIndex))
       e.preventDefault()
   }
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant='outline'>Editar</Button>
+        <Button variant={'secondary'}>
+          <Pen />
+          Editar
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -122,7 +111,7 @@ export function EditCategoryItem({
               max={MAX_SCORE}
               placeholder='Digite aqui'
               className='w-24'
-              {...register('score')}
+              {...register('score', { valueAsNumber: true })}
             />
           </div>
           {errors.score && (

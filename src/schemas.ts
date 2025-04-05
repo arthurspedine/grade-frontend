@@ -27,7 +27,7 @@ export const editClassFormSchema = addClassFormSchema.extend({
 export type AddClassFormType = z.infer<typeof addClassFormSchema>
 export type EditClassFormType = z.infer<typeof editClassFormSchema>
 
-export const assessmentCategorySchema = z.object({
+export const questionCategorySchema = z.object({
   name: z.string().min(1, 'O nome da categoria é obrigatório.'),
   score: z
     .number()
@@ -35,7 +35,14 @@ export const assessmentCategorySchema = z.object({
     .max(MAX_SCORE, `A pontuação não pode exceder ${MAX_SCORE}.`),
 })
 
-export type AssessmentCategoryType = z.infer<typeof assessmentCategorySchema>
+export type QuestionCategoryType = z.infer<typeof questionCategorySchema>
+
+const questionSchema = z.object({
+  questionNumber: z.number(),
+  categories: z
+    .array(questionCategorySchema)
+    .min(1, 'Ao menos uma categoria deve ser adicionada à questão.'),
+})
 
 export const addAssessmentFormSchema = z.object({
   name: z.string().min(1, 'O nome da avaliação é obrigatório.'),
@@ -46,15 +53,22 @@ export const addAssessmentFormSchema = z.object({
       })
     )
     .min(1, 'Ao menos uma turma deve ser selecionada.'),
-  categories: z
-    .array(assessmentCategorySchema)
-    .min(1, 'Ao menos uma categoria deve ser adicionada.')
+  questions: z
+    .array(questionSchema)
+    .min(1, 'Ao menos uma questão deve ser adicionada.')
     .refine(
-      categories =>
-        categories.reduce((sum, category) => sum + category.score, 0) ===
-        MAX_SCORE,
+      questions =>
+        questions.reduce(
+          (sum, question) =>
+            sum +
+            question.categories.reduce(
+              (catSum, category) => catSum + category.score,
+              0
+            ),
+          0
+        ) === MAX_SCORE,
       {
-        message: `A soma das pontuações deve ser igual a ${MAX_SCORE}.`,
+        message: `A soma das notas deve ser igual a ${MAX_SCORE}.`,
       }
     ),
 })

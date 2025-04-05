@@ -7,6 +7,7 @@ import {
 } from '@/components/ui/accordion'
 import Link from 'next/link'
 import { handleAssessmentsList } from './_http/handle-http-assessments'
+import { Button } from '@/components/ui/button'
 
 export const dynamic = 'force-dynamic'
 
@@ -28,10 +29,18 @@ export default async function AssessmentsPage() {
             <AccordionItem key={assessment.id} value={`item-${i + 1}`}>
               <AccordionTrigger>{assessment.name}</AccordionTrigger>
               <AccordionContent>
-                <ul>
+                <ul className='space-y-2'>
                   {assessment.classes.map(c => (
-                    <li key={c.id}>
+                    <li
+                      key={c.id}
+                      className='flex justify-between items-center'
+                    >
                       <p>{c.name}</p>
+                      <Button variant={'green'} size={'sm'} asChild>
+                        <Link href={`/evaluate/${assessment.id}/${c.id}`}>
+                          Avaliar
+                        </Link>
+                      </Button>
                     </li>
                   ))}
                 </ul>

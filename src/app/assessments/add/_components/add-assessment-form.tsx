@@ -12,47 +12,52 @@ import {
 } from '@/components/ui/table'
 import {
   type AddAssessmentFormType,
-  type AssessmentCategoryType,
+  type QuestionCategoryType,
   addAssessmentFormSchema,
 } from '@/schemas'
 import type { ClassType } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { redirect } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useFieldArray, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import { MAX_SCORE, MIN_SCORE } from '../../_helper/score'
+import { MAX_SCORE } from '../../_helper/score'
 import { addAssessment } from '../../_http/handle-http-assessments'
 import { EditCategoryItem } from './edit-category-item'
+import { AddCategoryDialog } from './add-category-dialog'
+import { Plus, Trash2 } from 'lucide-react'
+import {
+  validateNewScore,
+  validateDuplicateCategoryName,
+} from '../shared-validation'
 
 export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
   const {
     register,
     handleSubmit,
     setValue,
+    getValues,
+    watch,
     clearErrors,
     formState: { errors },
+    control,
   } = useForm<AddAssessmentFormType>({
     resolver: zodResolver(addAssessmentFormSchema),
     defaultValues: {
       classes: [],
-      categories: [],
+      questions: [],
     },
+  })
+
+  const { fields, append, remove, update } = useFieldArray({
+    control: control,
+    name: 'questions',
   })
 
   const [availableClasses, setAvailableClasses] =
     useState<ClassType[]>(classList)
   const [selectedClasses, setSelectedClasses] = useState<ClassType[]>([])
   const [selectedClass, setSelectedClass] = useState<ClassType | null>(null)
-
-  const [assessmentCategoriesList, setAssessmentCategoriesList] = useState<
-    AssessmentCategoryType[]
-  >([])
-
-  const [categoryName, setCategoryName] = useState<string>('')
-  const [categoryNameError, setCategoryNameError] = useState<string>('')
-  const [categoryScore, setCategoryScore] = useState<number>(0)
-  const [categoryScoreError, setCategoryScoreError] = useState<string>('')
 
   useEffect(() => {
     setValue(
@@ -61,11 +66,6 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
     )
     clearErrors('classes')
   }, [selectedClasses, setValue, clearErrors])
-
-  useEffect(() => {
-    setValue('categories', assessmentCategoriesList)
-    clearErrors('categories')
-  }, [assessmentCategoriesList, setValue, clearErrors])
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -127,104 +127,103 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
     }
   }
 
-  function handleAddCategoryToList(e: React.FormEvent) {
-    e.preventDefault()
+  function handleAddCategoryToList(
+    newCategory: QuestionCategoryType,
+    currentQuestionIndex: number
+  ) {
+    const updatedCategories = [
+      ...getValues(`questions.${currentQuestionIndex}.categories`),
+      newCategory,
+    ]
 
-    let error = false
-    if (!categoryName || categoryName === '' || categoryName.trim() === '') {
-      setCategoryNameError('O nome da categoria não pode ser nulo.')
-      error = true
-    } else {
-      setCategoryNameError('')
-    }
-    if (categoryScore < MIN_SCORE || categoryScore > MAX_SCORE) {
-      setCategoryScoreError(
-        `A nota da categoria deve ser entre ${MIN_SCORE} e ${MAX_SCORE}`
-      )
-      error = true
-    } else {
-      setCategoryScoreError('')
-    }
-    if (error) return
-
-    const newScore = getCurrentScore() + categoryScore
-    if (!isNewScoreValid(newScore)) return
-
-    if (isDuplicated(categoryName)) return
-
-    const newCategory = { name: categoryName, score: categoryScore }
-    setAssessmentCategoriesList(prev => [...prev, newCategory])
-
-    setCategoryName('')
-    setCategoryScore(0)
-    toast.success('Categoria adicionada com sucesso!', {
+    setValue(`questions.${currentQuestionIndex}.categories`, updatedCategories)
+    clearErrors(`questions.${currentQuestionIndex}.categories`)
+    toast.success('Categoria adicionada com sucesso.', {
       style: { filter: 'none', zIndex: 10 },
       position: 'top-center',
     })
   }
 
   function getCurrentScore(): number {
-    return assessmentCategoriesList.reduce(
-      (sum, category) => sum + Number(category.score),
+    return getValues('questions').reduce(
+      (sum, question) =>
+        sum +
+        question.categories.reduce(
+          (catSum, category) => catSum + category.score,
+          0
+        ),
       0
     )
   }
 
-  function handleRemoveCategoryFromList(index: number) {
-    setAssessmentCategoriesList(prev => {
-      const newList = [...prev]
-      newList.splice(index, 1)
-      return newList
+  function handleRemoveCategoryFromList(
+    questionIndex: number,
+    categoryIndex: number
+  ) {
+    const updatedCategories = [
+      ...getValues(`questions.${questionIndex}.categories`),
+    ]
+
+    updatedCategories.splice(categoryIndex, 1)
+    setValue(`questions.${questionIndex}.categories`, updatedCategories)
+    toast.success('Categoria removida com sucesso.', {
+      style: { filter: 'none', zIndex: 10 },
+      position: 'top-center',
     })
   }
 
-  function isNewScoreValid(newScore: number): boolean {
-    if (newScore > MAX_SCORE) {
-      toast.error(`A nova nota ultrapassa o limite de ${MAX_SCORE}.`, {
-        position: 'top-center',
-        style: { filter: 'none', zIndex: 10 },
-      })
-      return false
-    }
-    return true
-  }
-
-  function isDuplicated(newCategoryName: string) {
-    const categoryDuplicatedName = assessmentCategoriesList.find(
-      c => c.name.toLocaleLowerCase() === newCategoryName.toLocaleLowerCase()
-    )
-    if (categoryDuplicatedName) {
-      toast.error('Nome da categoria duplicado. Por favor, altere o valor.', {
-        position: 'top-center',
-        style: { filter: 'none', zIndex: 10 },
-      })
-      return true
-    }
-    return false
-  }
-
   function handleEditCategoryItem(
-    category: AssessmentCategoryType,
-    oldCategory: AssessmentCategoryType,
-    index: number
+    category: QuestionCategoryType,
+    categoryIndex: number,
+    questionIndex: number
   ): boolean {
+    const currentCategories = [
+      ...getValues(`questions.${questionIndex}.categories`),
+    ]
+
+    const oldCategory = currentCategories[categoryIndex]
+
     const newScore = getCurrentScore() + category.score - oldCategory.score
 
-    if (!isNewScoreValid(newScore)) return true
+    if (!validateNewScore(newScore)) return true
 
     if (
       category.name.toLocaleLowerCase() !== oldCategory.name.toLocaleLowerCase()
     ) {
-      if (isDuplicated(category.name)) return true
+      if (validateDuplicateCategoryName(category.name, getValues('questions')))
+        return true
     }
 
-    setAssessmentCategoriesList(prev => {
-      const newList = [...prev]
-      newList[index].name = category.name
-      newList[index].score = category.score
-      return newList
+    currentCategories[categoryIndex] = {
+      ...currentCategories[categoryIndex],
+      name: category.name,
+      score: category.score,
+    }
+    setValue(`questions.${questionIndex}.categories`, currentCategories)
+
+    toast.success('Categoria editada com sucesso.', {
+      style: { filter: 'none', zIndex: 10 },
+      position: 'top-center',
     })
+
     return false
+  }
+
+  function handleRemoveQuestion(questionIndex: number) {
+    remove(questionIndex)
+
+    const remainingQuestions = getValues('questions')
+    remainingQuestions.forEach((question, index) => {
+      update(index, {
+        ...question,
+        questionNumber: index + 1,
+      })
+    })
+
+    toast.success('Questão removida com sucesso.', {
+      style: { filter: 'none', zIndex: 10 },
+      position: 'top-center',
+    })
   }
 
   async function handleAddAssessmentSubmit(data: AddAssessmentFormType) {
@@ -281,7 +280,7 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
             </h2>
             {/* CARD BOX */}
             <div
-              className='scrollbar-custom bg-slate-50 h-full w-full border-border border-8 border-r-0 overflow-y-scroll rounded-lg'
+              className='scrollbar-custom bg-slate-50/5 h-full w-full border-border border-8 border-r-0 overflow-y-scroll rounded-lg'
               onDragOver={handleDragOver}
               onDrop={() => moveCard('selected', 'available')}
             >
@@ -304,7 +303,10 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
             onClick={moveSelectedCard}
             disabled={selectedClass === null}
           >
-            &gt;
+            {selectedClass &&
+            !availableClasses.find(card => card.id === selectedClass.id)
+              ? '<'
+              : '>'}
           </Button>
           {/* SELECTED CLASSES */}
           <div className='h-full w-64 flex flex-col space-y-1'>
@@ -313,7 +315,7 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
             </h2>
             {/* CARD BOX */}
             <div
-              className='scrollbar-custom bg-slate-50 h-full w-full border-border border-8 border-r-0 overflow-y-scroll rounded-lg'
+              className='scrollbar-custom bg-slate-50/5 h-full w-full border-border border-8 border-r-0 overflow-y-scroll rounded-lg'
               onDragOver={handleDragOver}
               onDrop={() => moveCard('available', 'selected')}
             >
@@ -341,108 +343,118 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
       {/* ASSESSMENT CATEGORIES */}
       <div className='flex flex-col space-y-4'>
         {/* CATEGORY FORM FOR NAME AND SCORE */}
-        <form className='space-y-4' onSubmit={handleAddCategoryToList}>
-          <div className='flex w-full space-x-8'>
-            <div className='w-full'>
-              <div className='flex items-center w-full space-x-2'>
-                <label
-                  className='text-base font-medium flex-shrink-0'
-                  htmlFor='name'
-                >
-                  Categoria de avaliação:
-                </label>
-                <Input
-                  id='name'
-                  type='text'
-                  placeholder='Digite aqui'
-                  className='w-full'
-                  value={categoryName}
-                  onChange={e => {
-                    setCategoryName(e.target.value)
-                  }}
-                />
-              </div>
-              <p className='text-destructive text-sm pt-0.5'>
-                {categoryNameError}
-              </p>
-            </div>
-            <div className='w-72'>
-              <div className='flex items-center w-full space-x-2'>
-                <label className='text-base font-medium' htmlFor='score'>
-                  Nota:
-                </label>
-                <Input
-                  id='score'
-                  type='number'
-                  value={categoryScore}
-                  onChange={e => {
-                    setCategoryScore(Number(e.target.value))
-                  }}
-                  min={MIN_SCORE}
-                  max={MAX_SCORE}
-                  placeholder='Digite aqui'
-                  className='w-full'
-                />
-              </div>
-              <p className='text-destructive text-sm pt-0.5'>
-                {categoryScoreError}
-              </p>
-            </div>
-          </div>
-          <div className='flex items-center justify-between'>
-            <p className='font-medium'>
-              Nota da lista: {getCurrentScore().toString()}/{MAX_SCORE}
+        <div className='flex items-center justify-between'>
+          <p className='font-medium'>
+            Soma notas: {getCurrentScore().toString()}/{MAX_SCORE}
+          </p>
+
+          {errors.questions && (
+            <p className='text-destructive text-sm'>
+              {errors.questions.message}
             </p>
+          )}
 
-            {errors.categories && (
-              <p className='text-destructive text-sm'>
-                {errors.categories.message}
-              </p>
-            )}
+          <Button
+            type='button'
+            variant={'secondary'}
+            onClick={() =>
+              append({
+                questionNumber: getValues('questions').length + 1,
+                categories: [],
+              })
+            }
+          >
+            <Plus />
+            Adicionar questão
+          </Button>
+        </div>
+        {fields.map((field, questionIndex) => (
+          <div
+            key={field.id}
+            className='border-b-2 border-border pb-2 space-y-2'
+          >
+            <div className='flex items-center justify-between'>
+              <div className='flex items-center space-x-4'>
+                <h3 className='text-lg'>Questão N°{field.questionNumber}</h3>
+                <Button
+                  type='button'
+                  variant={'destructive'}
+                  size={'sm'}
+                  onClick={() => handleRemoveQuestion(questionIndex)}
+                >
+                  <Trash2 />
+                  Remover questão
+                </Button>
+              </div>
+              <AddCategoryDialog
+                questionNumber={field.questionNumber}
+                questionIndex={questionIndex}
+                handleAddCategory={handleAddCategoryToList}
+                getCurrentScore={getCurrentScore}
+                isDuplicated={(categoryName: string) =>
+                  validateDuplicateCategoryName(
+                    categoryName,
+                    getValues('questions')
+                  )
+                }
+              />
+            </div>
 
-            <Button type='submit'>Adicionar à lista</Button>
-          </div>
-        </form>
-
-        {/* CATEGORIES TABLE */}
-
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className='w-16'>Nota</TableHead>
-              <TableHead>Categoria</TableHead>
-              <TableHead className='text-right'>Ações</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {assessmentCategoriesList.map(
-              (category: AssessmentCategoryType, i) => (
-                <TableRow key={category.name}>
-                  <TableCell className='font-medium'>
-                    {category.score}
-                  </TableCell>
-                  <TableCell>{category.name}</TableCell>
-                  <TableCell className='w-full flex justify-end space-x-4'>
-                    <EditCategoryItem
-                      handleEdit={handleEditCategoryItem}
-                      category={category}
-                      index={i}
-                    />
-                    <Button
-                      type='button'
-                      variant={'destructive'}
-                      onClick={() => {
-                        handleRemoveCategoryFromList(i)
-                      }}
-                    >
-                      Remover
-                    </Button>
-                  </TableCell>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className='w-16'>Nota</TableHead>
+                  <TableHead>Categoria</TableHead>
+                  <TableHead className='text-right'>Ações</TableHead>
                 </TableRow>
-              )
-            )}
-          </TableBody>
-        </Table>
+              </TableHeader>
+              <TableBody>
+                {watch(`questions.${questionIndex}.categories`).map(
+                  (category: QuestionCategoryType, categoryIndex) => (
+                    <TableRow key={category.name}>
+                      <TableCell className='font-medium'>
+                        {category.score}
+                      </TableCell>
+                      <TableCell>{category.name}</TableCell>
+                      <TableCell className='w-full flex justify-end space-x-4'>
+                        <EditCategoryItem
+                          handleEdit={handleEditCategoryItem}
+                          category={category}
+                          questionIndex={questionIndex}
+                          categoryIndex={categoryIndex}
+                        />
+                        <Button
+                          type='button'
+                          variant='destructive'
+                          onClick={() =>
+                            handleRemoveCategoryFromList(
+                              questionIndex,
+                              categoryIndex
+                            )
+                          }
+                        >
+                          <Trash2 />
+                          Remover
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  )
+                )}
+                {watch(`questions.${questionIndex}.categories`, []).length ===
+                  0 && (
+                  <TableRow>
+                    <TableCell
+                      colSpan={3}
+                      className='text-center py-4 text-muted-foreground'
+                    >
+                      Nenhuma categoria adicionada a esta questão.
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        ))}
       </div>
     </>
   )
