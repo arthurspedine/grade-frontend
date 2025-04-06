@@ -36,11 +36,19 @@ export default async function AssessmentsPage() {
                       className='flex justify-between items-center'
                     >
                       <p>{c.name}</p>
-                      <Button variant={'green'} size={'sm'} asChild>
-                        <Link href={`/evaluate/${assessment.id}/${c.id}`}>
-                          Avaliar
-                        </Link>
-                      </Button>
+                      <div className='flex space-x-4 items-center'>
+                        <div className='flex space-x-2'>
+                          <p>Alunos avalidados</p>
+                          <span className='font-semibold text-sm'>
+                            {c.countEvaluatedStudents} / {c.countStudents}
+                          </span>
+                        </div>
+                        <Button variant={'green'} size={'sm'} asChild>
+                          <Link href={`/evaluate/${assessment.id}/${c.id}`}>
+                            Avaliar
+                          </Link>
+                        </Button>
+                      </div>
                     </li>
                   ))}
                 </ul>

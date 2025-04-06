@@ -46,7 +46,7 @@ export function Header() {
     mounted && resolvedTheme === 'dark' ? grade_logo_dark : grade_logo_light
 
   return (
-    <header className='flex items-center justify-between pr-14 max-w-[1440px] mx-auto w-full'>
+    <header className='flex items-center justify-between pr-8 max-w-[1440px] mx-auto w-full'>
       <Link href={'/'}>
         {mounted ? (
           <Image src={logoSrc} alt='Grade logo' className='w-36' />

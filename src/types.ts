@@ -27,5 +27,18 @@ export type AssessmentDetailsType = {
   classes: {
     id: string
     name: string
+    countEvaluatedStudents: number
+    countStudents: number
+  }[]
+}
+
+export type AssessmentStudentType = { id: string; rm: string; name: string }
+
+export type AssessmentInfoType = {
+  name: string
+  countEvaluatedStudents: number
+  students: {
+    info: AssessmentStudentType
+    evaluationCompleted: boolean
   }[]
 }
