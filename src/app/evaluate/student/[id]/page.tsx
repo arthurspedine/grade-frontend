@@ -5,6 +5,8 @@ import type {
 } from '@/interfaces'
 import { redirect } from 'next/navigation'
 import { handleGetStudentEvaluationInfo } from '../../_http/handle-http-evaluate'
+import { EvaluateStudentContainer } from './_components/evaluate-student-container'
+import { EvaluationProvider } from '@/context/evaluation-context'
 
 export default async function EvaluateInfoAssessmentPage({
   params,
@@ -26,11 +28,14 @@ export default async function EvaluateInfoAssessmentPage({
         <div>
           <p>ALREADY EVALUATED COMPONENT</p>
         </div>
+      ) : 'questions' in studentEvaluationInfo ? (
+        <EvaluationProvider>
+          <EvaluateStudentContainer initialData={studentEvaluationInfo} />
+        </EvaluationProvider>
       ) : (
-        // Need to be evaluated
-        <div>
-          <p>NOT EVALUATED COMPONENT</p>
-        </div>
+        <p className='text-destructive text-center'>
+          Unexpected error: invalid evaluation data.
+        </p>
       )}
     </section>
   )
