@@ -14,6 +14,7 @@ interface EvaluationContextType {
     score: number
   ) => void
   isEvaluationComplete: () => boolean
+  dataLoaded: boolean
   loadData: (initialData: StudentEvaluationInfo) => void
 }
 
@@ -35,6 +36,8 @@ export function EvaluationProvider({
     null
   )
 
+  const [dataLoaded, setDataLoaded] = useState<boolean>(false)
+
   useEffect(() => {
     const savedEvaluation = localStorage.getItem('studentEvaluation')
     if (savedEvaluation) {
@@ -45,6 +48,7 @@ export function EvaluationProvider({
         redirect('/assessments')
       }
     }
+    setDataLoaded(true)
   }, [])
 
   function loadData(initialData: StudentEvaluationInfo) {
@@ -137,7 +141,7 @@ export function EvaluationProvider({
           category.answeredScore >= 0
       )
     )
-    if (valid) {
+    if (valid && !evaluation.evaluationCompleted) {
       const updatedEvaluation = { ...evaluation, evaluationCompleted: true }
 
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(evaluation))
@@ -152,6 +156,7 @@ export function EvaluationProvider({
         evaluationData: evaluation,
         updateCategoryScore,
         isEvaluationComplete,
+        dataLoaded: dataLoaded,
         loadData,
       }}
     >

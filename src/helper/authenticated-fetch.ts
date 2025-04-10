@@ -35,7 +35,8 @@ export async function authenticatedFetch<T>(
     }
 
     if (response.headers.get('Content-Type')?.includes('application/json')) {
-      return response.json()
+      const jsonResponse = await response.json()
+      return jsonResponse as T
     }
     return {} as Promise<T>
   } catch (error) {

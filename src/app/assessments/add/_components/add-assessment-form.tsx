@@ -341,7 +341,7 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
       </form>
 
       {/* ASSESSMENT CATEGORIES */}
-      <div className='flex flex-col space-y-4'>
+      <div className='flex flex-col space-y-4 pb-4'>
         {/* CATEGORY FORM FOR NAME AND SCORE */}
         <div className='flex items-center justify-between'>
           <p className='font-medium'>

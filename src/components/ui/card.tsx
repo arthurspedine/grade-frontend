@@ -9,7 +9,7 @@ const Card = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      `border bg-card text-card-foreground hover:cursor-pointer w-full px-4 py-2 border-b-2
+      `border bg-card text-card-foreground hover:cursor-pointer w-full px-4 py-2 border-b-2 rounded-md
       ${selected ? 'font-semibold' : ''}`,
       className
     )}
