@@ -4,7 +4,8 @@ import { getToken } from './get-token'
 
 export async function authenticatedFetch<T>(
   endpoint: string,
-  options: FetchOptions = { method: 'GET' }
+  options: FetchOptions = { method: 'GET' },
+  tags?: string[]
 ): Promise<T> {
   try {
     const accessToken = await getToken()
@@ -25,6 +26,7 @@ export async function authenticatedFetch<T>(
         options.body instanceof FormData
           ? options.body
           : JSON.stringify(options.body),
+      next: tags ? { tags } : undefined,
     })
 
     if (!response.ok) {

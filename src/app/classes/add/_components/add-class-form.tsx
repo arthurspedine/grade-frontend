@@ -20,18 +20,28 @@ import { useCSVValidation } from '@/hooks/useStudentUpload'
 import { type AddClassFormType, addClassFormSchema } from '@/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FileQuestion } from 'lucide-react'
-import { redirect } from 'next/navigation'
-import { useRef } from 'react'
+import { redirect, useSearchParams } from 'next/navigation'
+import { useEffect, useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { StudentsTable } from '../../_components/students-table'
 import { addClass } from '../../_http/handle-http-class'
+import { decodeText } from '@/helper/base64-search-params'
 
 type AddClassFormProps = {
   categoryList: { key: string; label: string }[]
 }
 
 export function AddClassForm({ categoryList }: AddClassFormProps) {
+  const params = useSearchParams()
+  const [returnTo, setReturnTo] = useState<string | null>(null)
+  useEffect(() => {
+    const returnToParam = params?.get('returnTo')
+    if (returnToParam) {
+      setReturnTo(decodeText(returnToParam))
+    }
+  }, [params])
+
   const {
     register,
     handleSubmit,
@@ -84,11 +94,13 @@ export function AddClassForm({ categoryList }: AddClassFormProps) {
       loading: 'Adicionando turma...',
       success: () => {
         setTimeout(() => {
-          redirect('/classes')
-        }, 1000)
+          if (!returnTo) redirect('/classes')
+          redirect(returnTo)
+        }, 500)
         return 'Turma adicionada com sucesso.'
       },
-      error: 'Algo deu errado. Por favor, tente novamente mais tarde.',
+      error:
+        'Algo deu errado. Por favor, verifique se os alunos não estão em outras turmas ou tente novamente mais tarde.',
       position: 'top-center',
       style: { filter: 'none', zIndex: 10 },
     })

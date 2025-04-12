@@ -9,20 +9,15 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import type { ClassType } from '@/types'
-import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { disableClass } from '../_http/handle-http-class'
 
 export function DisableClassDialog({ id, name, active }: ClassType) {
-  const router = useRouter()
   function handleButtonClick() {
     const handleRequest = disableClass(id)
     toast.promise(handleRequest, {
       loading: 'Desativando turma...',
       success: () => {
-        setTimeout(() => {
-          router.refresh()
-        }, 1000)
         return 'Turma desativada com sucesso.'
       },
       error: 'Algo deu errado. Por favor, tente novamente mais tarde.',

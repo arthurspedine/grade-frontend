@@ -234,7 +234,7 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
       success: () => {
         setTimeout(() => {
           redirect('/assessments')
-        }, 1000)
+        }, 500)
         return 'Avaliação adicionada com sucesso.'
       },
       error: 'Algo deu errado. Por favor, tente novamente mais tarde.',
