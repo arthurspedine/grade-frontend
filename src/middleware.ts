@@ -24,7 +24,7 @@ export default withMiddlewareAuthRequired(async function middleware(req) {
     const { accessToken, user } = session
 
     if (!accessToken || isTokenExpired(accessToken)) {
-      console.log('Token expirado ou inválido. Atualizando sessão...')
+      console.info('Token expirado ou inválido. Atualizando sessão...')
       await updateSession(req, res, {
         ...session,
         user: { ...user },

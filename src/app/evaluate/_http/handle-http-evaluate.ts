@@ -30,8 +30,6 @@ export async function handleGetStudentEvaluationInfo(id: string) {
     StudentEvaluationInfo | StudentFinishedEvaluationInfo
   >(`/evaluate/student/${id}`)
     .then(result => {
-      console.log(result)
-
       return result
     })
     .catch(e => {

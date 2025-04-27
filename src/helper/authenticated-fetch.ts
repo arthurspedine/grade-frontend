@@ -41,6 +41,8 @@ export async function authenticatedFetch<T>(
     return {} as Promise<T>
   } catch (error) {
     console.error(`Error in authenticated fetch to ${endpoint}:`, error)
+    console.error(`Used body: ${options.body}`)
+
     return Promise.reject(
       new Error('Houve um erro, tente novamente mais tarde.')
     )

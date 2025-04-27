@@ -24,6 +24,7 @@ export type ClassInfoType = {
 export type AssessmentDetailsType = {
   id: string
   name: string
+  assessmentDate: string
   classes: {
     id: string
     name: string

@@ -8,6 +8,7 @@ import {
 import Link from 'next/link'
 import { handleAssessmentsList } from './_http/handle-http-assessments'
 import { Button } from '@/components/ui/button'
+import { formatDate } from '@/helper/format-date'
 
 export const dynamic = 'force-dynamic'
 
@@ -27,7 +28,14 @@ export default async function AssessmentsPage() {
         <Accordion type='single' collapsible className='w-5/6 mx-auto py-4'>
           {assessmentsList.map((assessment, i) => (
             <AccordionItem key={assessment.id} value={`item-${i + 1}`}>
-              <AccordionTrigger>{assessment.name}</AccordionTrigger>
+              <AccordionTrigger>
+                <div className='w-full flex justify-between items-center'>
+                  {assessment.name}
+                  <span className='text-muted-foreground text-sm mr-1'>
+                    Data da avaliação: {formatDate(assessment.assessmentDate)}
+                  </span>
+                </div>
+              </AccordionTrigger>
               <AccordionContent>
                 <ul className='space-y-2'>
                   {assessment.classes.map(c => (
@@ -45,7 +53,9 @@ export default async function AssessmentsPage() {
                         </div>
                         <Button variant={'green'} size={'sm'} asChild>
                           <Link href={`/evaluate/${assessment.id}/${c.id}`}>
-                            Avaliar
+                            {c.countEvaluatedStudents === c.countStudents
+                              ? 'Detalhes'
+                              : 'Avaliar'}
                           </Link>
                         </Button>
                       </div>

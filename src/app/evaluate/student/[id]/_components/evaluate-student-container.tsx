@@ -1,5 +1,6 @@
 'use client'
 import { MAX_SCORE } from '@/app/assessments/_helper/score'
+import { GoBackButton } from '@/components/go-back-button'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -88,12 +89,14 @@ export function EvaluateStudentContainer({
   }
 
   return (
-    <Card selected className='hover:cursor-default px-8 py-6 w-full'>
+    <Card className='hover:cursor-default px-8 py-6 w-full'>
       <CardHeader className='flex-row justify-between space-y-0 py-2 px-0'>
         <div>
-          <CardTitle>Avaliando: {initialData.student.name}</CardTitle>
-          <CardDescription>
-            <p>RM{initialData.student.rm}</p>
+          <CardTitle className='hover:cursor-text'>
+            Avaliando: {initialData.student.name}
+          </CardTitle>
+          <CardDescription className='hover:cursor-text'>
+            <p>RM: {initialData.student.rm}</p>
             <p>
               Nota final:{' '}
               {Number(
@@ -109,9 +112,7 @@ export function EvaluateStudentContainer({
             </p>
           </CardDescription>
         </div>
-        <Button variant={'secondary'} onClick={() => router.back()}>
-          Voltar
-        </Button>
+        <GoBackButton />
       </CardHeader>
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <CardContent>
@@ -140,7 +141,7 @@ export function EvaluateStudentContainer({
                 key={questionNumber}
                 value={questionNumber.toString()}
               >
-                <h3 className='text-lg font-medium mb-4'>
+                <h3 className='text-lg font-medium mb-2 hover:cursor-text'>
                   Questão {question.questionNumber}
                 </h3>
                 {question.categories.map((category, index) => (
@@ -149,8 +150,10 @@ export function EvaluateStudentContainer({
                     className='border-b-2 border-border pb-2 py-4'
                   >
                     <div className='flex justify-between mb-2'>
-                      <p className='font-medium text-lg'>{category.name}</p>
-                      <span className='font-medium'>
+                      <p className='font-medium text-lg hover:cursor-text'>
+                        {category.name}
+                      </p>
+                      <span className='font-medium hover:cursor-text'>
                         Pontuação esperada: {category.score}
                       </span>
                     </div>
@@ -167,9 +170,10 @@ export function EvaluateStudentContainer({
                               value
                             )
                           }}
+                          className='hover:cursor-pointer'
                         />
                       </div>
-                      <div className='w-12text-center font-semibold'>
+                      <div className='w-12 text-center font-semibold hover:cursor-text'>
                         {category.answeredScore !== undefined
                           ? category.answeredScore
                           : 0}
@@ -180,7 +184,11 @@ export function EvaluateStudentContainer({
               </TabsContent>
             )
           })}
-          {error && <p className='text-destructive text-sm pt-0.5'>{error}</p>}
+          {error && (
+            <p className='text-destructive text-sm pt-0.5 hover:cursor-text'>
+              {error}
+            </p>
+          )}
         </CardContent>
       </Tabs>
       <CardFooter className='flex justify-between mt-4'>

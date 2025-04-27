@@ -4,13 +4,13 @@ import { cn } from '@/lib/utils'
 
 const Card = React.forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & { selected: boolean }
+  React.HTMLAttributes<HTMLDivElement> & { selected?: boolean }
 >(({ className, selected, ...props }, ref) => (
   <div
     ref={ref}
     className={cn(
-      `border bg-card text-card-foreground hover:cursor-pointer w-full px-4 py-2 border-b-2 rounded-md
-      ${selected ? 'font-semibold' : ''}`,
+      `border bg-card text-card-foreground w-full px-4 py-2 border-b-2 rounded-md
+      ${selected ? 'font-bold' : ''}`,
       className
     )}
     {...props}

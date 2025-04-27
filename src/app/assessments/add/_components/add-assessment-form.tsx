@@ -291,6 +291,7 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
                   selected={selectedClass?.id === c.id}
                   onDragStart={() => handleDragStart(c)}
                   onClick={() => setSelectedClass(c)}
+                  className='hover:cursor-pointer'
                 >
                   <CardContent>{c.name}</CardContent>
                 </Card>
@@ -326,6 +327,7 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
                   selected={selectedClass?.id === c.id}
                   onDragStart={() => handleDragStart(c)}
                   onClick={() => setSelectedClass(c)}
+                  className='hover:cursor-pointer'
                 >
                   <CardContent>{c.name}</CardContent>
                 </Card>

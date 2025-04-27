@@ -6,6 +6,7 @@ import type {
 import { redirect } from 'next/navigation'
 import { handleGetStudentEvaluationInfo } from '../../_http/handle-http-evaluate'
 import { EvaluateStudentContainer } from './_components/evaluate-student-container'
+import { AlreadyEvaluatedStudentContainer } from './_components/already-evaluated-student-container'
 
 export default async function EvaluateInfoAssessmentPage({
   params,
@@ -20,11 +21,9 @@ export default async function EvaluateInfoAssessmentPage({
 
   if (!studentEvaluationInfo) return redirect('/assessments')
 
-  return studentEvaluationInfo.evaluationCompleted ? (
-    // If student already evaluated
-    <div>
-      <p>ALREADY EVALUATED COMPONENT</p>
-    </div>
+  return studentEvaluationInfo.evaluationCompleted &&
+    'answers' in studentEvaluationInfo ? (
+    <AlreadyEvaluatedStudentContainer initialData={studentEvaluationInfo} />
   ) : 'questions' in studentEvaluationInfo ? (
     <EvaluateStudentContainer initialData={studentEvaluationInfo} />
   ) : (

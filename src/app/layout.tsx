@@ -36,7 +36,7 @@ export default function RootLayout({
             <UserProvider>
               <Header />
               {children}
-              <Toaster theme='light' richColors />
+              <Toaster richColors />
             </UserProvider>
             {/* FOOTER */}
           </main>

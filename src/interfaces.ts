@@ -30,4 +30,5 @@ export interface StudentFinishedEvaluationInfo extends BaseStudentEvaluation {
     }[]
   }[]
   totalScore: number
+  finishedDate: string
 }
