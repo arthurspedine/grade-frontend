@@ -16,6 +16,7 @@ interface EvaluationContextType {
   isEvaluationComplete: () => boolean
   dataLoaded: boolean
   loadData: (initialData: StudentEvaluationInfo) => void
+  updateFeedback: (value: string, field: 'raw' | 'final') => void
 }
 
 const EvaluationContext = createContext<EvaluationContextType | null>(null)
@@ -150,6 +151,15 @@ export function EvaluationProvider({
     return valid
   }
 
+  function updateFeedback(value: string, field: 'raw' | 'final') {
+    setEvaluation(prev => {
+      if (!prev) return null
+      const newFeedback = value
+      if (field === 'final') return { ...prev, finalFeedback: newFeedback }
+      return { ...prev, rawFeedback: newFeedback }
+    })
+  }
+
   return (
     <EvaluationContext.Provider
       value={{
@@ -158,6 +168,7 @@ export function EvaluationProvider({
         isEvaluationComplete,
         dataLoaded: dataLoaded,
         loadData,
+        updateFeedback,
       }}
     >
       {children}

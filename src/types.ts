@@ -42,3 +42,7 @@ export type AssessmentInfoType = {
     evaluationCompleted: boolean
   }[]
 }
+
+export type AiGeneratedFeedbackType = {
+  message: string
+}

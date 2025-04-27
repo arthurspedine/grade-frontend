@@ -38,6 +38,7 @@ export function EditCategoryItem({
     getValues,
     setError,
     clearErrors,
+    setValue,
     formState: { errors },
   } = useForm<QuestionCategoryType>({
     resolver: zodResolver(questionCategorySchema),
@@ -112,6 +113,13 @@ export function EditCategoryItem({
               placeholder='Digite aqui'
               className='w-24'
               {...register('score', { valueAsNumber: true })}
+              onBlur={e => {
+                const value = Number.parseFloat(e.target.value)
+                if (!Number.isNaN(value)) {
+                  const rounded = Math.round(value * 20) / 20
+                  setValue('score', rounded)
+                }
+              }}
             />
           </div>
           {errors.score && (

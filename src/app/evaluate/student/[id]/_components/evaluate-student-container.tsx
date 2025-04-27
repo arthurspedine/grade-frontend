@@ -96,15 +96,15 @@ export function EvaluateStudentContainer({
             <p>RM{initialData.student.rm}</p>
             <p>
               Nota final:{' '}
-              {evaluationData.questions.reduce((total, question) => {
-                const questionScore = question.categories.reduce(
-                  (sum, category) => {
-                    return sum + (category.answeredScore || 0)
-                  },
-                  0
-                )
-                return total + questionScore
-              }, 0)}{' '}
+              {Number(
+                evaluationData.questions.reduce((total, question) => {
+                  const questionScore = question.categories.reduce(
+                    (sum, category) => sum + (category.answeredScore || 0),
+                    0
+                  )
+                  return total + questionScore
+                }, 0)
+              ).toFixed(2)}{' '}
               / {MAX_SCORE}
             </p>
           </CardDescription>
@@ -124,7 +124,7 @@ export function EvaluateStudentContainer({
                   value={questionNumber.toString()}
                   className={
                     isQuestionComplete(questionNumber)
-                      ? 'bg-green-400 text-foreground'
+                      ? 'bg-green-500 text-foreground'
                       : ''
                   }
                 >

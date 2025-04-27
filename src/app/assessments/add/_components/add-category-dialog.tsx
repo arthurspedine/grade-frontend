@@ -44,6 +44,7 @@ export function AddCategoryDialog({
     getValues,
     clearErrors,
     reset,
+    setValue,
   } = useForm<QuestionCategoryType>({
     resolver: zodResolver(questionCategorySchema),
     defaultValues: {
@@ -138,7 +139,15 @@ export function AddCategoryDialog({
                 max={MAX_SCORE}
                 placeholder='Digite aqui'
                 className='w-32'
+                step={0.05}
                 {...register('score', { valueAsNumber: true })}
+                onBlur={e => {
+                  const value = Number.parseFloat(e.target.value)
+                  if (!Number.isNaN(value)) {
+                    const rounded = Math.round(value * 20) / 20
+                    setValue('score', rounded)
+                  }
+                }}
               />
             </div>
             {errors.score && (

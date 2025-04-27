@@ -5,7 +5,9 @@ import type {
   StudentEvaluationInfo,
   StudentFinishedEvaluationInfo,
 } from '@/interfaces'
-import type { AssessmentInfoType } from '@/types'
+import { LIST_ASSESSMENTS_TAG } from '@/tags'
+import type { AiGeneratedFeedbackType, AssessmentInfoType } from '@/types'
+import { revalidateTag } from 'next/cache'
 
 export async function handleGetAssessmentInfo(
   assessmentId: string,
@@ -28,10 +30,34 @@ export async function handleGetStudentEvaluationInfo(id: string) {
     StudentEvaluationInfo | StudentFinishedEvaluationInfo
   >(`/evaluate/student/${id}`)
     .then(result => {
+      console.log(result)
+
       return result
     })
     .catch(e => {
       console.error('Error to get evaluation info: ', e)
       return null
     })
+}
+
+export async function getChatFeedback(
+  answeredCategories: string,
+  rawFeedback: string
+) {
+  return await authenticatedFetch<AiGeneratedFeedbackType>('/evaluate/chat', {
+    method: 'POST',
+    body: { answeredCategories, rawFeedback },
+  })
+}
+
+export async function handleFinishEvaluation(formData: StudentEvaluationInfo) {
+  const result = await authenticatedFetch<void>(
+    `/evaluate/student/${formData.student.id}/finish`,
+    {
+      method: 'POST',
+      body: formData,
+    }
+  )
+  revalidateTag(LIST_ASSESSMENTS_TAG)
+  return result
 }

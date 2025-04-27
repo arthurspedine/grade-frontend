@@ -3,6 +3,8 @@ import type { AssessmentStudentType } from './types'
 interface BaseStudentEvaluation {
   student: AssessmentStudentType
   evaluationCompleted: boolean
+  rawFeedback: string
+  finalFeedback: string
 }
 
 export interface StudentEvaluationInfo extends BaseStudentEvaluation {
@@ -20,9 +22,12 @@ export interface StudentEvaluationInfo extends BaseStudentEvaluation {
 export interface StudentFinishedEvaluationInfo extends BaseStudentEvaluation {
   answers: {
     questionNumber: number
-    categories: { name: string; score: number; answeredScore: number }[]
+    categories: {
+      id: string
+      name: string
+      score: number
+      answeredScore: number
+    }[]
   }[]
-  rawFeedback: string
-  finalFeedback: string
   totalScore: number
 }

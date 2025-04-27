@@ -68,5 +68,7 @@ export const config = {
     '/api/auth/:path*',
     '/assessments',
     '/assessments/:path*',
+    '/evaluate',
+    '/evaluate/:path*',
   ],
 }

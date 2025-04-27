@@ -31,8 +31,17 @@ export const questionCategorySchema = z.object({
   name: z.string().min(1, 'O nome da categoria é obrigatório.'),
   score: z
     .number()
-    .min(MIN_SCORE, `A pontuação não pode ser menor que ${MIN_SCORE}.`)
-    .max(MAX_SCORE, `A pontuação não pode exceder ${MAX_SCORE}.`),
+    .min(MIN_SCORE, `A nota não pode ser menor que ${MIN_SCORE}.`)
+    .max(MAX_SCORE, `A nota não pode exceder ${MAX_SCORE}.`)
+    .refine(
+      value => {
+        const multiplied = Math.round(value * 100)
+        return multiplied % 5 === 0
+      },
+      {
+        message: 'A nota deve ser um múltiplo de 0.05.',
+      }
+    ),
 })
 
 export type QuestionCategoryType = z.infer<typeof questionCategorySchema>
