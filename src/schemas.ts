@@ -33,6 +33,9 @@ export const questionCategorySchema = z.object({
     .number()
     .min(MIN_SCORE, `A nota não pode ser menor que ${MIN_SCORE}.`)
     .max(MAX_SCORE, `A nota não pode exceder ${MAX_SCORE}.`)
+    .refine(value => !Number.isNaN(Number(value)), {
+      message: 'A nota deve ser um número válido.',
+    })
     .refine(
       value => {
         const multiplied = Math.round(value * 100)
@@ -79,6 +82,18 @@ export const addAssessmentFormSchema = z.object({
       {
         message: `A soma das notas deve ser igual a ${MAX_SCORE}.`,
       }
+    ),
+  assessmentDate: z
+    .string()
+    .refine(date => date !== null && date.trim() !== '', {
+      message: 'A data da avaliação é obrigatória.',
+    })
+    .refine(
+      val => {
+        const date = new Date(val)
+        return !Number.isNaN(date.getTime())
+      },
+      { message: 'A data da avaliação precisa ser uma data válida.' }
     ),
 })
 

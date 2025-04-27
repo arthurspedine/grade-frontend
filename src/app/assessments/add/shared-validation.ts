@@ -31,6 +31,12 @@ export function validateCategoryForm(
     })
     isValid = false
     errorFields.push('score')
+  } else if (Number.isNaN(Number(score))) {
+    setError('score', {
+      message: 'A nota deve ser um número válido.',
+    })
+    isValid = false
+    errorFields.push('score')
   } else {
     clearErrors('score')
   }

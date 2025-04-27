@@ -109,10 +109,10 @@ export default function FeedbackPage() {
     if (!evaluationData) return
     let error = ''
     if (!evaluationData?.rawFeedback) {
-      error += 'O feedback inicial não pode ser nulo. '
+      error += 'O feedback inicial é obrigatório. '
     }
     if (!evaluationData?.finalFeedback) {
-      error += 'O feedback final não pode ser nulo.'
+      error += 'O feedback final é obrigatório.'
     }
     if (error !== '') {
       setError(error)

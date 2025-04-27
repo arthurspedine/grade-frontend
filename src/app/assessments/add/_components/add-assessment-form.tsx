@@ -138,6 +138,7 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
 
     setValue(`questions.${currentQuestionIndex}.categories`, updatedCategories)
     clearErrors(`questions.${currentQuestionIndex}.categories`)
+    clearErrors('questions')
     toast.success('Categoria adicionada com sucesso.', {
       style: { filter: 'none', zIndex: 10 },
       position: 'top-center',
@@ -200,7 +201,7 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
       score: category.score,
     }
     setValue(`questions.${questionIndex}.categories`, currentCategories)
-
+    clearErrors('questions')
     toast.success('Categoria editada com sucesso.', {
       style: { filter: 'none', zIndex: 10 },
       position: 'top-center',
@@ -267,6 +268,25 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
           {errors.name && (
             <p className='text-destructive text-sm pt-0.5'>
               {errors.name.message}
+            </p>
+          )}
+        </div>
+        <div className='mt-2'>
+          <div className='flex space-x-2 items-center'>
+            <label className='text-base font-medium' htmlFor='assessmentDate'>
+              Data da avaliação:
+            </label>
+            <Input
+              id='assessmentDate'
+              type='date'
+              placeholder='Digite aqui'
+              {...register('assessmentDate')}
+              className='w-fit'
+            />
+          </div>
+          {errors.assessmentDate && (
+            <p className='text-destructive text-sm pt-0.5'>
+              {errors.assessmentDate.message}
             </p>
           )}
         </div>
@@ -341,7 +361,6 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
           </p>
         )}
       </form>
-
       {/* ASSESSMENT CATEGORIES */}
       <div className='flex flex-col space-y-4 pb-4'>
         {/* CATEGORY FORM FOR NAME AND SCORE */}
