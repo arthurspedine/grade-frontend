@@ -35,11 +35,14 @@ export async function authenticatedFetch<T>(
     }
 
     if (response.headers.get('Content-Type')?.includes('application/json')) {
-      return response.json()
+      const jsonResponse = await response.json()
+      return jsonResponse as T
     }
     return {} as Promise<T>
   } catch (error) {
     console.error(`Error in authenticated fetch to ${endpoint}:`, error)
+    console.error(`Used body: ${options.body}`)
+
     return Promise.reject(
       new Error('Houve um erro, tente novamente mais tarde.')
     )

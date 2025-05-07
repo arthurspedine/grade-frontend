@@ -4,11 +4,16 @@ import { useUser } from '@auth0/nextjs-auth0/client'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
-import grade_logo from '/public/grade_logo.svg'
+import grade_logo_dark from '/public/grade_logo_dark.svg'
+import grade_logo_light from '/public/grade_logo_light.svg'
 import { Skeleton } from '../ui/skeleton'
+import { ModeSwitcher } from '../theme-switcher'
+import { useTheme } from 'next-themes'
 
 export function Header() {
   const { user, isLoading } = useUser()
+  const { resolvedTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
 
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement | null>(null)
@@ -19,6 +24,7 @@ export function Header() {
   }
 
   useEffect(() => {
+    setMounted(true)
     const handleClickOutside = (event: MouseEvent) => {
       if (
         dropdownRef.current &&
@@ -36,10 +42,17 @@ export function Header() {
     }
   }, [])
 
+  const logoSrc =
+    mounted && resolvedTheme === 'dark' ? grade_logo_dark : grade_logo_light
+
   return (
-    <header className='flex items-center justify-between pr-14 max-w-[1440px] mx-auto w-full'>
+    <header className='flex items-center justify-between pr-8 max-w-[1440px] mx-auto w-full'>
       <Link href={'/'}>
-        <Image src={grade_logo} alt='Grade logo' className='w-36' />
+        {mounted ? (
+          <Image src={logoSrc} alt='Grade logo' className='w-36' />
+        ) : (
+          <Skeleton className='w-36 h-28' />
+        )}
       </Link>
       {isLoading && (
         <div className='flex items-center gap-4'>
@@ -102,12 +115,16 @@ export function Header() {
               </div>
             )}
           </div>
+          <ModeSwitcher />
         </div>
       )}
       {!isLoading && !user && (
-        <Button asChild>
-          <Link href='/api/auth/login'>Entrar</Link>
-        </Button>
+        <div className='flex items-center space-x-2'>
+          <Button asChild>
+            <Link href='/api/auth/login'>Entrar</Link>
+          </Button>
+          <ModeSwitcher />
+        </div>
       )}
     </header>
   )
