@@ -90,10 +90,18 @@ export const addAssessmentFormSchema = z.object({
     })
     .refine(
       val => {
-        const date = new Date(val)
+        const date = new Date(`${val}T00:00:00`)
         return !Number.isNaN(date.getTime())
       },
       { message: 'A data da avaliação precisa ser uma data válida.' }
+    )
+    .refine(
+      val => {
+        const date = new Date(`${val}T00:00:00`)
+        const now = new Date()
+        return date.getTime() > now.getTime()
+      },
+      { message: 'A data da avaliação precisa ser no futuro.' }
     ),
 })
 

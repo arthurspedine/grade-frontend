@@ -1,7 +1,6 @@
 import './globals.css'
 import { Header } from '@/components/header'
 import { ThemeProvider } from '@/components/theme-provider'
-import { UserProvider } from '@auth0/nextjs-auth0/client'
 import type { Metadata } from 'next'
 import { Poppins } from 'next/font/google'
 import type React from 'react'
@@ -25,7 +24,10 @@ export default function RootLayout({
       <head>
         <link rel='icon' href='/favicon.ico' sizes='any' />
       </head>
-      <body className={`${poppins.className} antialiased`}>
+      <body
+        className={`${poppins.className} antialiased`}
+        suppressHydrationWarning
+      >
         <ThemeProvider
           attribute={'class'}
           defaultTheme={'system'}
@@ -33,11 +35,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <main className='flex flex-col h-[calc(100dvh)] w-full scroll-smooth'>
-            <UserProvider>
-              <Header />
-              {children}
-              <Toaster richColors />
-            </UserProvider>
+            <Header />
+            {children}
+            <Toaster richColors />
             {/* FOOTER */}
           </main>
         </ThemeProvider>

@@ -1,6 +1,6 @@
 'use client'
 import { Button } from '@/components/ui/button'
-import { useUser } from '@auth0/nextjs-auth0/client'
+import { useUser } from '@auth0/nextjs-auth0'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
@@ -46,12 +46,12 @@ export function Header() {
     mounted && resolvedTheme === 'dark' ? grade_logo_dark : grade_logo_light
 
   return (
-    <header className='flex items-center justify-between pr-8 max-w-[1440px] mx-auto w-full'>
+    <header className='flex items-center justify-between px-6 py-4 max-w-[1440px] mx-auto w-full'>
       <Link href={'/'}>
         {mounted ? (
-          <Image src={logoSrc} alt='Grade logo' className='w-36' />
+          <Image src={logoSrc} alt='Grade logo' className='w-12' />
         ) : (
-          <Skeleton className='w-36 h-28' />
+          <Skeleton className='w-12 h-14' />
         )}
       </Link>
       {isLoading && (
@@ -62,19 +62,22 @@ export function Header() {
           </ul>
 
           <Skeleton className='rounded-full w-12 h-12' />
+          <Skeleton className='size-8' />
         </div>
       )}
       {user && !isLoading && (
         <div className='flex items-center gap-4'>
           <ul className='flex space-x-4'>
             <li>
-              <Link href={'/classes'} className='hover:underline'>
+              <Link href={'/classes'} className='group relative'>
                 Turmas
+                <span className='absolute h-0.5 bg-current left-0 -bottom-0.5 w-0 group-hover:w-full transition-all duration-300' />
               </Link>
             </li>
             <li>
-              <Link href={'/assessments'} className='hover:underline'>
+              <Link href={'/assessments'} className='group relative'>
                 Avaliações
+                <span className='absolute h-0.5 bg-current left-0 -bottom-0.5 w-0 group-hover:w-full transition-all duration-300' />
               </Link>
             </li>
           </ul>
@@ -89,8 +92,8 @@ export function Header() {
               <Image
                 src={user.picture ? user.picture : ' '}
                 alt='Foto do usuario'
-                width={48}
-                height={48}
+                width={42}
+                height={42}
                 className='rounded-full'
               />
             </button>
@@ -106,7 +109,7 @@ export function Header() {
                 </div>
                 <div className='mt-2 animate-fade-in-down'>
                   <a
-                    href='/api/auth/logout'
+                    href='/auth/logout'
                     className='block px-4 py-2 text-sm text-primary hover:border-b-2 hover:border-x-2 rounded-b-lg transition-all duration-300'
                   >
                     Sair
@@ -120,8 +123,11 @@ export function Header() {
       )}
       {!isLoading && !user && (
         <div className='flex items-center space-x-2'>
+          <Button asChild variant={'secondary'}>
+            <a href='/auth/login'>Entrar</a>
+          </Button>
           <Button asChild>
-            <Link href='/api/auth/login'>Entrar</Link>
+            <a href='/auth/login?screen_hint=signup'>Cadastrar</a>
           </Button>
           <ModeSwitcher />
         </div>

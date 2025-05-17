@@ -199,6 +199,7 @@ export default function FeedbackPage() {
                       </Button>
                     )}
                     <Button
+                      variant={'blue'}
                       className='w-44'
                       disabled={isLoadingAiFeedback}
                       onClick={handleGenerateAIFeedback}

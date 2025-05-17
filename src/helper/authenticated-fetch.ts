@@ -1,6 +1,6 @@
 'use server'
 import type { FetchOptions } from '@/types'
-import { getToken } from './get-token'
+import { auth0 } from '@/lib/auth0'
 
 export async function authenticatedFetch<T>(
   endpoint: string,
@@ -8,10 +8,10 @@ export async function authenticatedFetch<T>(
   tags?: string[]
 ): Promise<T> {
   try {
-    const accessToken = await getToken()
+    const { token } = await auth0.getAccessToken()
 
     const headers: Record<string, string> = {
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: `Bearer ${token}`,
     }
     if (options.body && !(options.body instanceof FormData)) {
       headers['Content-Type'] = 'application/json'
