@@ -3,6 +3,8 @@ import getCategoryOptions from '../_http/handle-category-options'
 import { AddClassForm } from './_components/add-class-form'
 import { Suspense } from 'react'
 
+export const dynamic = 'force-dynamic'
+
 export default async function AddClassPage() {
   const categoryList: { key: string; label: string }[] =
     await getCategoryOptions()
