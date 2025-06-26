@@ -6,7 +6,7 @@ import { auth0 } from '@/lib/auth0'
 import type {
   ClassPerformanceType,
   DashboardStatsType,
-  UpcomingAssessmentType,
+  PendingAssessmentType,
 } from '@/types'
 import {
   BarChart,
@@ -164,7 +164,7 @@ export default async function MainPage() {
 
   const [stats, assessments, classes] = await Promise.all([
     authenticatedFetch<DashboardStatsType>('/dashboard/stats'),
-    authenticatedFetch<UpcomingAssessmentType[]>('/assessments/upcoming'),
+    authenticatedFetch<PendingAssessmentType[]>('/assessments/pending'),
     authenticatedFetch<ClassPerformanceType[]>('/classes/performance'),
   ])
 
@@ -198,7 +198,7 @@ export default async function MainPage() {
             <div className='p-6 border-b border-card'>
               <h2 className='font-semibold text-xl flex items-center'>
                 <Calendar className='mr-2 text-bluecolor' size={20} />
-                Próximas avaliações
+                Avaliações não finalizadas
               </h2>
             </div>
 

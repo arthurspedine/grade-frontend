@@ -54,7 +54,7 @@ export type DashboardStatsType = {
   totalAssessments: number
 }
 
-export type UpcomingAssessmentType = {
+export type PendingAssessmentType = {
   id: string
   name: string
   assessmentDate: string
