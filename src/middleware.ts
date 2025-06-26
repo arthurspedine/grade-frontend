@@ -1,62 +1,26 @@
-import {
-  getSession,
-  updateSession,
-  withMiddlewareAuthRequired,
-} from '@auth0/nextjs-auth0/edge'
-import { NextResponse } from 'next/server'
+import { type NextRequest, NextResponse } from 'next/server'
+import { auth0 } from './lib/auth0'
 
-export default withMiddlewareAuthRequired(async function middleware(req) {
-  const res = NextResponse.next()
-
-  try {
-    const session = await getSession(req, res)
-
-    if (!session) {
-      const returnUrl = req.nextUrl.pathname
-      return NextResponse.redirect(
-        new URL(
-          `/api/auth/login?returnTo=${encodeURIComponent(returnUrl)}`,
-          req.url
-        )
-      )
-    }
-
-    const { accessToken, user } = session
-
-    if (!accessToken || isTokenExpired(accessToken)) {
-      console.log('Token expirado ou inválido. Atualizando sessão...')
-      await updateSession(req, res, {
-        ...session,
-        user: { ...user },
-      })
-      const returnUrl = req.nextUrl.pathname
-      return NextResponse.redirect(
-        new URL(
-          `/api/auth/login?returnTo=${encodeURIComponent(returnUrl)}`,
-          req.url
-        )
-      )
-    }
-
-    return res
-  } catch (error) {
-    console.error('Erro no middleware de autenticação:', error)
-
-    const returnUrl = req.nextUrl.pathname
-    return NextResponse.redirect(
-      new URL(
-        `/api/auth/login?returnTo=${encodeURIComponent(returnUrl)}`,
-        req.url
-      )
-    )
+export async function middleware(request: NextRequest) {
+  if (request.nextUrl.pathname === '/') {
+    return NextResponse.next()
   }
-})
 
-function isTokenExpired(token: string) {
-  const { exp } = JSON.parse(atob(token.split('.')[1]))
-  return Date.now() >= exp * 1000
+  const authRes = await auth0.middleware(request)
+
+  if (request.nextUrl.pathname.startsWith('/auth')) {
+    return authRes
+  }
+
+  const session = await auth0.getSession(request)
+
+  if (!session) {
+    return NextResponse.redirect(new URL('/auth/login', request.nextUrl.origin))
+  }
+
+  return authRes
 }
 
 export const config = {
-  matcher: ['/classes', '/classes/:path*', '/api/auth/:path*'],
+  matcher: ['/((?!api/auth|_next/static|_next/image|favicon.ico|$).*)'],
 }

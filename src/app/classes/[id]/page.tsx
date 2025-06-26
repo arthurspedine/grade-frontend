@@ -5,6 +5,7 @@ import type { ClassInfoType } from '@/types'
 import { redirect } from 'next/navigation'
 import { StudentsTable } from '../_components/students-table'
 import getCategoryOptions from '../_http/handle-category-options'
+import { GoBackButton } from '@/components/go-back-button'
 
 export default async function ClassInfoPage({
   params,
@@ -25,11 +26,7 @@ export default async function ClassInfoPage({
         <Title>
           Turma <span className='italic'>{classInfo.details.name}</span>
         </Title>
-        <div
-          className={`px-4 py-2 bg-${classInfo.details.active ? 'green' : 'red'}-600 rounded-xl text-secondary font-medium`}
-        >
-          <p>{classInfo.details.active ? 'ATIVA' : 'INATIVA'}</p>
-        </div>
+        <GoBackButton />
       </div>
       <p>
         Categoria:{' '}

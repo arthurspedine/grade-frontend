@@ -1,16 +1,17 @@
 'use server'
 import type { FetchOptions } from '@/types'
-import { getToken } from './get-token'
+import { auth0 } from '@/lib/auth0'
 
 export async function authenticatedFetch<T>(
   endpoint: string,
-  options: FetchOptions = { method: 'GET' }
+  options: FetchOptions = { method: 'GET' },
+  tags?: string[]
 ): Promise<T> {
   try {
-    const accessToken = await getToken()
+    const { token } = await auth0.getAccessToken()
 
     const headers: Record<string, string> = {
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: `Bearer ${token}`,
     }
     if (options.body && !(options.body instanceof FormData)) {
       headers['Content-Type'] = 'application/json'
@@ -25,6 +26,7 @@ export async function authenticatedFetch<T>(
         options.body instanceof FormData
           ? options.body
           : JSON.stringify(options.body),
+      next: tags ? { tags } : undefined,
     })
 
     if (!response.ok) {
@@ -33,11 +35,14 @@ export async function authenticatedFetch<T>(
     }
 
     if (response.headers.get('Content-Type')?.includes('application/json')) {
-      return response.json()
+      const jsonResponse = await response.json()
+      return jsonResponse as T
     }
     return {} as Promise<T>
   } catch (error) {
     console.error(`Error in authenticated fetch to ${endpoint}:`, error)
+    console.error(`Used body: ${options.body}`)
+
     return Promise.reject(
       new Error('Houve um erro, tente novamente mais tarde.')
     )

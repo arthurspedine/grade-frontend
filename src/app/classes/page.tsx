@@ -59,7 +59,7 @@ export default async function ClassesPage() {
                   </TableCell>
                   <TableCell className='w-full flex justify-end'>
                     <div className='max-w-72 flex-grow flex space-x-2'>
-                      <Button variant={'outline'} asChild>
+                      <Button variant={'secondary'} asChild>
                         <Link href={`/classes/${c.id}`}>Ver turma</Link>
                       </Button>
                       <Button variant={'outline'} asChild>

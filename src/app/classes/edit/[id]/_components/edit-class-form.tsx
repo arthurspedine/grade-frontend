@@ -2,6 +2,7 @@
 
 import { StudentsTable } from '@/app/classes/_components/students-table'
 import { updateClass } from '@/app/classes/_http/handle-http-class'
+import { GoBackButton } from '@/components/go-back-button'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -23,7 +24,6 @@ import { type EditClassFormType, editClassFormSchema } from '@/schemas'
 import type { ClassType, StudentType } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FileQuestion } from 'lucide-react'
-import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { useEffect, useRef } from 'react'
 import { Controller, useForm } from 'react-hook-form'
@@ -118,10 +118,11 @@ export function EditClassForm({
       success: () => {
         setTimeout(() => {
           redirect('/classes')
-        }, 1000)
+        }, 500)
         return 'Turma editada com sucesso.'
       },
-      error: 'Algo deu errado. Por favor, tente novamente mais tarde.',
+      error:
+        'Algo deu errado. Por favor, verifique se os alunos não estão em outras turmas ou tente novamente mais tarde.',
       position: 'top-center',
       style: { filter: 'none', zIndex: 10 },
     })
@@ -229,9 +230,7 @@ export function EditClassForm({
             )}
           </div>
           <div className='flex space-x-2'>
-            <Button variant={'outline'} asChild>
-              <Link href={'/classes'}>Voltar</Link>
-            </Button>
+            <GoBackButton />
             <Button variant={'green'}>Salvar Turma</Button>
           </div>
         </div>

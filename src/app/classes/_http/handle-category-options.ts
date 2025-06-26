@@ -3,7 +3,7 @@ export default async function getCategoryOptions(): Promise<
 > {
   const response = await fetch(`${process.env.BACKEND_URL}/category/list`, {
     method: 'GET',
-    cache: 'no-cache',
+    cache: 'force-cache',
   })
 
   if (!response.ok) {

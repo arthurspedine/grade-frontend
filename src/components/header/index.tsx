@@ -1,14 +1,19 @@
 'use client'
 import { Button } from '@/components/ui/button'
-import { useUser } from '@auth0/nextjs-auth0/client'
+import { useUser } from '@auth0/nextjs-auth0'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
-import grade_logo from '/public/grade_logo.svg'
+import grade_logo_dark from '/public/grade_logo_dark.svg'
+import grade_logo_light from '/public/grade_logo_light.svg'
 import { Skeleton } from '../ui/skeleton'
+import { ModeSwitcher } from '../theme-switcher'
+import { useTheme } from 'next-themes'
 
 export function Header() {
   const { user, isLoading } = useUser()
+  const { resolvedTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
 
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement | null>(null)
@@ -19,6 +24,7 @@ export function Header() {
   }
 
   useEffect(() => {
+    setMounted(true)
     const handleClickOutside = (event: MouseEvent) => {
       if (
         dropdownRef.current &&
@@ -36,10 +42,17 @@ export function Header() {
     }
   }, [])
 
+  const logoSrc =
+    mounted && resolvedTheme === 'dark' ? grade_logo_dark : grade_logo_light
+
   return (
-    <header className='flex items-center justify-between pr-14 max-w-[1440px] mx-auto w-full'>
+    <header className='flex items-center justify-between px-6 py-4 max-w-[1440px] mx-auto w-full'>
       <Link href={'/'}>
-        <Image src={grade_logo} alt='Grade logo' className='w-36' />
+        {mounted ? (
+          <Image src={logoSrc} alt='Grade logo' className='w-12' />
+        ) : (
+          <Skeleton className='w-12 h-14' />
+        )}
       </Link>
       {isLoading && (
         <div className='flex items-center gap-4'>
@@ -49,19 +62,22 @@ export function Header() {
           </ul>
 
           <Skeleton className='rounded-full w-12 h-12' />
+          <Skeleton className='size-8' />
         </div>
       )}
       {user && !isLoading && (
         <div className='flex items-center gap-4'>
           <ul className='flex space-x-4'>
             <li>
-              <Link href={'/classes'} className='hover:underline'>
+              <Link href={'/classes'} className='group relative'>
                 Turmas
+                <span className='absolute h-0.5 bg-current left-0 -bottom-0.5 w-0 group-hover:w-full transition-all duration-300' />
               </Link>
             </li>
             <li>
-              <Link href={'/assessments'} className='hover:underline'>
+              <Link href={'/assessments'} className='group relative'>
                 Avaliações
+                <span className='absolute h-0.5 bg-current left-0 -bottom-0.5 w-0 group-hover:w-full transition-all duration-300' />
               </Link>
             </li>
           </ul>
@@ -76,8 +92,8 @@ export function Header() {
               <Image
                 src={user.picture ? user.picture : ' '}
                 alt='Foto do usuario'
-                width={48}
-                height={48}
+                width={42}
+                height={42}
                 className='rounded-full'
               />
             </button>
@@ -93,7 +109,7 @@ export function Header() {
                 </div>
                 <div className='mt-2 animate-fade-in-down'>
                   <a
-                    href='/api/auth/logout'
+                    href='/auth/logout'
                     className='block px-4 py-2 text-sm text-primary hover:border-b-2 hover:border-x-2 rounded-b-lg transition-all duration-300'
                   >
                     Sair
@@ -102,12 +118,19 @@ export function Header() {
               </div>
             )}
           </div>
+          <ModeSwitcher />
         </div>
       )}
       {!isLoading && !user && (
-        <Button asChild>
-          <Link href='/api/auth/login'>Entrar</Link>
-        </Button>
+        <div className='flex items-center space-x-2'>
+          <Button asChild variant={'secondary'}>
+            <a href='/auth/login'>Entrar</a>
+          </Button>
+          <Button asChild>
+            <a href='/auth/login?screen_hint=signup'>Cadastrar</a>
+          </Button>
+          <ModeSwitcher />
+        </div>
       )}
     </header>
   )
