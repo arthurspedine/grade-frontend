@@ -47,3 +47,22 @@ export type AssessmentInfoType = {
 export type AiGeneratedFeedbackType = {
   message: string
 }
+
+export type DashboardStatsType = {
+  totalStudents: number
+  totalClasses: number
+  totalAssessments: number
+}
+
+export type PendingAssessmentType = {
+  id: string
+  name: string
+  assessmentDate: string
+  classesCount: number
+}
+
+export type ClassPerformanceType = {
+  id: string
+  name: string
+  performanceRate: number
+}

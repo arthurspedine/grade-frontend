@@ -8,3 +8,25 @@ export function formatDate(dateString: string): string {
 
   return `${formattedDay}/${formattedMonth}/${date.getFullYear()}`
 }
+
+export function formatUpcomingDate(date: string) {
+  const [year, monthStr, day] = date.split('-').map(Number)
+
+  const monthNames = [
+    'Jan',
+    'Fev',
+    'Mar',
+    'Abr',
+    'Mai',
+    'Jun',
+    'Jul',
+    'Ago',
+    'Set',
+    'Out',
+    'Nov',
+    'Dez',
+  ]
+  const month = monthNames[Number(monthStr) - 1]
+
+  return `${String(day).padStart(2, '0')} ${month}`
+}

@@ -135,7 +135,7 @@ export default function FeedbackPage() {
   }
 
   return (
-    <Card className='hover:cursor-default px-8 py-6 w-full'>
+    <Card className='hover:cursor-default px-8 py-12 w-full'>
       <CardHeader className='flex-row justify-between space-y-0 py-2 px-0'>
         <div>
           <CardTitle className='hover:cursor-text'>
@@ -199,6 +199,7 @@ export default function FeedbackPage() {
                       </Button>
                     )}
                     <Button
+                      variant={'blue'}
                       className='w-44'
                       disabled={isLoadingAiFeedback}
                       onClick={handleGenerateAIFeedback}
