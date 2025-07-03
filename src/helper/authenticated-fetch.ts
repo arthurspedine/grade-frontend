@@ -1,6 +1,8 @@
 'use server'
+import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import type { FetchOptions } from '@/types'
-import { auth0 } from '@/lib/auth0'
+import { getServerSession } from 'next-auth/next'
+import { redirect } from 'next/navigation'
 
 export async function authenticatedFetch<T>(
   endpoint: string,
@@ -8,11 +10,24 @@ export async function authenticatedFetch<T>(
   tags?: string[]
 ): Promise<T> {
   try {
-    const { token } = await auth0.getAccessToken()
+    const session = await getServerSession(authOptions)
+
+    if (!session) {
+      redirect('/auth/signin')
+    }
+
+    if (session.error === 'RefreshAccessTokenError') {
+      redirect('/auth/signin?error=SessionExpired')
+    }
+
+    if (!session.idToken) {
+      redirect('/auth/signin?error=TokenMissing')
+    }
 
     const headers: Record<string, string> = {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${session?.idToken}`,
     }
+
     if (options.body && !(options.body instanceof FormData)) {
       headers['Content-Type'] = 'application/json'
     }
@@ -30,8 +45,15 @@ export async function authenticatedFetch<T>(
     })
 
     if (!response.ok) {
-      const errorResponse = await response.text()
-      return Promise.reject(new Error(JSON.parse(errorResponse).error))
+      let errorResponse = await response.text()
+      if (!errorResponse) {
+        errorResponse = 'Unknown error occurred.'
+      }
+      try {
+        const parsed = JSON.parse(errorResponse)
+        errorResponse = parsed.error || errorResponse
+      } catch {}
+      return Promise.reject(new Error(errorResponse))
     }
 
     if (response.headers.get('Content-Type')?.includes('application/json')) {

@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { MAX_SCORE, MIN_SCORE } from './app/assessments/_helper/score'
+import { MAX_SCORE, MIN_SCORE } from './app/(home)/assessments/_helper/score'
 
 export const addClassFormSchema = z.object({
   name: z.string().min(1, 'O nome da turma é obrigatório.'),

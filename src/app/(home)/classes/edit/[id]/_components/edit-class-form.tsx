@@ -1,7 +1,7 @@
 'use client'
 
-import { StudentsTable } from '@/app/classes/_components/students-table'
-import { updateClass } from '@/app/classes/_http/handle-http-class'
+import { StudentsTable } from '@/app/(home)/classes/_components/students-table'
+import { updateClass } from '@/app/(home)/classes/_http/handle-http-class'
 import { GoBackButton } from '@/components/go-back-button'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
