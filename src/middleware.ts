@@ -1,5 +1,4 @@
 import { type NextRequest, NextResponse } from 'next/server'
-import { getToken } from 'next-auth/jwt'
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
@@ -9,25 +8,22 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
+  const token =
+    request.cookies.get('__Secure-next-auth.session-token')?.value ||
+    request.cookies.get('next-auth.session-token')?.value
+
+  if (pathname.startsWith('/auth/') && token) {
+    const dashboardUrl = new URL('/dashboard', request.url)
+    return NextResponse.redirect(dashboardUrl)
+  }
+
   if (pathname.startsWith('/auth/')) {
     return NextResponse.next()
   }
 
-  const token = await getToken({
-    req: request,
-    secret: process.env.NEXTAUTH_SECRET,
-  })
-
   if (!token) {
     const signInUrl = new URL('/auth/signin', request.url)
     signInUrl.searchParams.set('callbackUrl', request.url)
-    return NextResponse.redirect(signInUrl)
-  }
-
-  if (token.error === 'RefreshAccessTokenError') {
-    const signInUrl = new URL('/auth/signin', request.url)
-    signInUrl.searchParams.set('callbackUrl', request.url)
-    signInUrl.searchParams.set('error', 'SessionExpired')
     return NextResponse.redirect(signInUrl)
   }
 

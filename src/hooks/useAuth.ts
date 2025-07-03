@@ -1,29 +1,31 @@
 'use client'
 
 import { getSession, signIn } from 'next-auth/react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 
 interface UseAuthOptions {
   redirectOnSuccess?: string
   autoRedirectIfAuthenticated?: boolean
+  callbackUrl?: string | null
+  error?: string | null
 }
 
 export function useAuth(options: UseAuthOptions = {}) {
   const {
     redirectOnSuccess = '/dashboard',
     autoRedirectIfAuthenticated = false,
+    callbackUrl: providedCallbackUrl,
+    error,
   } = options
 
   const router = useRouter()
-  const searchParams = useSearchParams()
   const [isLoading, setIsLoading] = useState(false)
   const [isCheckingSession, setIsCheckingSession] = useState(
     autoRedirectIfAuthenticated
   )
 
-  const callbackUrl = searchParams?.get('callbackUrl') || redirectOnSuccess
-  const error = searchParams?.get('error')
+  const callbackUrl = providedCallbackUrl || redirectOnSuccess
 
   // Check if user is already authenticated
   useEffect(() => {

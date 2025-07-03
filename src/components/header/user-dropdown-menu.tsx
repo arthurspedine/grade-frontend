@@ -124,7 +124,7 @@ export function UserDropdownMenu({
         <button
           type='button'
           onClick={() => signOut({ callbackUrl: '/' })}
-          className='flex items-center w-full px-4 py-2 text-sm text-red-600'
+          className='flex items-center w-full px-4 py-3 text-sm text-red-600'
         >
           <LogOut className='w-4 h-4 mr-3' />
           Sair

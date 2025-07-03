@@ -13,17 +13,14 @@ export async function authenticatedFetch<T>(
     const session = await getServerSession(authOptions)
 
     if (!session) {
-      console.error('Session not found')
       redirect('/auth/signin')
     }
 
     if (session.error === 'RefreshAccessTokenError') {
-      console.error('Refresh token error, redirecting to login')
       redirect('/auth/signin?error=SessionExpired')
     }
 
     if (!session.idToken) {
-      console.error('ID Token not found in session')
       redirect('/auth/signin?error=TokenMissing')
     }
 

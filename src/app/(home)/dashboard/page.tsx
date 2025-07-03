@@ -66,6 +66,8 @@ const UpcomingAssessment = ({
   )
 }
 
+export const dynamic = 'force-dynamic'
+
 export default async function DashboardPage() {
   const [stats, assessments, classes] = await Promise.all([
     authenticatedFetch<DashboardStatsType>('/dashboard/stats'),

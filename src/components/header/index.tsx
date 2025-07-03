@@ -18,7 +18,6 @@ export function Header() {
 
   const isLoading = status === 'loading'
   const user = session?.user
-  console.log(user)
 
   useEffect(() => {
     setMounted(true)

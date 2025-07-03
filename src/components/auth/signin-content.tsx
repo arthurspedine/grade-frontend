@@ -3,6 +3,8 @@
 import { useAuth } from '@/hooks/useAuth'
 import { LoadingSpinner } from '../loading-spinner'
 import { GoogleSignInButton } from './google-signin-button'
+import { Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
 
 interface SignInContentProps {
   redirectOnSuccess?: string
@@ -12,16 +14,18 @@ interface SignInContentProps {
   description?: string
 }
 
-export function SignInContent({
-  redirectOnSuccess = '/dashboard',
-  autoRedirectIfAuthenticated = false,
-  showTitle = true,
-  title = 'Entre na sua conta',
-  description = 'Faça login com sua conta Google.',
-}: SignInContentProps) {
+function SignInSearchParamsWrapper({
+  redirectOnSuccess,
+  autoRedirectIfAuthenticated,
+}: { redirectOnSuccess: string; autoRedirectIfAuthenticated: boolean }) {
+  const searchParams = useSearchParams()
+  const callbackUrl = searchParams?.get('callbackUrl')
+  const error = searchParams?.get('error')
   const { isLoading, isCheckingSession, handleGoogleSignIn } = useAuth({
     redirectOnSuccess,
     autoRedirectIfAuthenticated,
+    callbackUrl,
+    error,
   })
 
   if (isCheckingSession) {
@@ -31,7 +35,22 @@ export function SignInContent({
       </div>
     )
   }
+  return (
+    <GoogleSignInButton
+      isLoading={isLoading}
+      disabled={isLoading}
+      onClick={handleGoogleSignIn}
+    />
+  )
+}
 
+export function SignInContent({
+  redirectOnSuccess = '/dashboard',
+  autoRedirectIfAuthenticated = false,
+  showTitle = true,
+  title = 'Entre na sua conta',
+  description = 'Faça login com sua conta Google.',
+}: SignInContentProps) {
   return (
     <div className='space-y-6 w-full'>
       {showTitle && (
@@ -40,12 +59,12 @@ export function SignInContent({
           <p className='mt-2 text-sm text-muted-foreground'>{description}</p>
         </div>
       )}
-
-      <GoogleSignInButton
-        isLoading={isLoading}
-        disabled={isLoading}
-        onClick={handleGoogleSignIn}
-      />
+      <Suspense>
+        <SignInSearchParamsWrapper
+          redirectOnSuccess={redirectOnSuccess}
+          autoRedirectIfAuthenticated={autoRedirectIfAuthenticated}
+        />
+      </Suspense>
     </div>
   )
 }

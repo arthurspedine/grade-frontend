@@ -2,8 +2,10 @@
 
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import { Suspense } from 'react'
+import { LoadingSpinner } from '@/components/loading-spinner'
 
-export default function AuthError() {
+function ErrorMessage() {
   const searchParams = useSearchParams()
   const error = searchParams?.get('error')
 
@@ -21,15 +23,23 @@ export default function AuthError() {
   }
 
   return (
+    <div className='mt-4 bg-secondary border text-red-600 px-4 py-3 rounded-md'>
+      <p className='text-center'>{getErrorMessage(error)}</p>
+    </div>
+  )
+}
+
+export default function AuthError() {
+  return (
     <div className='flex justify-center py-2 px-4 sm:px-6 lg:px-8'>
       <div className='max-w-md w-full space-y-8'>
         <div>
           <h2 className='mt-6 text-center text-3xl font-extrabold'>
             Erro de Autenticação
           </h2>
-          <div className='mt-4 bg-secondary border text-red-600 px-4 py-3 rounded-md'>
-            <p className='text-center'>{getErrorMessage(error)}</p>
-          </div>
+          <Suspense fallback={<LoadingSpinner />}>
+            <ErrorMessage />
+          </Suspense>
         </div>
 
         <div className='text-center'>
