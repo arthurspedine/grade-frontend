@@ -42,8 +42,8 @@ export function AlreadyEvaluatedStudentContainer({
   const totalPercentage = calculateTotalPercentage()
 
   return (
-    <Card className='shadow-md pb-6'>
-      <CardHeader className='border-b'>
+    <Card className='shadow-md pb-6 px-10'>
+      <CardHeader className='border-b px-0'>
         <div className='flex items-start justify-between'>
           <div>
             <CardTitle className='text-xl flex items-center gap-2'>

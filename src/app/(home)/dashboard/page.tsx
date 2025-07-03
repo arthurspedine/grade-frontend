@@ -117,13 +117,14 @@ export default async function DashboardPage() {
                 />
               ))}
               <div className='p-4 text-center'>
-                <button
+                <Link
+                  href={'/assessments'}
                   type='button'
                   className='text-bluecolor text-sm font-medium relative group'
                 >
                   Ver todas as avaliações
                   <span className='absolute h-0.5 bg-current left-0 -bottom-0.5 w-0 group-hover:w-full transition-all duration-300' />
-                </button>
+                </Link>
               </div>
             </div>
           </div>

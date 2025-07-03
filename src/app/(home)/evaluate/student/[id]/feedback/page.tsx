@@ -238,7 +238,7 @@ export default function FeedbackPage() {
                   ref={textareaRef => {
                     if (textareaRef) {
                       textareaRef.style.height = 'auto'
-                      textareaRef.style.height = `${Math.min(textareaRef.scrollHeight, 300)}px`
+                      textareaRef.style.height = `${Math.min(textareaRef.scrollHeight + 10, 300)}px`
                     }
                   }}
                 />
