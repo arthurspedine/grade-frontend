@@ -1,6 +1,6 @@
 'use client'
 import { Button } from '@/components/ui/button'
-import { useUser } from '@auth0/nextjs-auth0'
+import { useSession, signOut } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
@@ -11,13 +11,16 @@ import { ModeSwitcher } from '../theme-switcher'
 import { useTheme } from 'next-themes'
 
 export function Header() {
-  const { user, isLoading } = useUser()
+  const { data: session, status } = useSession()
   const { resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
 
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement | null>(null)
   const buttonRef = useRef<HTMLButtonElement | null>(null)
+
+  const isLoading = status === 'loading'
+  const user = session?.user
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen)
@@ -59,6 +62,7 @@ export function Header() {
           <ul className='flex space-x-4'>
             <Skeleton className='w-20 h-6' />
             <Skeleton className='w-20 h-6' />
+            <Skeleton className='w-20 h-6' />
           </ul>
 
           <Skeleton className='rounded-full w-12 h-12' />
@@ -68,6 +72,12 @@ export function Header() {
       {user && !isLoading && (
         <div className='flex items-center gap-4'>
           <ul className='flex space-x-4'>
+            <li>
+              <Link href={'/dashboard'} className='group relative'>
+                Dashboard
+                <span className='absolute h-0.5 bg-current left-0 -bottom-0.5 w-0 group-hover:w-full transition-all duration-300' />
+              </Link>
+            </li>
             <li>
               <Link href={'/classes'} className='group relative'>
                 Turmas
@@ -90,7 +100,7 @@ export function Header() {
               type='button'
             >
               <Image
-                src={user.picture ? user.picture : ' '}
+                src={user.image ? user.image : '/favicon.ico'}
                 alt='Foto do usuario'
                 width={42}
                 height={42}
@@ -108,12 +118,13 @@ export function Header() {
                   <p className='font-medium truncate'>{user.email}</p>
                 </div>
                 <div className='mt-2 animate-fade-in-down'>
-                  <a
-                    href='/auth/logout'
-                    className='block px-4 py-2 text-sm text-primary hover:border-b-2 hover:border-x-2 rounded-b-lg transition-all duration-300'
+                  <button
+                    type='button'
+                    onClick={() => signOut()}
+                    className='block w-full text-left px-4 py-2 text-sm text-primary hover:border-b-2 hover:border-x-2 rounded-b-lg transition-all duration-300'
                   >
                     Sair
-                  </a>
+                  </button>
                 </div>
               </div>
             )}
@@ -124,10 +135,7 @@ export function Header() {
       {!isLoading && !user && (
         <div className='flex items-center space-x-2'>
           <Button asChild variant={'secondary'}>
-            <a href='/auth/login'>Entrar</a>
-          </Button>
-          <Button asChild>
-            <a href='/auth/login?screen_hint=signup'>Cadastrar</a>
+            <Link href='/auth/signin'>Entrar</Link>
           </Button>
           <ModeSwitcher />
         </div>

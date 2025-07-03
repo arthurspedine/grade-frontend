@@ -1,24 +1,37 @@
 import { type NextRequest, NextResponse } from 'next/server'
-import { auth0 } from './lib/auth0'
+import { getToken } from 'next-auth/jwt'
 
 export async function middleware(request: NextRequest) {
-  if (request.nextUrl.pathname === '/') {
+  const { pathname } = request.nextUrl
+
+  // Home page always accessible
+  if (pathname === '/') {
     return NextResponse.next()
   }
 
-  const authRes = await auth0.middleware(request)
-
-  if (request.nextUrl.pathname.startsWith('/auth')) {
-    return authRes
+  if (pathname.startsWith('/auth/')) {
+    return NextResponse.next()
   }
 
-  const session = await auth0.getSession(request)
+  const token = await getToken({
+    req: request,
+    secret: process.env.NEXTAUTH_SECRET,
+  })
 
-  if (!session) {
-    return NextResponse.redirect(new URL('/auth/login', request.nextUrl.origin))
+  if (!token) {
+    const signInUrl = new URL('/auth/signin', request.url)
+    signInUrl.searchParams.set('callbackUrl', request.url)
+    return NextResponse.redirect(signInUrl)
   }
 
-  return authRes
+  if (token.error === 'RefreshAccessTokenError') {
+    const signInUrl = new URL('/auth/signin', request.url)
+    signInUrl.searchParams.set('callbackUrl', request.url)
+    signInUrl.searchParams.set('error', 'SessionExpired')
+    return NextResponse.redirect(signInUrl)
+  }
+
+  return NextResponse.next()
 }
 
 export const config = {

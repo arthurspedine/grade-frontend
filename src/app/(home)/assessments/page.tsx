@@ -10,7 +10,7 @@ import { handleAssessmentsList } from './_http/handle-http-assessments'
 import { Button } from '@/components/ui/button'
 import { formatDate } from '@/helper/format-date'
 
-export const dynamic = 'force-dynamic'
+// export const dynamic = 'force-dynamic'
 
 export default async function AssessmentsPage() {
   const assessmentsList = await handleAssessmentsList()

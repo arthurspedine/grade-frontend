@@ -1,9 +1,9 @@
 'use client'
-import { MAX_SCORE } from '@/app/assessments/_helper/score'
+import { MAX_SCORE } from '@/app/(home)/assessments/_helper/score'
 import {
   getChatFeedback,
   handleFinishEvaluation,
-} from '@/app/evaluate/_http/handle-http-evaluate'
+} from '@/app/(home)/evaluate/_http/handle-http-evaluate'
 import { GoBackButton } from '@/components/go-back-button'
 import { Button } from '@/components/ui/button'
 import {

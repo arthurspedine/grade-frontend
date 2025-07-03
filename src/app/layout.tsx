@@ -1,10 +1,10 @@
 import './globals.css'
-import { Header } from '@/components/header'
 import { ThemeProvider } from '@/components/theme-provider'
 import type { Metadata } from 'next'
 import { Poppins } from 'next/font/google'
 import type React from 'react'
 import { Toaster } from 'sonner'
+import { AuthProvider } from '@/components/auth-provider'
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -18,7 +18,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: { children: React.ReactNode }) {
+  modal,
+}: {
+  children: React.ReactNode
+  modal: React.ReactNode
+}) {
   return (
     <html lang='pt-BR' suppressHydrationWarning>
       <head>
@@ -34,12 +38,14 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <main className='flex flex-col h-[calc(100dvh)] w-full scroll-smooth'>
-            <Header />
-            {children}
-            <Toaster richColors />
-            {/* FOOTER */}
-          </main>
+          <AuthProvider>
+            <main className='flex flex-col h-[calc(100dvh)] w-full scroll-smooth'>
+              {children}
+              <Toaster richColors />
+            </main>
+            {modal}
+            <div id='modal-root' />
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

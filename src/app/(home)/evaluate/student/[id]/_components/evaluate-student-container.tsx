@@ -1,5 +1,5 @@
 'use client'
-import { MAX_SCORE } from '@/app/assessments/_helper/score'
+import { MAX_SCORE } from '@/app/(home)/assessments/_helper/score'
 import { GoBackButton } from '@/components/go-back-button'
 import { Button } from '@/components/ui/button'
 import {
