@@ -1,24 +1,33 @@
 import { type NextRequest, NextResponse } from 'next/server'
-import { auth0 } from './lib/auth0'
 
 export async function middleware(request: NextRequest) {
-  if (request.nextUrl.pathname === '/') {
+  const { pathname } = request.nextUrl
+
+  // Home page always accessible
+  if (pathname === '/') {
     return NextResponse.next()
   }
 
-  const authRes = await auth0.middleware(request)
+  const token =
+    request.cookies.get('__Secure-next-auth.session-token')?.value ||
+    request.cookies.get('next-auth.session-token')?.value
 
-  if (request.nextUrl.pathname.startsWith('/auth')) {
-    return authRes
+  if (pathname.startsWith('/auth/') && token) {
+    const dashboardUrl = new URL('/dashboard', request.url)
+    return NextResponse.redirect(dashboardUrl)
   }
 
-  const session = await auth0.getSession(request)
-
-  if (!session) {
-    return NextResponse.redirect(new URL('/auth/login', request.nextUrl.origin))
+  if (pathname.startsWith('/auth/')) {
+    return NextResponse.next()
   }
 
-  return authRes
+  if (!token) {
+    const signInUrl = new URL('/auth/signin', request.url)
+    signInUrl.searchParams.set('callbackUrl', request.url)
+    return NextResponse.redirect(signInUrl)
+  }
+
+  return NextResponse.next()
 }
 
 export const config = {

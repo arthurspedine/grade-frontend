@@ -1,9 +1,9 @@
 'use client'
-import { MAX_SCORE } from '@/app/assessments/_helper/score'
+import { MAX_SCORE } from '@/app/(home)/assessments/_helper/score'
 import {
   getChatFeedback,
   handleFinishEvaluation,
-} from '@/app/evaluate/_http/handle-http-evaluate'
+} from '@/app/(home)/evaluate/_http/handle-http-evaluate'
 import { GoBackButton } from '@/components/go-back-button'
 import { Button } from '@/components/ui/button'
 import {
@@ -238,7 +238,7 @@ export default function FeedbackPage() {
                   ref={textareaRef => {
                     if (textareaRef) {
                       textareaRef.style.height = 'auto'
-                      textareaRef.style.height = `${Math.min(textareaRef.scrollHeight, 300)}px`
+                      textareaRef.style.height = `${Math.min(textareaRef.scrollHeight + 10, 300)}px`
                     }
                   }}
                 />
