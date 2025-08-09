@@ -63,11 +63,11 @@ export function UserDropdownMenu({
   }
 
   return (
-    <div className='relative' ref={dropdownRef}>
+    <div className='relative mx-2' ref={dropdownRef}>
       <button
         type='button'
         onClick={() => setIsOpen(!isOpen)}
-        className='flex items-center space-x-3 py-2 rounded-lg hover:bg-secondary transition-colors duration-200 focus:outline-none'
+        className='flex items-center space-x-3 py-2 px-2 rounded-lg hover:bg-secondary transition-colors duration-200 focus:outline-none'
       >
         {/* Avatar */}
         <Avatar className='size-8'>

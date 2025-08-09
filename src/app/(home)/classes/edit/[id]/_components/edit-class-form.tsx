@@ -1,7 +1,7 @@
 'use client'
 
 import { StudentsTable } from '@/app/(home)/classes/_components/students-table'
-import { updateClass } from '@/app/(home)/classes/_http/handle-http-class'
+import { updateClass } from '@/http/handle-http-class'
 import { GoBackButton } from '@/components/go-back-button'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -175,7 +175,7 @@ export function EditClassForm({
                     onValueChange={field.onChange}
                   >
                     <SelectTrigger className='w-[180px]' id='category'>
-                      <SelectValue placeholder='Selecione...' />
+                      <SelectValue placeholder={'Selecione...'} />
                     </SelectTrigger>
                     <SelectContent>
                       {categoryList.map(c => (

@@ -1,26 +1,15 @@
 import { Title } from '@/components/title'
-import getCategoryOptions from '../_http/handle-category-options'
 import { AddClassForm } from './_components/add-class-form'
-import { Suspense } from 'react'
+import { GoBackButton } from '@/components/go-back-button'
 
-export const dynamic = 'force-dynamic'
-
-export default async function AddClassPage() {
-  const categoryList: { key: string; label: string }[] =
-    await getCategoryOptions()
-
+export default function AddClassPage() {
   return (
     <section className='max-w-[1440px] mx-auto w-full h-full px-8 flex flex-col'>
-      <Title>Adicionar Nova Turma</Title>
-      <Suspense
-        fallback={
-          <p className='text-muted-foreground text-sm text-center'>
-            Carregando...
-          </p>
-        }
-      >
-        <AddClassForm categoryList={categoryList} />
-      </Suspense>
+      <div className='flex justify-between'>
+        <Title>Adicionar Nova Turma</Title>
+        <GoBackButton goBackUrl='/classes' />
+      </div>
+      <AddClassForm />
     </section>
   )
 }

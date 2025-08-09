@@ -17,6 +17,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip'
 import { useCSVValidation } from '@/hooks/useStudentUpload'
+import { useCategories } from '@/hooks/useCategories'
 import { type AddClassFormType, addClassFormSchema } from '@/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FileQuestion } from 'lucide-react'
@@ -25,14 +26,12 @@ import { useEffect, useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { StudentsTable } from '../../_components/students-table'
-import { addClass } from '../../_http/handle-http-class'
+import { addClass } from '@/http/handle-http-class'
 import { decodeText } from '@/helper/base64-search-params'
 
-type AddClassFormProps = {
-  categoryList: { key: string; label: string }[]
-}
-
-export function AddClassForm({ categoryList }: AddClassFormProps) {
+export function AddClassForm() {
+  const { categories: categoryList, loading: categoriesLoading } =
+    useCategories()
   const params = useSearchParams()
   const [returnTo, setReturnTo] = useState<string | null>(null)
   useEffect(() => {
@@ -151,16 +150,27 @@ export function AddClassForm({ categoryList }: AddClassFormProps) {
                     {...field}
                     value={field.value || ''}
                     onValueChange={field.onChange}
+                    disabled={categoriesLoading}
                   >
                     <SelectTrigger className='w-[180px]' id='category'>
-                      <SelectValue placeholder='Selecione...' />
+                      <SelectValue
+                        placeholder={
+                          categoriesLoading ? 'Carregando...' : 'Selecione...'
+                        }
+                      />
                     </SelectTrigger>
                     <SelectContent>
-                      {categoryList.map(c => (
-                        <SelectItem key={c.key} value={c.key}>
-                          {c.label}
+                      {categoriesLoading ? (
+                        <SelectItem value='loading' disabled>
+                          Carregando categorias...
                         </SelectItem>
-                      ))}
+                      ) : (
+                        categoryList.map(c => (
+                          <SelectItem key={c.key} value={c.key}>
+                            {c.label}
+                          </SelectItem>
+                        ))
+                      )}
                     </SelectContent>
                   </Select>
                 )}
@@ -207,7 +217,9 @@ export function AddClassForm({ categoryList }: AddClassFormProps) {
               </p>
             )}
           </div>
-          <Button variant={'green'}>Adicionar Turma</Button>
+          <Button variant={'green'} disabled={categoriesLoading}>
+            Adicionar Turma
+          </Button>
         </div>
         <StudentsTable students={students} />
       </div>

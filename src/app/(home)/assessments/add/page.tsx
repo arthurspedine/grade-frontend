@@ -1,4 +1,4 @@
-import { handleClassesList } from '@/app/(home)/classes/_http/handle-http-class'
+import { handleClassesList } from '@/http/handle-http-class'
 import { Title } from '@/components/title'
 import type { ClassType } from '@/types'
 import { AddAssessmentForm } from './_components/add-assessment-form'

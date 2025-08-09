@@ -1,3 +1,5 @@
+'use server'
+
 export default async function getCategoryOptions(): Promise<
   { key: string; label: string }[]
 > {

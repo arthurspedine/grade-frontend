@@ -48,7 +48,7 @@ export function Header() {
         </div>
       )}
       {user && !isLoading && (
-        <div className='flex items-center gap-4'>
+        <div className='flex items-center gap-2'>
           <ul className='flex space-x-4'>
             <li>
               <Link href={'/dashboard'} className='group relative'>

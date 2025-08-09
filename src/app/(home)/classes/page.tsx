@@ -1,3 +1,5 @@
+'use client'
+
 import { Title } from '@/components/title'
 import { Button } from '@/components/ui/button'
 import {
@@ -9,18 +11,32 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import type { ClassType } from '@/types'
 import Link from 'next/link'
 import { DisableClassDialog } from './_components/disable-class-dialog'
-import getCategoryOptions from './_http/handle-category-options'
-import { handleClassesList } from './_http/handle-http-class'
+import { useClasses } from '@/http/use/useClasses'
+import { ClassesSkeleton } from './_components/classes-skeleton'
 
-export const dynamic = 'force-dynamic'
+export default function ClassesPage() {
+  const { data, loading, error } = useClasses()
 
-export default async function ClassesPage() {
-  const classesList: ClassType[] = await handleClassesList()
-  const categoryList: { key: string; label: string }[] =
-    await getCategoryOptions()
+  if (loading) {
+    return <ClassesSkeleton />
+  }
+
+  if (error) {
+    return (
+      <section className='max-w-[1440px] mx-auto w-full px-8 flex-grow'>
+        <div className='flex flex-col items-center justify-center pt-16'>
+          <p className='text-red-500 mb-4'>{error}</p>
+          <Button onClick={() => window.location.reload()}>
+            Tentar novamente
+          </Button>
+        </div>
+      </section>
+    )
+  }
+
+  const { classesList, categoryList } = data
 
   return (
     <section className='max-w-[1440px] mx-auto w-full px-8 flex-grow'>
@@ -33,7 +49,7 @@ export default async function ClassesPage() {
         )}
       </div>
 
-      <div>
+      <div className='mt-4'>
         {classesList.length > 0 ? (
           // WHEN THE USER HAS AT LEAST ONE CLASS
           <Table>
@@ -58,7 +74,7 @@ export default async function ClassesPage() {
                     }
                   </TableCell>
                   <TableCell className='w-full flex justify-end'>
-                    <div className='max-w-72 flex-grow flex space-x-2'>
+                    <div className='max-w-72 flex-grow flex space-x-2 mr-2'>
                       <Button variant={'secondary'} asChild>
                         <Link href={`/classes/${c.id}`}>Ver turma</Link>
                       </Button>

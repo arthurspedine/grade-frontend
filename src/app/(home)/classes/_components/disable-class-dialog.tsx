@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dialog'
 import type { ClassType } from '@/types'
 import { toast } from 'sonner'
-import { disableClass } from '../_http/handle-http-class'
+import { disableClass } from '@/http/handle-http-class'
 
 export function DisableClassDialog({ id, name, active }: ClassType) {
   function handleButtonClick() {

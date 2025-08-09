@@ -11,7 +11,7 @@ import {
   Users,
 } from 'lucide-react'
 import Link from 'next/link'
-import { useDashboard } from '@/hooks/useDashboard'
+import { useDashboard } from '@/http/use/useDashboard'
 import { DashboardSkeleton } from './_components/dashboard-skeleton'
 import { StatsCard } from './_components/stats-card'
 import { UpcomingAssessmentItem } from './_components/upcoming-assessment-item'
