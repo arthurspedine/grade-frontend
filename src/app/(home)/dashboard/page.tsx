@@ -1,98 +1,63 @@
+'use client'
+
 import { Title } from '@/components/title'
 import { Button } from '@/components/ui/button'
-import { authenticatedFetch } from '@/helper/authenticated-fetch'
 import { formatUpcomingDate } from '@/helper/format-date'
-import type {
-  ClassPerformanceType,
-  DashboardStatsType,
-  PendingAssessmentType,
-} from '@/types'
 import {
   BarChart,
   BookOpen,
   Calendar,
   ClipboardCheck,
-  type LucideProps,
   Users,
 } from 'lucide-react'
 import Link from 'next/link'
-import type { ForwardRefExoticComponent } from 'react'
+import { useDashboard } from '@/hooks/useDashboard'
+import { DashboardSkeleton } from './_components/dashboard-skeleton'
+import { StatsCard } from './_components/stats-card'
+import { UpcomingAssessmentItem } from './_components/upcoming-assessment-item'
 
-const StatCard = ({
-  icon,
-  title,
-  value,
-  color,
-}: {
-  icon: ForwardRefExoticComponent<Omit<LucideProps, 'ref'>>
-  title: string
-  value: number
-  color: string
-}) => {
-  const Icon = icon
-  return (
-    <div className='bg-accent rounded-lg p-6 shadow-md flex items-center'>
-      <div className={`p-3 rounded-full ${color} mr-4`}>
-        <Icon size={24} className='text-white' />
+export default function DashboardPage() {
+  const { data, loading, error } = useDashboard()
+
+  if (loading) {
+    return <DashboardSkeleton />
+  }
+
+  if (error) {
+    return (
+      <div className='flex flex-col flex-grow items-center justify-center'>
+        <p className='text-red-500 mb-4'>{error}</p>
+        <Button onClick={() => window.location.reload()}>
+          Tentar novamente
+        </Button>
       </div>
-      <div>
-        <p className='text-gray-500 text-sm'>{title}</p>
-        <p className='text-2xl font-semibold'>{value}</p>
-      </div>
-    </div>
-  )
-}
+    )
+  }
 
-const UpcomingAssessment = ({
-  title,
-  date,
-  classes,
-}: { title: string; date: string; classes: number }) => {
-  return (
-    <div className='p-4 border-b border-input last:border-0'>
-      <div className='flex justify-between items-center'>
-        <div>
-          <h3 className='font-medium'>{title}</h3>
-          <p className='text-gray-500 text-sm mt-1'>
-            {classes}{' '}
-            {classes === 1
-              ? 'turma a ser avaliada'
-              : 'turmas a serem avaliadas'}
-          </p>
-        </div>
-        <div className='text-bluecolor text-sm'>{date}</div>
-      </div>
-    </div>
-  )
-}
+  const { stats, assessments, classes } = data
 
-export const dynamic = 'force-dynamic'
-
-export default async function DashboardPage() {
-  const [stats, assessments, classes] = await Promise.all([
-    authenticatedFetch<DashboardStatsType>('/dashboard/stats'),
-    authenticatedFetch<PendingAssessmentType[]>('/assessments/pending'),
-    authenticatedFetch<ClassPerformanceType[]>('/classes/performance'),
-  ])
+  if (!stats) {
+    return <DashboardSkeleton />
+  }
 
   return (
     <div className='flex flex-col flex-grow'>
       <section className='max-w-[1440px] mx-auto w-full px-4 sm:px-6 lg:px-8 pb-4'>
         <Title>Dashboard</Title>
         <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4 my-4'>
-          <StatCard
+          <StatsCard
             icon={Users}
             title='Alunos'
             value={stats.totalStudents}
             color='bg-bluecolor'
           />
-          <StatCard
+          <StatsCard
             icon={BookOpen}
             title='Turmas'
             value={stats.totalClasses}
             color='bg-green-500'
           />
-          <StatCard
+          <StatsCard
             icon={ClipboardCheck}
             title='Avaliações'
             value={stats.totalAssessments}
@@ -111,7 +76,7 @@ export default async function DashboardPage() {
 
             <div>
               {assessments.map(assessment => (
-                <UpcomingAssessment
+                <UpcomingAssessmentItem
                   key={assessment.id}
                   title={assessment.name}
                   date={formatUpcomingDate(assessment.assessmentDate)}
@@ -174,13 +139,16 @@ export default async function DashboardPage() {
             {/* Ações rápidas */}
             <div className='bg-accent rounded-lg shadow-md overflow-hidden'>
               <div className='p-6 border-b border-card'>
-                <h2 className='font-semibold text-xl'>Ações rápidas</h2>
+                <h2 className='font-semibold text-xl flex items-center'>
+                  <ClipboardCheck className='mr-2 text-bluecolor' size={20} />
+                  Ações rápidas
+                </h2>
               </div>
               <div className='p-4 space-y-2'>
                 <Button
                   variant={'ghost'}
                   asChild
-                  className='w-full hover:shadow-md hover:bg-card/15 flex justify-start py-6 transition-all duration-300'
+                  className='w-full hover:shadow-md dark:shadow-bluecolor hover:bg-card/15 flex justify-start py-6 transition-all duration-300'
                 >
                   <Link href={'/assessments/add'}>
                     <div className='bg-blue-100 p-2 rounded-md mr-3'>
@@ -192,7 +160,7 @@ export default async function DashboardPage() {
                 <Button
                   variant={'ghost'}
                   asChild
-                  className='w-full hover:shadow-md hover:bg-card/15 flex justify-start py-6 transition-all duration-300'
+                  className='w-full hover:shadow-md dark:shadow-bluecolor hover:bg-card/15 flex justify-start py-6 transition-all duration-300'
                 >
                   <Link href={'/classes/add'}>
                     <div className='bg-green-100 p-2 rounded-md mr-3'>
