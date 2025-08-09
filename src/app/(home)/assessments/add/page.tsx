@@ -1,5 +1,3 @@
-'use client'
-
 import { Title } from '@/components/title'
 import { Button } from '@/components/ui/button'
 import { encodeText } from '@/helper/base64-search-params'
