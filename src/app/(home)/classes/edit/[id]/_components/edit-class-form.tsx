@@ -230,7 +230,7 @@ export function EditClassForm({
             )}
           </div>
           <div className='flex space-x-2'>
-            <GoBackButton />
+            <GoBackButton goBackUrl='/classes' />
             <Button variant={'green'}>Salvar Turma</Button>
           </div>
         </div>
