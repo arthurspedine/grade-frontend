@@ -9,28 +9,31 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      AUTH0_SECRET: ${{ secrets.AUTH0_SECRET }}
-      APP_BASE_URL: ${{ secrets.APP_BASE_URL }}
-      AUTH0_ISSUER_BASE_URL: ${{ secrets.AUTH0_ISSUER_BASE_URL }}
-      AUTH0_CLIENT_ID: ${{ secrets.AUTH0_CLIENT_ID }}
-      AUTH0_CLIENT_SECRET: ${{ secrets.AUTH0_CLIENT_SECRET }}
-      AUTH0_AUDIENCE: ${{ secrets.AUTH0_AUDIENCE }}
-      AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
+      GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+      GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+      NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+      NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
       BACKEND_URL: ${{ secrets.BACKEND_URL }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: latest
 
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: '18.18.0'
+          node-version: '18.19.1'
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: npm install
+        run: pnpm install --frozen-lockfile
 
       - name: Build the application
-        run: node ./node_modules/.bin/next build
+        run: pnpm run build
 
       - name: Clean work folder by remote commands via SSH
         uses: appleboy/ssh-action@v0.1.1
@@ -63,8 +66,8 @@ jobs:
           source: "/home/runner/work/grade-frontend/grade-frontend/.*"
           target: "/home/actions/app/front/grade-frontend/"
 
-      - name: Depoy via remote commands via SSH
-        uses: appleboy/ssh-action@v0.1.1
+      - name: Deploy via remote commands via SSH
+        uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.REMOTE_IP }}
           username: ${{ secrets.REMOTE_USER }}
@@ -75,5 +78,5 @@ jobs:
             mv ~/app/front/grade-frontend/github/workspace/.*  ~/app/front/grade-frontend/
             rm -rf ~/app/front/grade-frontend/github/
             cd ~/app/front/grade-frontend
-            cp ../.env.local .env.local
+            cp ../.env .env
             pm2 restart grade
