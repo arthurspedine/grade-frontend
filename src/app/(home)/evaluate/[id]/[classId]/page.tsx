@@ -65,7 +65,7 @@ export default function EvaluateInfoAssessmentPage({
       <div className='flex justify-between'>
         <Title>Avaliação: {assessmentInfo.name}</Title>
 
-        <GoBackButton />
+        <GoBackButton goBackUrl='/assessments' />
       </div>
 
       <div className='space-y-1'>

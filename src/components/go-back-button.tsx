@@ -7,18 +7,11 @@ import { Button } from './ui/button'
 export function GoBackButton({
   className,
   goBackUrl,
-}: { className?: string; goBackUrl?: string }) {
+}: { className?: string; goBackUrl: string }) {
   const router = useRouter()
 
   const handleGoBack = () => {
-    if (
-      document.referrer &&
-      new URL(document.referrer).origin === window.location.origin
-    ) {
-      router.back()
-    } else {
-      router.push(goBackUrl || '/')
-    }
+    router.push(goBackUrl)
   }
 
   return (

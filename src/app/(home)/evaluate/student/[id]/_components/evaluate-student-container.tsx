@@ -10,11 +10,23 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { Progress } from '@/components/ui/progress'
 import { Slider } from '@/components/ui/slider'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useEvaluation } from '@/context/evaluation-context'
 import type { StudentEvaluationInfo } from '@/interfaces'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import {
+  Award,
+  CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+  Circle,
+  Hash,
+  Minus,
+  Plus,
+  User,
+} from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
@@ -29,7 +41,7 @@ export function EvaluateStudentContainer({
     isEvaluationComplete,
     loadData,
   } = useEvaluation()
-  const [activeTab, setActiveTab] = useState('1')
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -42,12 +54,20 @@ export function EvaluateStudentContainer({
     return <p className='text-center text-muted-foreground'>Carregando...</p>
   }
 
+  const currentQuestion = evaluationData.questions[currentQuestionIndex]
+  const totalQuestions = evaluationData.questions.length
+  const completedQuestions = evaluationData.questions.filter(q =>
+    q.categories.every(
+      cat => typeof cat.answeredScore === 'number' && cat.answeredScore >= 0
+    )
+  ).length
+
   function handleScoreChange(
     questionNumber: number,
     categoryIndex: number,
-    value: number[]
+    value: number
   ) {
-    updateCategoryScore(questionNumber, categoryIndex, value[0])
+    updateCategoryScore(questionNumber, categoryIndex, value)
     setError(null)
   }
 
@@ -59,26 +79,22 @@ export function EvaluateStudentContainer({
     }
   }
 
-  function handleNextTab() {
-    const currentTabNumber = Number.parseInt(activeTab)
-    if (evaluationData?.questions) {
-      if (currentTabNumber < evaluationData.questions.length) {
-        setActiveTab((currentTabNumber + 1).toString())
-      }
+  function goToNext() {
+    if (currentQuestionIndex < totalQuestions - 1) {
+      setCurrentQuestionIndex(currentQuestionIndex + 1)
+      setError(null)
     }
   }
 
-  function handlePrevTab() {
-    const currentTabNumber = Number.parseInt(activeTab)
-    if (currentTabNumber > 1) {
-      setActiveTab((currentTabNumber - 1).toString())
+  function goToPrev() {
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex(currentQuestionIndex - 1)
+      setError(null)
     }
   }
 
-  function isQuestionComplete(questionNumber: number): boolean {
-    const question = evaluationData?.questions.find(
-      q => q.questionNumber === questionNumber
-    )
+  function isQuestionComplete(questionIndex: number): boolean {
+    const question = evaluationData?.questions[questionIndex]
     if (!question) return false
 
     return question.categories.every(
@@ -88,131 +104,338 @@ export function EvaluateStudentContainer({
     )
   }
 
+  const totalScore = evaluationData.questions.reduce((total, question) => {
+    const questionScore = question.categories.reduce(
+      (sum, category) => sum + (category.answeredScore || 0),
+      0
+    )
+    return total + questionScore
+  }, 0)
+
+  const progressPercentage = (completedQuestions / totalQuestions) * 100
+
   return (
-    <Card className='w-full px-8 py-6 hover:cursor-default'>
-      <CardHeader className='flex-row justify-between space-y-0 px-0 py-2'>
-        <div>
-          <CardTitle className='hover:cursor-text'>
-            Avaliando: {initialData.student.name}
-          </CardTitle>
-          <CardDescription className='hover:cursor-text'>
-            <p>RM: {initialData.student.rm}</p>
-            <p>
-              Nota final:{' '}
-              {Number(
-                evaluationData.questions.reduce((total, question) => {
-                  const questionScore = question.categories.reduce(
-                    (sum, category) => sum + (category.answeredScore || 0),
-                    0
-                  )
-                  return total + questionScore
-                }, 0)
-              ).toFixed(2)}{' '}
-              / {MAX_SCORE}
-            </p>
-          </CardDescription>
-        </div>
-        <GoBackButton />
-      </CardHeader>
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <CardContent>
-          <TabsList className='mb-4 grid grid-cols-3 gap-2 lg:grid-cols-6'>
-            {evaluationData.questions.map(question => {
-              const questionNumber = question.questionNumber
-              return (
-                <TabsTrigger
-                  key={questionNumber}
-                  value={questionNumber.toString()}
-                  className={
-                    isQuestionComplete(questionNumber)
-                      ? 'bg-green-500 text-foreground'
-                      : ''
-                  }
+    <div className='container mx-auto max-w-4xl space-y-6 px-4 py-6'>
+      {/* Header com informações do aluno */}
+      <Card>
+        <CardHeader className='pb-4'>
+          <div className='flex items-start justify-between'>
+            <div className='space-y-2'>
+              <CardTitle className='flex items-center gap-2 text-2xl'>
+                <User className='h-6 w-6 text-primary' />
+                {initialData.student.name}
+              </CardTitle>
+              <CardDescription className='flex items-center gap-4 text-base'>
+                <span className='flex items-center gap-1'>
+                  <Hash className='h-4 w-4' />
+                  RM: {initialData.student.rm}
+                </span>
+                <span className='flex items-center gap-1'>
+                  <Award className='h-4 w-4' />
+                  Nota: {totalScore.toFixed(2)} / {MAX_SCORE}
+                </span>
+              </CardDescription>
+            </div>
+            <GoBackButton
+              goBackUrl={`/evaluate/${initialData.student.assessmentId}/${evaluationData.student.classId}`}
+            />
+          </div>
+
+          {/* Progress indicator */}
+          <div className='space-y-2 pt-4'>
+            <div className='flex justify-between text-sm'>
+              <span>Progresso da Avaliação</span>
+              <span>
+                {completedQuestions} de {totalQuestions} questões
+              </span>
+            </div>
+            <Progress value={progressPercentage} className='h-2' />
+          </div>
+        </CardHeader>
+      </Card>
+
+      {/* Navegação entre questões */}
+      <Card>
+        <CardHeader className='pb-3'>
+          <div className='flex items-center justify-between'>
+            <CardTitle className='text-lg'>
+              Questão {currentQuestion.questionNumber} de {totalQuestions}
+            </CardTitle>
+            <div className='flex gap-2'>
+              {evaluationData.questions.map((question, index) => (
+                <button
+                  key={question.questionNumber}
+                  type='button'
+                  onClick={() => {
+                    setCurrentQuestionIndex(index)
+                    setError(null)
+                  }}
+                  className={`flex h-8 w-8 items-center justify-center rounded-full font-medium text-xs transition-colors ${
+                    index === currentQuestionIndex
+                      ? 'bg-primary text-primary-foreground'
+                      : isQuestionComplete(index)
+                        ? 'bg-green-100 text-green-700 hover:bg-green-200'
+                        : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                  }`}
                 >
-                  Questão {questionNumber}
-                </TabsTrigger>
-              )
-            })}
-          </TabsList>
-          {evaluationData.questions.map(question => {
-            const questionNumber = question.questionNumber
-            return (
-              <TabsContent
-                key={questionNumber}
-                value={questionNumber.toString()}
-              >
-                <h3 className='mb-2 font-medium text-lg hover:cursor-text'>
-                  Questão {question.questionNumber}
-                </h3>
-                {question.categories.map((category, index) => (
-                  <div
-                    key={category.id}
-                    className='border-border border-b-2 py-4 pb-2'
-                  >
-                    <div className='mb-2 flex justify-between'>
-                      <p className='font-medium text-lg hover:cursor-text'>
-                        {category.name}
-                      </p>
-                      <span className='font-medium hover:cursor-text'>
-                        Pontuação esperada: {category.score}
-                      </span>
-                    </div>
-                    <div className='flex items-center gap-4'>
-                      <div className='flex-1'>
-                        <Slider
-                          value={[category.answeredScore || 0]}
-                          max={category.score}
-                          step={0.05}
-                          onValueChange={value => {
-                            handleScoreChange(
-                              question.questionNumber,
-                              index,
-                              value
-                            )
-                          }}
-                          className='hover:cursor-pointer'
-                        />
+                  {isQuestionComplete(index) ? (
+                    <CheckCircle2 className='h-4 w-4' />
+                  ) : (
+                    index + 1
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+        </CardHeader>
+
+        <CardContent className='space-y-6'>
+          {currentQuestion.categories.map((category, categoryIndex) => (
+            <Card key={category.id} className='border-l-4 border-l-primary/30'>
+              <CardContent className='p-4'>
+                <div className='space-y-4'>
+                  <div className='flex items-center justify-between'>
+                    <h4 className='font-semibold text-lg'>{category.name}</h4>
+                    <span className='text-muted-foreground text-sm'>
+                      Máximo: {category.score} pontos
+                    </span>
+                  </div>
+
+                  <div className='space-y-4'>
+                    {/* Controles de pontuação */}
+                    <div className='space-y-3'>
+                      <div className='flex items-center justify-between'>
+                        <span className='font-medium text-sm'>Pontuação:</span>
+                        <div className='flex items-center gap-1'>
+                          {/* Botões de diminuir */}
+                          <Button
+                            type='button'
+                            variant='outline'
+                            size='sm'
+                            onClick={() => {
+                              const currentScore = category.answeredScore || 0
+                              const newScore = Math.max(0, currentScore - 1)
+                              handleScoreChange(
+                                currentQuestion.questionNumber,
+                                categoryIndex,
+                                newScore
+                              )
+                            }}
+                            disabled={(category.answeredScore || 0) < 1}
+                            className='h-8 w-8 p-0'
+                            title='Diminuir 1 ponto'
+                          >
+                            <ChevronsLeft className='h-3 w-3' />
+                          </Button>
+
+                          <Button
+                            type='button'
+                            variant='outline'
+                            size='sm'
+                            onClick={() => {
+                              const currentScore = category.answeredScore || 0
+                              const newScore = Math.max(0, currentScore - 0.5)
+                              handleScoreChange(
+                                currentQuestion.questionNumber,
+                                categoryIndex,
+                                newScore
+                              )
+                            }}
+                            disabled={(category.answeredScore || 0) < 0.5}
+                            className='h-8 w-8 p-0'
+                            title='Diminuir 0.5 pontos'
+                          >
+                            <ChevronLeft className='h-3 w-3' />
+                          </Button>
+
+                          <Button
+                            type='button'
+                            variant='outline'
+                            size='sm'
+                            onClick={() => {
+                              const currentScore = category.answeredScore || 0
+                              const newScore = Math.max(0, currentScore - 0.25)
+                              handleScoreChange(
+                                currentQuestion.questionNumber,
+                                categoryIndex,
+                                newScore
+                              )
+                            }}
+                            disabled={(category.answeredScore || 0) < 0.25}
+                            className='h-8 w-8 p-0'
+                            title='Diminuir 0.25 pontos'
+                          >
+                            <Minus className='h-3 w-3' />
+                          </Button>
+
+                          {/* Display da nota */}
+                          <div className='mx-2 flex min-w-[80px] items-center justify-center rounded-md border bg-background px-3 py-1'>
+                            <span className='font-medium text-sm'>
+                              {(category.answeredScore || 0).toFixed(2)}
+                            </span>
+                          </div>
+
+                          {/* Botões de aumentar */}
+                          <Button
+                            type='button'
+                            variant='outline'
+                            size='sm'
+                            onClick={() => {
+                              const currentScore = category.answeredScore || 0
+                              const newScore = Math.min(
+                                category.score,
+                                currentScore + 0.25
+                              )
+                              handleScoreChange(
+                                currentQuestion.questionNumber,
+                                categoryIndex,
+                                newScore
+                              )
+                            }}
+                            disabled={
+                              (category.answeredScore || 0) >= category.score
+                            }
+                            className='h-8 w-8 p-0'
+                            title='Aumentar 0.25 pontos'
+                          >
+                            <Plus className='h-3 w-3' />
+                          </Button>
+
+                          <Button
+                            type='button'
+                            variant='outline'
+                            size='sm'
+                            onClick={() => {
+                              const currentScore = category.answeredScore || 0
+                              const newScore = Math.min(
+                                category.score,
+                                currentScore + 0.5
+                              )
+                              handleScoreChange(
+                                currentQuestion.questionNumber,
+                                categoryIndex,
+                                newScore
+                              )
+                            }}
+                            disabled={
+                              (category.answeredScore || 0) >= category.score
+                            }
+                            className='h-8 w-8 p-0'
+                            title='Aumentar 0.5 pontos'
+                          >
+                            <ChevronRight className='h-3 w-3' />
+                          </Button>
+
+                          <Button
+                            type='button'
+                            variant='outline'
+                            size='sm'
+                            onClick={() => {
+                              const currentScore = category.answeredScore || 0
+                              const newScore = Math.min(
+                                category.score,
+                                currentScore + 1
+                              )
+                              handleScoreChange(
+                                currentQuestion.questionNumber,
+                                categoryIndex,
+                                newScore
+                              )
+                            }}
+                            disabled={
+                              (category.answeredScore || 0) >= category.score
+                            }
+                            className='h-8 w-8 p-0'
+                            title='Aumentar 1 ponto'
+                          >
+                            <ChevronsRight className='h-3 w-3' />
+                          </Button>
+                        </div>
                       </div>
-                      <div className='w-12 text-center font-semibold hover:cursor-text'>
-                        {category.answeredScore !== undefined
-                          ? category.answeredScore
-                          : 0}
+
+                      {/* Slider para ajuste fino */}
+                      <div className='space-y-2'>
+                        <span className='font-medium text-sm'>
+                          Ajuste fino:
+                        </span>
+                        <div className='flex items-center gap-3'>
+                          <span className='text-sm'>0</span>
+                          <Slider
+                            value={[category.answeredScore || 0]}
+                            max={category.score}
+                            step={0.5}
+                            onValueChange={value =>
+                              handleScoreChange(
+                                currentQuestion.questionNumber,
+                                categoryIndex,
+                                value[0]
+                              )
+                            }
+                            className='flex-1'
+                          />
+                          <span className='text-sm'>{category.score}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
-                ))}
-              </TabsContent>
-            )
-          })}
+
+                  {/* Display da nota atual */}
+                  <div className='flex items-center gap-2 rounded-md bg-muted/50 p-2'>
+                    <Circle
+                      className={`h-4 w-4 ${
+                        typeof category.answeredScore === 'number' &&
+                        category.answeredScore >= 0
+                          ? 'fill-green-500 text-green-500'
+                          : 'text-muted-foreground'
+                      }`}
+                    />
+                    <span className='text-sm'>
+                      Nota atribuída:{' '}
+                      <strong>
+                        {category.answeredScore?.toFixed(2) || '0.00'}
+                      </strong>{' '}
+                      pontos
+                    </span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+
           {error && (
-            <p className='pt-0.5 text-destructive text-sm hover:cursor-text'>
-              {error}
-            </p>
+            <div className='rounded-md border border-destructive/20 bg-destructive/10 p-3'>
+              <p className='text-destructive text-sm'>{error}</p>
+            </div>
           )}
         </CardContent>
-      </Tabs>
-      <CardFooter className='mt-4 flex justify-between'>
-        <Button
-          variant={'outline'}
-          onClick={handlePrevTab}
-          disabled={activeTab === '1'}
-        >
-          <ChevronLeft /> Anterior
-        </Button>
 
-        <Button onClick={handleSubmit} variant={'green'}>
-          Finalizar Avaliação
-        </Button>
+        <CardFooter className='flex justify-between pt-6'>
+          <Button
+            variant='outline'
+            onClick={goToPrev}
+            disabled={currentQuestionIndex === 0}
+            className='flex items-center gap-2'
+          >
+            <ChevronLeft className='h-4 w-4' />
+            Anterior
+          </Button>
 
-        <Button
-          onClick={handleNextTab}
-          disabled={
-            Number.parseInt(activeTab) === evaluationData?.questions.length
-          }
-        >
-          Próxima <ChevronRight />
-        </Button>
-      </CardFooter>
-    </Card>
+          {currentQuestionIndex === totalQuestions - 1 ? (
+            <Button onClick={handleSubmit} variant='green'>
+              Finalizar Avaliação
+            </Button>
+          ) : (
+            <Button
+              onClick={goToNext}
+              disabled={currentQuestionIndex === totalQuestions - 1}
+              className='flex items-center gap-2'
+            >
+              Próxima
+              <ChevronRight className='h-4 w-4' />
+            </Button>
+          )}
+        </CardFooter>
+      </Card>
+    </div>
   )
 }

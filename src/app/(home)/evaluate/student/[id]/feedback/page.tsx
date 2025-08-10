@@ -1,5 +1,6 @@
 'use client'
 import { MAX_SCORE } from '@/app/(home)/assessments/_helper/score'
+import { EvaluationResultsViewer } from '@/components/evaluation-result-viewer'
 import { GoBackButton } from '@/components/go-back-button'
 import { Button } from '@/components/ui/button'
 import {
@@ -9,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { Progress } from '@/components/ui/progress'
 import { Textarea } from '@/components/ui/textarea'
 import {
   Tooltip,
@@ -22,7 +24,20 @@ import {
   getChatFeedback,
   handleFinishEvaluation,
 } from '@/http/handle-http-evaluate'
-import { ChevronRight, CircleHelp, CornerDownRight } from 'lucide-react'
+import {
+  Award,
+  Bot,
+  CheckCircle,
+  ChevronRight,
+  CircleHelp,
+  FileText,
+  Hash,
+  MessageSquare,
+  Sparkles,
+  Target,
+  TrendingUp,
+  User,
+} from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
@@ -97,12 +112,20 @@ export default function FeedbackPage() {
     }
     setIsLoadingAiFeedback(true)
 
-    const { message } = await getChatFeedback(
-      JSON.stringify(evaluationData?.questions),
-      evaluationData?.rawFeedback
-    )
-    setAiFeedback(message)
-    setIsLoadingAiFeedback(false)
+    try {
+      const { message } = await getChatFeedback(
+        JSON.stringify(evaluationData?.questions),
+        evaluationData?.rawFeedback
+      )
+      setAiFeedback(message)
+    } catch (error) {
+      setError('Erro ao gerar feedback com IA.')
+      setAiFeedback(
+        'Erro ao gerar o feedback com IA. Você pode tentar novamente ou continuar sem o feedback da IA.'
+      )
+    } finally {
+      setIsLoadingAiFeedback(false)
+    }
   }
 
   function handleSubmit() {
@@ -124,7 +147,9 @@ export default function FeedbackPage() {
       loading: 'Finalizando avaliação...',
       success: () => {
         setTimeout(() => {
-          router.replace('/assessments')
+          router.replace(
+            `/evaluate/${evaluationData.student.assessmentId}/${evaluationData.student.classId}`
+          )
         }, 500)
         return 'Avaliação finalizada com sucesso.'
       },
@@ -135,151 +160,203 @@ export default function FeedbackPage() {
   }
 
   return (
-    <Card className='w-full px-8 py-12 hover:cursor-default'>
-      <CardHeader className='flex-row justify-between space-y-0 px-0 py-2'>
-        <div>
-          <CardTitle className='hover:cursor-text'>
-            Avaliando: {evaluationData.student.name}
+    <div className='container mx-auto max-w-6xl space-y-6 px-4 py-6'>
+      {/* Header Card */}
+      <Card>
+        <CardHeader className='pb-4'>
+          <div className='flex items-start justify-between'>
+            <div className='space-y-2'>
+              <CardTitle className='flex items-center gap-2 text-2xl'>
+                <User className='h-6 w-6 text-primary' />
+                Feedback Final: {evaluationData.student.name}
+              </CardTitle>
+              <CardDescription className='flex items-center gap-4 text-base'>
+                <span className='flex items-center gap-1'>
+                  <Hash className='h-4 w-4' />
+                  RM: {evaluationData.student.rm}
+                </span>
+                <span className='flex items-center gap-1'>
+                  <Award className='h-4 w-4' />
+                  Nota Final:{' '}
+                  {Number(
+                    evaluationData.questions.reduce((total, question) => {
+                      const questionScore = question.categories.reduce(
+                        (sum, category) => sum + (category.answeredScore || 0),
+                        0
+                      )
+                      return total + questionScore
+                    }, 0)
+                  ).toFixed(2)}{' '}
+                  / {MAX_SCORE}
+                </span>
+              </CardDescription>
+            </div>
+            <div className='flex gap-2'>
+              <GoBackButton
+                goBackUrl={`/evaluate/student/${evaluationData.student.id}`}
+              />
+              <Button variant='green' onClick={handleSubmit}>
+                Salvar Avaliação
+              </Button>
+            </div>
+          </div>
+        </CardHeader>
+      </Card>
+
+      {/* Feedback Cards */}
+      <Card>
+        <CardHeader>
+          <CardTitle className='flex items-center gap-2'>
+            <MessageSquare className='h-5 w-5 text-primary' />
+            Feedback da Avaliação
           </CardTitle>
-          <CardDescription className='hover:cursor-text'>
-            RM: {evaluationData.student.rm}
-          </CardDescription>
-        </div>
-        <div className='space-x-2'>
-          <GoBackButton />
-          <Button variant={'green'} onClick={handleSubmit}>
-            Salvar Avaliação
-          </Button>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <div className='border-border border-b-2 pb-2'>
-          <div className='flex h-full w-full flex-row gap-4'>
-            <div className='flex grow flex-col gap-4'>
-              {/* RAW FEEDBACK */}
-              <div className='space-y-1'>
-                <label
-                  className='font-medium text-base hover:cursor-text'
-                  htmlFor='rawFeedback-id'
-                >
-                  Seu feedback
-                </label>
+        </CardHeader>
+        <CardContent>
+          <div className={`border-border ${error && 'border-b-2'} pb-2`}>
+            <div className='flex h-full w-full flex-row gap-4'>
+              <div className='flex grow flex-col gap-4'>
+                {/* RAW FEEDBACK */}
+                <div className='space-y-3'>
+                  <div className='flex items-center gap-2'>
+                    <FileText className='h-4 w-4 text-blue-700 dark:text-blue-600' />
+                    <label
+                      className='font-medium text-base hover:cursor-text'
+                      htmlFor='rawFeedback-id'
+                    >
+                      Seu Feedback Inicial
+                    </label>
+                  </div>
+                  <Textarea
+                    id='rawFeedback-id'
+                    placeholder='Digite o seu feedback sobre a avaliação do estudante...'
+                    onChange={value =>
+                      handleFeedbackChange(value.target.value, 'raw')
+                    }
+                    maxLength={1500}
+                    className='min-h-[120px]'
+                  />
+                  <span className='flex justify-end text-muted-foreground text-sm hover:cursor-text'>
+                    {evaluationData.rawFeedback
+                      ? evaluationData.rawFeedback.length
+                      : 0}
+                    /1500
+                  </span>
+                </div>
+
+                <div className='space-y-3'>
+                  {/* AI FEEDBACK */}
+                  <div className='flex items-end justify-between'>
+                    <div className='flex items-center gap-2'>
+                      <Bot className='h-4 w-4 text-purple-700 dark:text-purple-600' />
+                      <label
+                        className='font-medium text-base leading-none hover:cursor-text'
+                        htmlFor='AIFeedback-id'
+                      >
+                        Feedback Gerado por IA
+                      </label>
+                    </div>
+                    <div className='flex items-center space-x-2'>
+                      {aiFeedback && (
+                        <Button
+                          variant={'outline'}
+                          onClick={() => updateFeedback(aiFeedback, 'final')}
+                          className='flex items-center gap-2'
+                        >
+                          <CheckCircle className='h-4 w-4' />
+                          <span>Aplicar feedback</span>
+                          <ChevronRight className='h-4 w-4' />
+                        </Button>
+                      )}
+                      <Button
+                        variant={'purple'}
+                        className='flex w-44 items-center gap-2'
+                        disabled={isLoadingAiFeedback}
+                        onClick={handleGenerateAIFeedback}
+                      >
+                        <Sparkles className='h-4 w-4' />
+                        {isLoadingAiFeedback
+                          ? 'Gerando...'
+                          : 'Gerar feedback IA'}
+                      </Button>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger type='button'>
+                            <CircleHelp className='h-4 w-4 text-muted-foreground' />
+                          </TooltipTrigger>
+                          <TooltipContent side='bottom'>
+                            <p>
+                              A inteligência artificial usará o seu feedback
+                              inicial
+                            </p>
+                            <p>
+                              para estruturar o resultado final. Considere isso
+                              como
+                            </p>
+                            <p>uma oportunidade para aprimorar a avaliação.</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
+                  </div>
+                  <Textarea
+                    id='AIFeedback-id'
+                    placeholder='Clique no botão "Gerar feedback IA" para receber um feedback gerado automaticamente...'
+                    value={aiFeedback}
+                    disabled={aiFeedback === ''}
+                    readOnly
+                    className='max-h-96 min-h-[120px] overflow-y-auto border-purple-200 bg-purple-50/50 dark:border-purple-800 dark:bg-purple-950/20'
+                    ref={textareaRef => {
+                      if (textareaRef) {
+                        textareaRef.style.height = 'auto'
+                        textareaRef.style.height = `${Math.min(textareaRef.scrollHeight + 10, 300)}px`
+                      }
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* FINAL FEEDBACK */}
+              <div className='flex grow flex-col space-y-3'>
+                <div className='flex items-center justify-between'>
+                  <div className='flex items-center gap-2'>
+                    <CheckCircle className='h-4 w-4 text-green-600' />
+                    <label
+                      className='font-medium text-base hover:cursor-text'
+                      htmlFor='finalFeedback-id'
+                    >
+                      Feedback Final
+                    </label>
+                  </div>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger type='button'>
+                        <CircleHelp className='h-4 w-4 text-muted-foreground' />
+                      </TooltipTrigger>
+                      <TooltipContent side='left'>
+                        <p>O feedback final será de sua escolha entre</p>
+                        <p>estruturar melhor o feedback ou fazer uma</p>
+                        <p>união entre o feedback inicial com o da IA.</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
                 <Textarea
-                  id='rawFeedback-id'
-                  placeholder='Digite o seu feedback sobre a avaliação do estudante'
+                  id='finalFeedback-id'
+                  placeholder='Digite aqui o feedback final da avaliação do estudante...'
+                  className='min-h-[280px] flex-1 border-green-200 bg-green-50/50 dark:border-green-800 dark:bg-green-950/20'
                   onChange={value =>
-                    handleFeedbackChange(value.target.value, 'raw')
+                    handleFeedbackChange(value.target.value, 'final')
                   }
+                  value={evaluationData.finalFeedback || ''}
                   maxLength={1500}
                 />
-                <span className='flex justify-end text-muted-foreground text-sm hover:cursor-text'>
-                  {evaluationData.rawFeedback
-                    ? evaluationData.rawFeedback.length
+                <span className='flex justify-end text-muted-foreground text-sm'>
+                  {evaluationData.finalFeedback
+                    ? evaluationData.finalFeedback.length
                     : 0}
                   /1500
                 </span>
               </div>
-              <div className='space-y-2'>
-                {/* AI FEEDBACK */}
-                <div className='flex items-end justify-between'>
-                  <label
-                    className='font-medium text-base leading-none hover:cursor-text'
-                    htmlFor='AIFeedback-id'
-                  >
-                    Feedback IA
-                  </label>
-                  <div className='flex items-center space-x-2'>
-                    {aiFeedback && (
-                      <Button
-                        variant={'outline'}
-                        onClick={() => updateFeedback(aiFeedback, 'final')}
-                      >
-                        <span className='mr-1'>Aplicar feedback</span>
-                        <ChevronRight />
-                      </Button>
-                    )}
-                    <Button
-                      variant={'blue'}
-                      className='w-44'
-                      disabled={isLoadingAiFeedback}
-                      onClick={handleGenerateAIFeedback}
-                    >
-                      {isLoadingAiFeedback
-                        ? 'Gerando...'
-                        : 'Gerar feedback por IA'}
-                    </Button>
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger type='button'>
-                          <CircleHelp />
-                        </TooltipTrigger>
-                        <TooltipContent side='bottom'>
-                          <p>
-                            A inteligência artificial usará o seu feedback
-                            inicial
-                          </p>
-                          <p>
-                            para estruturar o resultado final. Considere isso
-                            como
-                          </p>
-                          <p>uma oportunidade para aprimorar a avaliação.</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </div>
-                </div>
-                <Textarea
-                  id='AIFeedback-id'
-                  placeholder='Clique no botão "Gerar feedback por IA" para receber um feedback gerado por uma LLM'
-                  value={aiFeedback}
-                  disabled={aiFeedback === ''}
-                  readOnly
-                  className='max-h-96 overflow-y-auto'
-                  ref={textareaRef => {
-                    if (textareaRef) {
-                      textareaRef.style.height = 'auto'
-                      textareaRef.style.height = `${Math.min(textareaRef.scrollHeight + 10, 300)}px`
-                    }
-                  }}
-                />
-              </div>
-            </div>
-            {/* FINAL FEEDBACK */}
-            <div className='flex grow flex-col space-y-1'>
-              <label
-                className='flex justify-between font-medium text-base hover:cursor-text'
-                htmlFor='finalFeedback-id'
-              >
-                Feedback final
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger type='button'>
-                      <CircleHelp />
-                    </TooltipTrigger>
-                    <TooltipContent side='left'>
-                      <p>O feedback final será de sua escolha entre</p>
-                      <p>estruturar melhor o feedback ou fazer uma</p>
-                      <p>união entre o feedback inicial com o da IA.</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </label>
-              <Textarea
-                id='finalFeedback-id'
-                placeholder='Digite aqui o feedback final da avaliação do estudante'
-                className='flex-1'
-                onChange={value =>
-                  handleFeedbackChange(value.target.value, 'final')
-                }
-                value={evaluationData.finalFeedback || ''}
-                maxLength={1500}
-              />
-              <span className='flex justify-end text-muted-foreground text-sm'>
-                {evaluationData.finalFeedback
-                  ? evaluationData.finalFeedback.length
-                  : 0}
-                /1500
-              </span>
             </div>
           </div>
           {error && (
@@ -287,50 +364,59 @@ export default function FeedbackPage() {
               {error}
             </p>
           )}
-        </div>
+        </CardContent>
+      </Card>
 
-        <p className='mt-4 hover:cursor-text'>
-          Nota final:{' '}
-          {Number(
-            evaluationData.questions.reduce((total, question) => {
-              const questionScore = question.categories.reduce(
-                (sum, category) => sum + (category.answeredScore || 0),
-                0
-              )
-              return total + questionScore
-            }, 0)
-          ).toFixed(2)}{' '}
-          / {MAX_SCORE}
-        </p>
-        {evaluationData.questions.map(question => (
-          <div
-            key={question.questionNumber}
-            className='border-border border-b-2 py-4'
-          >
-            <p className='underline hover:cursor-text'>
-              Questão N°{question.questionNumber}
-            </p>
+      {/* Scores Summary Card */}
+      <Card>
+        <CardHeader>
+          <CardTitle className='flex items-center gap-2'>
+            <TrendingUp className='h-5 w-5 text-primary' />
+            Resumo das Notas Atribuídas
+          </CardTitle>
+        </CardHeader>
+        <CardContent className='space-y-6'>
+          {evaluationData.questions.map(question => {
+            const questionTotal = question.categories.reduce(
+              (sum, category) => sum + (category.answeredScore || 0),
+              0
+            )
+            const questionMax = question.categories.reduce(
+              (sum, category) => sum + category.score,
+              0
+            )
+            const questionPercentage = (questionTotal / questionMax) * 100
 
-            {question.categories.map(category => (
-              <div key={category.id} className='space-x-8 hover:cursor-text'>
-                <p className='flex'>
-                  <CornerDownRight />
-                  {category.name}
-                </p>
+            return (
+              <div key={question.questionNumber} className='space-y-4'>
+                <div className='flex items-center justify-between'>
+                  <h3 className='font-semibold text-lg'>
+                    Questão {question.questionNumber}
+                  </h3>
+                  <div className='flex items-center gap-2 text-sm'>
+                    <Target className='h-4 w-4 text-muted-foreground' />
+                    <span className='font-medium'>
+                      {questionTotal.toFixed(2)} / {questionMax} pontos
+                    </span>
+                  </div>
+                </div>
 
-                <span className='flex font-medium'>
-                  <CornerDownRight />
-                  Pontuação máxima: {category.score}
-                </span>
-                <span className='flex font-medium'>
-                  <CornerDownRight />
-                  Pontuação avaliada: {category.answeredScore}
-                </span>
+                <Progress value={questionPercentage} className='h-2' />
+
+                <div className='grid gap-3 md:grid-cols-2 lg:grid-cols-3'>
+                  {question.categories.map(category => (
+                    <EvaluationResultsViewer
+                      key={category.id}
+                      {...category}
+                      answeredScore={category.answeredScore || 0}
+                    />
+                  ))}
+                </div>
               </div>
-            ))}
-          </div>
-        ))}
-      </CardContent>
-    </Card>
+            )
+          })}
+        </CardContent>
+      </Card>
+    </div>
   )
 }

@@ -15,6 +15,7 @@ import Link from 'next/link'
 import { DashboardSkeleton } from './_components/dashboard-skeleton'
 import { StatsCard } from './_components/stats-card'
 import { UpcomingAssessmentItem } from './_components/upcoming-assessment-item'
+import { PerformanceBar } from '@/components/performance-bar'
 
 export default function DashboardPage() {
   const { data, loading, error } = useDashboard()
@@ -106,33 +107,13 @@ export default function DashboardPage() {
                 </h2>
               </div>
               <div className='space-y-4 p-6'>
-                {classes.map(c => {
-                  const rate = c.performanceRate
-                  let barColor = 'bg-red-400'
-
-                  if (rate >= 80)
-                    barColor = 'bg-gradient-to-r from-green-400 to-green-600'
-                  else if (rate >= 70)
-                    barColor = 'bg-gradient-to-r from-blue-400 to-blue-600'
-                  else if (rate >= 60)
-                    barColor = 'bg-gradient-to-r from-yellow-400 to-yellow-600'
-                  else barColor = 'bg-gradient-to-r from-red-400 to-red-600'
-
-                  return (
-                    <div key={c.id}>
-                      <div className='mb-1 flex justify-between'>
-                        <span className='font-medium text-sm'>{c.name}</span>
-                        <span className='font-semibold text-sm'>{rate}%</span>
-                      </div>
-                      <div className='h-2 w-full rounded-full bg-gray-200'>
-                        <div
-                          className={`${barColor} h-2 rounded-full transition-all duration-300`}
-                          style={{ width: `${rate}%` }}
-                        />
-                      </div>
-                    </div>
-                  )
-                })}
+                {classes.map(c => (
+                  <PerformanceBar
+                    key={c.id}
+                    name={c.name}
+                    score={c.performanceRate}
+                  />
+                ))}
               </div>
             </div>
 

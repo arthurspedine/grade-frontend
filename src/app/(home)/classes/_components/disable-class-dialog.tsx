@@ -18,6 +18,7 @@ export function DisableClassDialog({ id, name, active }: ClassType) {
     toast.promise(handleRequest, {
       loading: 'Desativando turma...',
       success: () => {
+        window.location.reload()
         return 'Turma desativada com sucesso.'
       },
       error: 'Algo deu errado. Por favor, tente novamente mais tarde.',
@@ -48,13 +49,15 @@ export function DisableClassDialog({ id, name, active }: ClassType) {
               Cancelar
             </Button>
           </DialogTrigger>
-          <Button
-            onClick={handleButtonClick}
-            variant={'destructive'}
-            className='grow'
-          >
-            Desativar
-          </Button>
+          <DialogTrigger asChild>
+            <Button
+              onClick={handleButtonClick}
+              variant={'destructive'}
+              className='grow'
+            >
+              Desativar
+            </Button>
+          </DialogTrigger>
         </div>
       </DialogContent>
     </Dialog>
