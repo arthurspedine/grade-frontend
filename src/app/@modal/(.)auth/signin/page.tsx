@@ -10,8 +10,9 @@ import {
 } from '@/components/ui/dialog'
 import { useRouter } from 'next/navigation'
 
-export default function SignInPage() {
+export default function ModalSignInPage() {
   const router = useRouter()
+
   return (
     <Dialog defaultOpen={true} onOpenChange={() => router.back()}>
       <DialogContent className='sm:max-w-md'>
