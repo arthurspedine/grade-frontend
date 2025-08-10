@@ -4,7 +4,7 @@ import type {
   StudentFinishedEvaluationInfo,
 } from '@/interfaces'
 import { redirect } from 'next/navigation'
-import { handleGetStudentEvaluationInfo } from '../../_http/handle-http-evaluate'
+import { handleGetStudentEvaluationInfo } from '@/http/handle-http-evaluate'
 import { EvaluateStudentContainer } from './_components/evaluate-student-container'
 import { AlreadyEvaluatedStudentContainer } from './_components/already-evaluated-student-container'
 

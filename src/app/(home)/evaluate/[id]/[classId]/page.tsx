@@ -2,7 +2,7 @@ import { Title } from '@/components/title'
 import { isValid } from '@/helper/validate-uuid'
 import type { AssessmentInfoType } from '@/types'
 import { redirect } from 'next/navigation'
-import { handleGetAssessmentInfo } from '../../_http/handle-http-evaluate'
+import { handleGetAssessmentInfo } from '@/http/handle-http-evaluate'
 import {
   Table,
   TableBody,

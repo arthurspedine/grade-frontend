@@ -13,8 +13,10 @@ import {
 } from '@/components/ui/table'
 import Link from 'next/link'
 import { DisableClassDialog } from './_components/disable-class-dialog'
-import { useClasses } from '@/http/use/useClasses'
+import { useClasses } from '@/hooks/useClasses'
 import { ClassesSkeleton } from './_components/classes-skeleton'
+import { Card, CardContent } from '@/components/ui/card'
+import { Plus } from 'lucide-react'
 
 export default function ClassesPage() {
   const { data, loading, error } = useClasses()
@@ -89,16 +91,25 @@ export default function ClassesPage() {
             </TableBody>
           </Table>
         ) : (
-          // WHEN THE USER DOESN'T HAVE ANY CLASSES
-          <p className='text-muted-foreground text-center pt-16'>
-            Parece que você ainda não adicionou turmas na sua conta.{' '}
-            <Link
-              href={'/classes/add'}
-              className='text-primary hover:underline'
-            >
-              Adicionar uma nova turma
-            </Link>
-          </p>
+          <Card className='mt-8'>
+            <CardContent className='p-12 text-center'>
+              <div className='max-w-md mx-auto'>
+                <h3 className='text-lg font-semibold mb-2'>
+                  Nenhuma turma criada
+                </h3>
+                <p className='text-muted-foreground mb-6'>
+                  Comece criando sua primeira turma para organizar e acompanhar
+                  o progresso dos seus alunos.
+                </p>
+                <Button asChild>
+                  <Link href={'/classes/add'}>
+                    <Plus className='w-4 h-4 mr-2' />
+                    Criar primeira turma
+                  </Link>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
         )}
       </div>
     </section>
