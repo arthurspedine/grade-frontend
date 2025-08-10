@@ -4,11 +4,11 @@ export function UpcomingAssessmentItem({
   classes,
 }: { title: string; date: string; classes: number }) {
   return (
-    <div className='p-4 border-b border-input last:border-0'>
-      <div className='flex justify-between items-center'>
+    <div className='border-input border-b p-4 last:border-0'>
+      <div className='flex items-center justify-between'>
         <div>
           <h3 className='font-medium'>{title}</h3>
-          <p className='text-gray-500 text-sm mt-1'>
+          <p className='mt-1 text-gray-500 text-sm'>
             {classes}{' '}
             {classes === 1
               ? 'turma a ser avaliada'

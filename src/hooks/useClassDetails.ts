@@ -1,7 +1,7 @@
 'use client'
 
-import getCategoryOptions from '@/http/handle-category-options'
 import { authenticatedFetch } from '@/helper/authenticated-fetch'
+import getCategoryOptions from '@/http/handle-category-options'
 import type { ClassInfoType } from '@/types'
 import { useEffect, useState } from 'react'
 

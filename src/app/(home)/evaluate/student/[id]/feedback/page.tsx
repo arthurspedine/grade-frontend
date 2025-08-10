@@ -1,9 +1,5 @@
 'use client'
 import { MAX_SCORE } from '@/app/(home)/assessments/_helper/score'
-import {
-  getChatFeedback,
-  handleFinishEvaluation,
-} from '@/http/handle-http-evaluate'
 import { GoBackButton } from '@/components/go-back-button'
 import { Button } from '@/components/ui/button'
 import {
@@ -22,6 +18,10 @@ import {
 } from '@/components/ui/tooltip'
 import { useEvaluation } from '@/context/evaluation-context'
 import { isValid } from '@/helper/validate-uuid'
+import {
+  getChatFeedback,
+  handleFinishEvaluation,
+} from '@/http/handle-http-evaluate'
 import { ChevronRight, CircleHelp, CornerDownRight } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -76,7 +76,7 @@ export default function FeedbackPage() {
   }, [evaluationData, isEvaluationComplete, dataLoaded, router])
 
   if (!dataLoaded) {
-    return <p className='text-muted-foreground text-center'>Carregando...</p>
+    return <p className='text-center text-muted-foreground'>Carregando...</p>
   }
 
   if (!evaluationData) {
@@ -135,8 +135,8 @@ export default function FeedbackPage() {
   }
 
   return (
-    <Card className='hover:cursor-default px-8 py-12 w-full'>
-      <CardHeader className='flex-row justify-between space-y-0 py-2 px-0'>
+    <Card className='w-full px-8 py-12 hover:cursor-default'>
+      <CardHeader className='flex-row justify-between space-y-0 px-0 py-2'>
         <div>
           <CardTitle className='hover:cursor-text'>
             Avaliando: {evaluationData.student.name}
@@ -154,12 +154,12 @@ export default function FeedbackPage() {
       </CardHeader>
       <CardContent>
         <div className='border-border border-b-2 pb-2'>
-          <div className='flex flex-row gap-4 w-full h-full'>
-            <div className='flex flex-col gap-4 grow'>
+          <div className='flex h-full w-full flex-row gap-4'>
+            <div className='flex grow flex-col gap-4'>
               {/* RAW FEEDBACK */}
               <div className='space-y-1'>
                 <label
-                  className='text-base font-medium hover:cursor-text'
+                  className='font-medium text-base hover:cursor-text'
                   htmlFor='rawFeedback-id'
                 >
                   Seu feedback
@@ -172,7 +172,7 @@ export default function FeedbackPage() {
                   }
                   maxLength={1500}
                 />
-                <span className='flex text-muted-foreground text-sm justify-end hover:cursor-text'>
+                <span className='flex justify-end text-muted-foreground text-sm hover:cursor-text'>
                   {evaluationData.rawFeedback
                     ? evaluationData.rawFeedback.length
                     : 0}
@@ -181,9 +181,9 @@ export default function FeedbackPage() {
               </div>
               <div className='space-y-2'>
                 {/* AI FEEDBACK */}
-                <div className='flex justify-between items-end'>
+                <div className='flex items-end justify-between'>
                   <label
-                    className='text-base font-medium leading-none hover:cursor-text'
+                    className='font-medium text-base leading-none hover:cursor-text'
                     htmlFor='AIFeedback-id'
                   >
                     Feedback IA
@@ -245,9 +245,9 @@ export default function FeedbackPage() {
               </div>
             </div>
             {/* FINAL FEEDBACK */}
-            <div className='flex flex-col grow space-y-1'>
+            <div className='flex grow flex-col space-y-1'>
               <label
-                className='text-base font-medium flex justify-between hover:cursor-text'
+                className='flex justify-between font-medium text-base hover:cursor-text'
                 htmlFor='finalFeedback-id'
               >
                 Feedback final
@@ -274,7 +274,7 @@ export default function FeedbackPage() {
                 value={evaluationData.finalFeedback || ''}
                 maxLength={1500}
               />
-              <span className='flex text-muted-foreground text-sm justify-end'>
+              <span className='flex justify-end text-muted-foreground text-sm'>
                 {evaluationData.finalFeedback
                   ? evaluationData.finalFeedback.length
                   : 0}
@@ -283,7 +283,7 @@ export default function FeedbackPage() {
             </div>
           </div>
           {error && (
-            <p className='text-destructive text-sm pt-2 text-center hover:cursor-text'>
+            <p className='pt-2 text-center text-destructive text-sm hover:cursor-text'>
               {error}
             </p>
           )}
@@ -305,7 +305,7 @@ export default function FeedbackPage() {
         {evaluationData.questions.map(question => (
           <div
             key={question.questionNumber}
-            className='py-4 border-border border-b-2'
+            className='border-border border-b-2 py-4'
           >
             <p className='underline hover:cursor-text'>
               Questão N°{question.questionNumber}

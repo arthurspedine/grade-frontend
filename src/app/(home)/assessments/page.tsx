@@ -7,10 +7,11 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
-import { Progress } from '@/components/ui/progress'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
+import { Progress } from '@/components/ui/progress'
 import {
   Select,
   SelectContent,
@@ -18,22 +19,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
 import { formatDate } from '@/helper/format-date'
-import { useState, useMemo } from 'react'
+import { useAssessments } from '@/hooks/useAssessments'
+import type { AssessmentDetailsType } from '@/types'
 import {
-  Plus,
-  Calendar,
-  Users,
-  Search,
-  CheckCircle,
   AlertCircle,
+  Calendar,
+  CheckCircle,
+  Plus,
+  Search,
+  Users,
   X,
 } from 'lucide-react'
-import type { AssessmentDetailsType } from '@/types'
+import Link from 'next/link'
+import { useMemo, useState } from 'react'
 import { AssessmentsSkeleton } from './_components/assessments-skeleton'
-import { useAssessments } from '@/hooks/useAssessments'
 
 export default function AssessmentsPage() {
   const { data: assessmentsList, loading, error } = useAssessments()
@@ -149,9 +149,9 @@ export default function AssessmentsPage() {
 
   if (error) {
     return (
-      <section className='max-w-[1440px] mx-auto w-full px-8 flex-grow'>
+      <section className='mx-auto w-full max-w-[1440px] flex-grow px-8'>
         <div className='flex flex-col items-center justify-center pt-16'>
-          <p className='text-red-500 mb-4'>{error}</p>
+          <p className='mb-4 text-red-500'>{error}</p>
           <Button onClick={() => window.location.reload()}>
             Tentar novamente
           </Button>
@@ -161,13 +161,13 @@ export default function AssessmentsPage() {
   }
 
   return (
-    <section className='max-w-[1440px] mx-auto w-full px-8 flex-grow'>
+    <section className='mx-auto w-full max-w-[1440px] flex-grow px-8'>
       {/* Header */}
-      <div className='flex justify-between items-center mb-6'>
+      <div className='mb-6 flex items-center justify-between'>
         <Title>Avaliações</Title>
         <Button asChild>
           <Link href={'/assessments/add'}>
-            <Plus className='w-4 h-4 mr-2' />
+            <Plus className='mr-2 h-4 w-4' />
             Nova Avaliação
           </Link>
         </Button>
@@ -176,9 +176,9 @@ export default function AssessmentsPage() {
       {assessmentsList.length > 0 ? (
         <>
           {/* Search and Filters */}
-          <div className='mb-6 flex flex-col sm:flex-row gap-4'>
-            <div className='relative flex-1 max-w-md'>
-              <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4' />
+          <div className='mb-6 flex flex-col gap-4 sm:flex-row'>
+            <div className='relative max-w-md flex-1'>
+              <Search className='-translate-y-1/2 absolute top-1/2 left-3 h-4 w-4 transform text-muted-foreground' />
               <Input
                 placeholder='Buscar avaliação...'
                 value={searchTerm}
@@ -204,14 +204,14 @@ export default function AssessmentsPage() {
                 onClick={clearAllFilters}
                 className='flex items-center gap-2 whitespace-nowrap'
               >
-                <X className='w-4 h-4' />
+                <X className='h-4 w-4' />
                 Limpar filtros
               </Button>
             )}
           </div>
 
           {/* Results Counter */}
-          <div className='mb-4 text-sm text-muted-foreground'>
+          <div className='mb-4 text-muted-foreground text-sm'>
             {filteredAssessments.length === assessmentsList.length ? (
               <span>
                 Mostrando {filteredAssessments.length} de{' '}
@@ -239,7 +239,7 @@ export default function AssessmentsPage() {
           </div>
 
           {/* Assessments Grid */}
-          <div className='grid gap-6 mb-8'>
+          <div className='mb-8 grid gap-6'>
             {filteredAssessments.length === 0 ? (
               <Card>
                 <CardContent className='p-8 text-center'>
@@ -257,21 +257,21 @@ export default function AssessmentsPage() {
                 return (
                   <Card
                     key={assessment.id}
-                    className='overflow-hidden hover:shadow-lg transition-shadow'
+                    className='overflow-hidden transition-shadow hover:shadow-lg'
                   >
                     <CardHeader className='pb-3'>
                       <div className='flex items-start justify-between'>
                         <div className='flex-1'>
-                          <h3 className='text-lg font-semibold mb-2'>
+                          <h3 className='mb-2 font-semibold text-lg'>
                             {assessment.name}
                           </h3>
-                          <div className='flex items-center gap-4 text-sm text-muted-foreground mb-3'>
+                          <div className='mb-3 flex items-center gap-4 text-muted-foreground text-sm'>
                             <div className='flex items-center gap-1'>
-                              <Calendar className='w-4 h-4' />
+                              <Calendar className='h-4 w-4' />
                               {formatDate(assessment.assessmentDate)}
                             </div>
                             <div className='flex items-center gap-1'>
-                              <Users className='w-4 h-4' />
+                              <Users className='h-4 w-4' />
                               {assessment.classes.length} turma
                               {assessment.classes.length !== 1 ? 's' : ''}
                             </div>
@@ -280,14 +280,14 @@ export default function AssessmentsPage() {
                           {/* Progress Summary */}
                           <div className='space-y-2'>
                             <div className='flex items-center justify-between'>
-                              <span className='text-sm font-medium'>
+                              <span className='font-medium text-sm'>
                                 Progresso Geral
                               </span>
                               <Badge
                                 variant={status.variant}
                                 className='flex items-center gap-1'
                               >
-                                <StatusIcon className='w-3 h-3' />
+                                <StatusIcon className='h-3 w-3' />
                                 {status.label}
                               </Badge>
                             </div>
@@ -295,7 +295,7 @@ export default function AssessmentsPage() {
                               value={progress.percentage}
                               className='h-2'
                             />
-                            <p className='text-xs text-muted-foreground'>
+                            <p className='text-muted-foreground text-xs'>
                               {progress.evaluatedStudents} de{' '}
                               {progress.totalStudents} alunos avaliados (
                               {Math.round(progress.percentage)}%)
@@ -309,8 +309,8 @@ export default function AssessmentsPage() {
                       {/* Classes Details */}
                       <Accordion type='single' collapsible className='w-full'>
                         <AccordionItem value='details' className='border-none'>
-                          <AccordionTrigger className='hover:no-underline py-2'>
-                            <span className='text-sm font-medium'>
+                          <AccordionTrigger className='py-2 hover:no-underline'>
+                            <span className='font-medium text-sm'>
                               Ver detalhes das turmas
                             </span>
                           </AccordionTrigger>
@@ -328,9 +328,9 @@ export default function AssessmentsPage() {
                                 return (
                                   <div
                                     key={classItem.id}
-                                    className='p-3 border rounded-lg bg-muted/20'
+                                    className='rounded-lg border bg-muted/20 p-3'
                                   >
-                                    <div className='flex items-center justify-between mb-2'>
+                                    <div className='mb-2 flex items-center justify-between'>
                                       <h4 className='font-medium'>
                                         {classItem.name}
                                       </h4>
@@ -349,7 +349,7 @@ export default function AssessmentsPage() {
                                         className='h-1.5'
                                       />
                                       <div className='flex items-center justify-between'>
-                                        <span className='text-xs text-muted-foreground'>
+                                        <span className='text-muted-foreground text-xs'>
                                           {classItem.countEvaluatedStudents} /{' '}
                                           {classItem.countStudents} alunos
                                         </span>
@@ -387,17 +387,17 @@ export default function AssessmentsPage() {
       ) : (
         <Card className='mt-8'>
           <CardContent className='p-12 text-center'>
-            <div className='max-w-md mx-auto'>
-              <h3 className='text-lg font-semibold mb-2'>
+            <div className='mx-auto max-w-md'>
+              <h3 className='mb-2 font-semibold text-lg'>
                 Nenhuma avaliação criada
               </h3>
-              <p className='text-muted-foreground mb-6'>
+              <p className='mb-6 text-muted-foreground'>
                 Comece criando sua primeira avaliação para organizar e
                 acompanhar o progresso dos seus alunos.
               </p>
               <Button asChild>
                 <Link href={'/assessments/add'}>
-                  <Plus className='w-4 h-4 mr-2' />
+                  <Plus className='mr-2 h-4 w-4' />
                   Criar primeira avaliação
                 </Link>
               </Button>

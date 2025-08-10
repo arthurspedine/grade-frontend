@@ -6,7 +6,7 @@ import { StudentTablesSkeleton } from '../../../_components/students-table-skele
 
 export function EditClassSkeleton() {
   return (
-    <section className='max-w-[1440px] mx-auto w-full h-full px-8 flex flex-col'>
+    <section className='mx-auto flex h-full w-full max-w-[1440px] flex-col px-8'>
       {/* Title skeleton */}
       <div className='flex items-center gap-2'>
         <Title>Editar turma</Title>
@@ -16,14 +16,14 @@ export function EditClassSkeleton() {
       {/* Form skeleton */}
       <div className='w-full space-y-6 px-8 py-4'>
         {/* Name and Category row */}
-        <div className='w-full flex justify-between items-start'>
-          <div className='w-1/2 flex items-center gap-2'>
-            <span className='text-base font-medium'>Nome:</span>
+        <div className='flex w-full items-start justify-between'>
+          <div className='flex w-1/2 items-center gap-2'>
+            <span className='font-medium text-base'>Nome:</span>
             <Skeleton className='h-10 w-full' /> {/* Name input */}
           </div>
-          <div className='w-1/2 flex flex-col items-end space-y-1'>
+          <div className='flex w-1/2 flex-col items-end space-y-1'>
             <div className='flex items-center space-x-2'>
-              <span className='text-base font-medium'>Categoria:</span>
+              <span className='font-medium text-base'>Categoria:</span>
               <Skeleton className='h-10 w-[180px]' /> {/* Category select */}
             </div>
           </div>

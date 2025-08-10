@@ -1,8 +1,6 @@
+import { GoBackButton } from '@/components/go-back-button'
 import { Title } from '@/components/title'
-import { isValid } from '@/helper/validate-uuid'
-import type { AssessmentInfoType } from '@/types'
-import { redirect } from 'next/navigation'
-import { handleGetAssessmentInfo } from '@/http/handle-http-evaluate'
+import { Button } from '@/components/ui/button'
 import {
   Table,
   TableBody,
@@ -12,10 +10,12 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { Button } from '@/components/ui/button'
-import Link from 'next/link'
-import { GoBackButton } from '@/components/go-back-button'
+import { isValid } from '@/helper/validate-uuid'
+import { handleGetAssessmentInfo } from '@/http/handle-http-evaluate'
+import type { AssessmentInfoType } from '@/types'
 import { CheckCircle } from 'lucide-react'
+import Link from 'next/link'
+import { redirect } from 'next/navigation'
 
 export default async function EvaluateInfoAssessmentPage({
   params,
@@ -32,13 +32,13 @@ export default async function EvaluateInfoAssessmentPage({
   if (!assessmentInfo) return redirect('/assessments')
 
   return (
-    <section className='max-w-[1440px] mx-auto w-full px-8 flex-grow max-h-screen'>
+    <section className='mx-auto max-h-screen w-full max-w-[1440px] flex-grow px-8'>
       <div className='flex flex-col space-y-1'>
         <div className='flex items-center justify-between'>
           <Title>
             Avaliação <span className='italic'>{assessmentInfo.name}</span>
           </Title>
-          <div className='flex space-x-2 items-center'>
+          <div className='flex items-center space-x-2'>
             <p>Alunos avalidados</p>
             <span className='font-semibold text-sm'>
               {assessmentInfo.countEvaluatedStudents} /{' '}
@@ -56,7 +56,7 @@ export default async function EvaluateInfoAssessmentPage({
             <TableHead className='w-20'>RM</TableHead>
             <TableHead>Nome</TableHead>
             <TableHead className='text-right'>Avaliado</TableHead>
-            <TableHead className='text-right w-32'>Ações</TableHead>
+            <TableHead className='w-32 text-right'>Ações</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

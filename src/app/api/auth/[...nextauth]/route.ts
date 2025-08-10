@@ -1,6 +1,6 @@
 import NextAuth, { type AuthOptions } from 'next-auth'
-import GoogleProvider from 'next-auth/providers/google'
 import type { JWT } from 'next-auth/jwt'
+import GoogleProvider from 'next-auth/providers/google'
 
 interface GoogleProfile extends Record<string, unknown> {
   email_verified?: boolean

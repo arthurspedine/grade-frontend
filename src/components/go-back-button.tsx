@@ -1,8 +1,8 @@
 'use client'
 
+import { cn } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
 import { Button } from './ui/button'
-import { cn } from '@/lib/utils'
 
 export function GoBackButton({
   className,
@@ -24,7 +24,7 @@ export function GoBackButton({
   return (
     <Button
       variant='secondary'
-      className={cn('justify-end w-fit', className)}
+      className={cn('w-fit justify-end', className)}
       onClick={handleGoBack}
       type='button'
     >

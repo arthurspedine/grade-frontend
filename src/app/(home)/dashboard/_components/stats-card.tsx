@@ -14,13 +14,13 @@ export function StatsCard({
 }) {
   const Icon = icon
   return (
-    <div className='bg-accent rounded-lg p-6 shadow-md flex items-center'>
-      <div className={`p-3 rounded-full ${color} mr-4`}>
+    <div className='flex items-center rounded-lg bg-accent p-6 shadow-md'>
+      <div className={`rounded-full p-3 ${color} mr-4`}>
         <Icon size={24} className='text-white' />
       </div>
       <div>
         <p className='text-gray-500 text-sm'>{title}</p>
-        <p className='text-2xl font-semibold'>{value}</p>
+        <p className='font-semibold text-2xl'>{value}</p>
       </div>
     </div>
   )

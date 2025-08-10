@@ -2,6 +2,7 @@
 
 import { Title } from '@/components/title'
 import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 import {
   Table,
   TableBody,
@@ -11,12 +12,11 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import Link from 'next/link'
-import { DisableClassDialog } from './_components/disable-class-dialog'
 import { useClasses } from '@/hooks/useClasses'
-import { ClassesSkeleton } from './_components/classes-skeleton'
-import { Card, CardContent } from '@/components/ui/card'
 import { Plus } from 'lucide-react'
+import Link from 'next/link'
+import { ClassesSkeleton } from './_components/classes-skeleton'
+import { DisableClassDialog } from './_components/disable-class-dialog'
 
 export default function ClassesPage() {
   const { data, loading, error } = useClasses()
@@ -27,9 +27,9 @@ export default function ClassesPage() {
 
   if (error) {
     return (
-      <section className='max-w-[1440px] mx-auto w-full px-8 flex-grow'>
+      <section className='mx-auto w-full max-w-[1440px] flex-grow px-8'>
         <div className='flex flex-col items-center justify-center pt-16'>
-          <p className='text-red-500 mb-4'>{error}</p>
+          <p className='mb-4 text-red-500'>{error}</p>
           <Button onClick={() => window.location.reload()}>
             Tentar novamente
           </Button>
@@ -41,11 +41,11 @@ export default function ClassesPage() {
   const { classesList, categoryList } = data
 
   return (
-    <section className='max-w-[1440px] mx-auto w-full px-8 flex-grow'>
+    <section className='mx-auto w-full max-w-[1440px] flex-grow px-8'>
       <div className='flex justify-between'>
         <Title>Turmas</Title>
         {classesList.length > 0 && (
-          <Link href={'/classes/add'} className='hover:underline text'>
+          <Link href={'/classes/add'} className='text hover:underline'>
             Adicionar turma
           </Link>
         )}
@@ -75,8 +75,8 @@ export default function ClassesPage() {
                         ?.label
                     }
                   </TableCell>
-                  <TableCell className='w-full flex justify-end'>
-                    <div className='max-w-72 flex-grow flex space-x-2 mr-2'>
+                  <TableCell className='flex w-full justify-end'>
+                    <div className='mr-2 flex max-w-72 flex-grow space-x-2'>
                       <Button variant={'secondary'} asChild>
                         <Link href={`/classes/${c.id}`}>Ver turma</Link>
                       </Button>
@@ -93,17 +93,17 @@ export default function ClassesPage() {
         ) : (
           <Card className='mt-8'>
             <CardContent className='p-12 text-center'>
-              <div className='max-w-md mx-auto'>
-                <h3 className='text-lg font-semibold mb-2'>
+              <div className='mx-auto max-w-md'>
+                <h3 className='mb-2 font-semibold text-lg'>
                   Nenhuma turma criada
                 </h3>
-                <p className='text-muted-foreground mb-6'>
+                <p className='mb-6 text-muted-foreground'>
                   Comece criando sua primeira turma para organizar e acompanhar
                   o progresso dos seus alunos.
                 </p>
                 <Button asChild>
                   <Link href={'/classes/add'}>
-                    <Plus className='w-4 h-4 mr-2' />
+                    <Plus className='mr-2 h-4 w-4' />
                     Criar primeira turma
                   </Link>
                 </Button>

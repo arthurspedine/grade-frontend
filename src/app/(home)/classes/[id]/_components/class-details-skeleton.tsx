@@ -6,7 +6,7 @@ import { StudentTablesSkeleton } from '../../_components/students-table-skeleton
 
 export function ClassDetailsSkeleton() {
   return (
-    <section className='max-w-[1440px] mx-auto w-full px-8 flex-grow max-h-screen'>
+    <section className='mx-auto max-h-screen w-full max-w-[1440px] flex-grow px-8'>
       <div className='flex items-center justify-between'>
         <div className='flex items-center gap-2'>
           <Title>Turma</Title>

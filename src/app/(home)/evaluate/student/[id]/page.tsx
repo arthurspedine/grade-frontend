@@ -1,12 +1,12 @@
 import { isValid } from '@/helper/validate-uuid'
+import { handleGetStudentEvaluationInfo } from '@/http/handle-http-evaluate'
 import type {
   StudentEvaluationInfo,
   StudentFinishedEvaluationInfo,
 } from '@/interfaces'
 import { redirect } from 'next/navigation'
-import { handleGetStudentEvaluationInfo } from '@/http/handle-http-evaluate'
-import { EvaluateStudentContainer } from './_components/evaluate-student-container'
 import { AlreadyEvaluatedStudentContainer } from './_components/already-evaluated-student-container'
+import { EvaluateStudentContainer } from './_components/evaluate-student-container'
 
 export default async function EvaluateInfoAssessmentPage({
   params,
@@ -27,7 +27,7 @@ export default async function EvaluateInfoAssessmentPage({
   ) : 'questions' in studentEvaluationInfo ? (
     <EvaluateStudentContainer initialData={studentEvaluationInfo} />
   ) : (
-    <p className='text-destructive text-center'>
+    <p className='text-center text-destructive'>
       Unexpected error: invalid evaluation data.
     </p>
   )

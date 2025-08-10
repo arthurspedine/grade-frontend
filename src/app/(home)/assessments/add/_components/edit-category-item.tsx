@@ -13,9 +13,9 @@ import { Input } from '@/components/ui/input'
 import { type QuestionCategoryType, questionCategorySchema } from '@/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { DialogDescription } from '@radix-ui/react-dialog'
+import { Pen } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { MAX_SCORE, MIN_SCORE } from '../../_helper/score'
-import { Pen } from 'lucide-react'
 import { validateCategoryForm } from '../shared-validation'
 
 export function EditCategoryItem({
@@ -81,7 +81,7 @@ export function EditCategoryItem({
         <div className='flex flex-col space-y-1'>
           <div className='flex items-center space-x-2'>
             <label
-              className='text-base font-medium flex-shrink-0'
+              className='flex-shrink-0 font-medium text-base'
               htmlFor='name'
             >
               Nome da Categoria:
@@ -96,12 +96,12 @@ export function EditCategoryItem({
             />
           </div>
           {errors.name && (
-            <p className='text-destructive text-sm pt-0.5 pb-1'>
+            <p className='pt-0.5 pb-1 text-destructive text-sm'>
               {errors.name.message}
             </p>
           )}
           <div className='flex items-center space-x-2'>
-            <label className='text-base font-medium' htmlFor='score'>
+            <label className='font-medium text-base' htmlFor='score'>
               Nota:
             </label>
             <Input
@@ -123,7 +123,7 @@ export function EditCategoryItem({
             />
           </div>
           {errors.score && (
-            <p className='text-destructive text-sm pt-0.5 pb-1'>
+            <p className='pt-0.5 pb-1 text-destructive text-sm'>
               {errors.score.message}
             </p>
           )}

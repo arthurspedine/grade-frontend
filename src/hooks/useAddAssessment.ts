@@ -1,9 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { handleClassesList } from '@/http/handle-http-class'
 import getCategoryOptions from '@/http/handle-category-options'
+import { handleClassesList } from '@/http/handle-http-class'
 import type { ClassType } from '@/types'
+import { useEffect, useState } from 'react'
 
 export function useAddAssessment() {
   const [classList, setClassList] = useState<ClassType[]>([])

@@ -12,7 +12,7 @@ import {
 
 export function ClassesSkeleton() {
   return (
-    <section className='max-w-[1440px] mx-auto w-full px-8 flex-grow'>
+    <section className='mx-auto w-full max-w-[1440px] flex-grow px-8'>
       <div className='flex justify-between'>
         <Title>Turmas</Title>
         <Skeleton className='h-5 w-32' /> {/* Add class link */}
@@ -53,8 +53,8 @@ function ClassRowSkeleton() {
       <TableCell>
         <Skeleton className='h-4 w-24' />
       </TableCell>
-      <TableCell className='w-full flex justify-end'>
-        <div className='max-w-72 flex-grow flex space-x-2 mr-2'>
+      <TableCell className='flex w-full justify-end'>
+        <div className='mr-2 flex max-w-72 flex-grow space-x-2'>
           <Skeleton className='h-9 w-24' /> {/* Ver turma button */}
           <Skeleton className='h-9 w-20' /> {/* Editar button */}
           <Skeleton className='h-9 w-24' /> {/* Disable button */}

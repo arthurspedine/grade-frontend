@@ -1,14 +1,14 @@
 'use client'
 
-import { Title } from '@/components/title'
-import { isValid } from '@/helper/validate-uuid'
-import { redirect } from 'next/navigation'
-import { StudentsTable } from '../_components/students-table'
 import { GoBackButton } from '@/components/go-back-button'
-import { useClassDetails } from '@/hooks/useClassDetails'
-import { ClassDetailsSkeleton } from './_components/class-details-skeleton'
+import { Title } from '@/components/title'
 import { Button } from '@/components/ui/button'
+import { isValid } from '@/helper/validate-uuid'
+import { useClassDetails } from '@/hooks/useClassDetails'
+import { redirect } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { StudentsTable } from '../_components/students-table'
+import { ClassDetailsSkeleton } from './_components/class-details-skeleton'
 
 export default function ClassInfoPage({
   params,
@@ -36,9 +36,9 @@ export default function ClassInfoPage({
 
   if (error) {
     return (
-      <section className='max-w-[1440px] mx-auto w-full px-8 flex-grow'>
+      <section className='mx-auto w-full max-w-[1440px] flex-grow px-8'>
         <div className='flex flex-col items-center justify-center pt-16'>
-          <p className='text-red-500 mb-4'>{error}</p>
+          <p className='mb-4 text-red-500'>{error}</p>
           <Button onClick={() => window.location.reload()}>
             Tentar novamente
           </Button>
@@ -53,7 +53,7 @@ export default function ClassInfoPage({
     return <ClassDetailsSkeleton />
   }
   return (
-    <section className='max-w-[1440px] mx-auto w-full px-8 flex-grow max-h-screen'>
+    <section className='mx-auto max-h-screen w-full max-w-[1440px] flex-grow px-8'>
       <div className='flex items-center justify-between'>
         <Title>
           Turma <span className='italic'>{classInfo.details.name}</span>

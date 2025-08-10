@@ -1,13 +1,10 @@
-import { formatDate } from '@/helper/format-date'
-import type { StudentFinishedEvaluationInfo } from '@/interfaces'
+import { GoBackButton } from '@/components/go-back-button'
 import {
-  Award,
-  Calendar,
-  CheckCircle,
-  FileText,
-  User,
-  CornerDownRight,
-} from 'lucide-react'
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion'
 import {
   Card,
   CardContent,
@@ -17,13 +14,16 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
+import { formatDate } from '@/helper/format-date'
+import type { StudentFinishedEvaluationInfo } from '@/interfaces'
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion'
-import { GoBackButton } from '@/components/go-back-button'
+  Award,
+  Calendar,
+  CheckCircle,
+  CornerDownRight,
+  FileText,
+  User,
+} from 'lucide-react'
 
 export function AlreadyEvaluatedStudentContainer({
   initialData,
@@ -42,31 +42,31 @@ export function AlreadyEvaluatedStudentContainer({
   const totalPercentage = calculateTotalPercentage()
 
   return (
-    <Card className='shadow-md pb-6 px-10'>
+    <Card className='px-10 pb-6 shadow-md'>
       <CardHeader className='border-b px-0'>
         <div className='flex items-start justify-between'>
           <div>
-            <CardTitle className='text-xl flex items-center gap-2'>
+            <CardTitle className='flex items-center gap-2 text-xl'>
               <CheckCircle
                 className='text-green-500 dark:text-green-400'
                 size={24}
               />
               Avaliação Finalizada
             </CardTitle>
-            <CardDescription className='flex flex-col mt-2'>
+            <CardDescription className='mt-2 flex flex-col'>
               <div className='flex items-center'>
-                <User className='text-primary mr-2' size={24} />
-                <h2 className='text-xl font-bold text-primary'>
+                <User className='mr-2 text-primary' size={24} />
+                <h2 className='font-bold text-primary text-xl'>
                   {initialData.student.name}
                 </h2>
               </div>
-              <span className='text-muted-foreground text-base'>
+              <span className='text-base text-muted-foreground'>
                 RM: {initialData.student.rm}
               </span>
             </CardDescription>
           </div>
           <div className='flex items-center space-x-2'>
-            <div className='flex items-center gap-1 px-3 py-1 rounded-md border border-input bg-background shadow-sm hover:bg-accent/30 hover:text-accent-foreground'>
+            <div className='flex items-center gap-1 rounded-md border border-input bg-background px-3 py-1 shadow-sm hover:bg-accent/30 hover:text-accent-foreground'>
               Avaliado: <Calendar size={14} />
               {formatDate(initialData.finishedDate)}
             </div>
@@ -75,12 +75,12 @@ export function AlreadyEvaluatedStudentContainer({
         </div>
 
         <div className='mt-4'>
-          <div className='flex justify-between items-center mb-2'>
-            <div className='font-semibold flex items-center gap-2'>
+          <div className='mb-2 flex items-center justify-between'>
+            <div className='flex items-center gap-2 font-semibold'>
               <Award size={18} />
               Pontuação total: {initialData.totalScore} pontos
             </div>
-            <span className='text-sm text-muted-foreground'>
+            <span className='text-muted-foreground text-sm'>
               {totalPercentage}%
             </span>
           </div>
@@ -99,7 +99,7 @@ export function AlreadyEvaluatedStudentContainer({
                 Questão Nº {question.questionNumber}
               </AccordionTrigger>
               <AccordionContent>
-                <div className='space-y-4 pl-2 pt-2'>
+                <div className='space-y-4 pt-2 pl-2'>
                   {question.categories.map(category => {
                     const categoryPercentage = Math.round(
                       (category.answeredScore / category.score) * 100
@@ -121,13 +121,13 @@ export function AlreadyEvaluatedStudentContainer({
                     return (
                       <Card key={category.id} className='bg-accent/30'>
                         <CardContent className='py-1'>
-                          <div className='font-bold dark:font-medium flex items-center gap-2 mb-2'>
+                          <div className='mb-2 flex items-center gap-2 font-bold dark:font-medium'>
                             <CornerDownRight size={16} />
                             {category.name}
                           </div>
 
-                          <div className='pl-6 space-y-3'>
-                            <div className='flex justify-between items-center text-sm'>
+                          <div className='space-y-3 pl-6'>
+                            <div className='flex items-center justify-between text-sm'>
                               <span>Pontuação máxima: {category.score}</span>
                               <span
                                 className={`font-bold dark:font-medium ${scoreColor}`}
@@ -152,28 +152,28 @@ export function AlreadyEvaluatedStudentContainer({
         </Accordion>
       </CardContent>
 
-      <CardFooter className='flex flex-col items-start pt-6 border-t border-border'>
+      <CardFooter className='flex flex-col items-start border-border border-t pt-6'>
         <div className='w-full space-y-4'>
           <div className='flex items-center gap-2'>
             <FileText size={18} />
-            <h2 className='text-lg font-semibold'>Feedback</h2>
+            <h2 className='font-semibold text-lg'>Feedback</h2>
           </div>
 
           <div className='space-y-4 pl-6'>
             <div>
-              <h3 className='text-sm font-medium text-muted-foreground mb-1'>
+              <h3 className='mb-1 font-medium text-muted-foreground text-sm'>
                 Feedback Inicial:
               </h3>
-              <p className='bg-accent/30 p-3 rounded-md whitespace-pre-line'>
+              <p className='whitespace-pre-line rounded-md bg-accent/30 p-3'>
                 {initialData.rawFeedback}
               </p>
             </div>
 
             <div>
-              <h3 className='text-sm font-medium text-muted-foreground mb-1'>
+              <h3 className='mb-1 font-medium text-muted-foreground text-sm'>
                 Feedback Final:
               </h3>
-              <p className='bg-accent/30 p-3 rounded-md whitespace-pre-line'>
+              <p className='whitespace-pre-line rounded-md bg-accent/30 p-3'>
                 {initialData.finalFeedback}
               </p>
             </div>

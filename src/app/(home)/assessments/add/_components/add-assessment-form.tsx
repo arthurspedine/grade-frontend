@@ -2,6 +2,7 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
+import { addAssessment } from '@/http/handle-http-assessments'
 import {
   type AddAssessmentFormType,
   type QuestionCategoryType,
@@ -9,19 +10,18 @@ import {
 } from '@/schemas'
 import type { ClassType } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Plus, Trash2 } from 'lucide-react'
 import { redirect } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { MAX_SCORE } from '../../_helper/score'
-import { addAssessment } from '@/http/handle-http-assessments'
-import { EditCategoryItem } from './edit-category-item'
-import { AddCategoryDialog } from './add-category-dialog'
-import { Plus, Trash2 } from 'lucide-react'
 import {
-  validateNewScore,
   validateDuplicateCategoryName,
+  validateNewScore,
 } from '../shared-validation'
+import { AddCategoryDialog } from './add-category-dialog'
+import { EditCategoryItem } from './edit-category-item'
 
 export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
   const {
@@ -175,16 +175,16 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
   return (
     <>
       <form
-        className='flex flex-col px-8 py-4 relative'
+        className='relative flex flex-col px-8 py-4'
         onSubmit={handleSubmit(handleAddAssessmentSubmit)}
       >
-        <Button variant={'green'} className='absolute right-0 top-[-34px]'>
+        <Button variant={'green'} className='absolute top-[-34px] right-0'>
           Salvar Avaliação
         </Button>
         {/* NAME INPUT */}
         <div>
-          <div className='flex space-x-2 items-center'>
-            <label className='text-base font-medium' htmlFor='name'>
+          <div className='flex items-center space-x-2'>
+            <label className='font-medium text-base' htmlFor='name'>
               Nome:
             </label>
             <Input
@@ -196,14 +196,14 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
             />
           </div>
           {errors.name && (
-            <p className='text-destructive text-sm pt-0.5'>
+            <p className='pt-0.5 text-destructive text-sm'>
               {errors.name.message}
             </p>
           )}
         </div>
         <div className='mt-2'>
-          <div className='flex space-x-2 items-center'>
-            <label className='text-base font-medium' htmlFor='assessmentDate'>
+          <div className='flex items-center space-x-2'>
+            <label className='font-medium text-base' htmlFor='assessmentDate'>
               Data da avaliação:
             </label>
             <Input
@@ -215,7 +215,7 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
             />
           </div>
           {errors.assessmentDate && (
-            <p className='text-destructive text-sm pt-0.5'>
+            <p className='pt-0.5 text-destructive text-sm'>
               {errors.assessmentDate.message}
             </p>
           )}
@@ -223,24 +223,24 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
 
         {/* CLASS SELECTION */}
         <section className='mt-8'>
-          <h2 className='font-semibold text-lg mb-4'>
+          <h2 className='mb-4 font-semibold text-lg'>
             Selecione as turmas para esta avaliação:
           </h2>
 
-          <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
+          <div className='grid grid-cols-1 gap-6 lg:grid-cols-2'>
             {/* AVAILABLE CLASSES */}
             <div className='space-y-3'>
               <h3 className='font-medium text-base text-muted-foreground'>
                 Turmas Disponíveis ({classList.length})
               </h3>
-              <div className='border rounded-lg p-4 bg-muted/20 max-h-80 overflow-y-auto'>
+              <div className='max-h-80 overflow-y-auto rounded-lg border bg-muted/20 p-4'>
                 <div className='space-y-3'>
                   {classList.map(classItem => (
                     <Card
                       key={classItem.id}
                       className={`cursor-pointer transition-all duration-200 hover:shadow-md ${
                         selectedClasses.find(c => c.id === classItem.id)
-                          ? 'ring-2 ring-primary bg-primary/5 opacity-60'
+                          ? 'bg-primary/5 opacity-60 ring-2 ring-primary'
                           : 'hover:bg-muted/50'
                       }`}
                       onClick={() => {
@@ -259,10 +259,10 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
                       <CardContent className='p-3'>
                         <div className='flex items-center justify-between'>
                           <div className='flex-1'>
-                            <h4 className='font-medium text-sm mb-1'>
+                            <h4 className='mb-1 font-medium text-sm'>
                               {classItem.name}
                             </h4>
-                            <p className='text-xs text-muted-foreground'>
+                            <p className='text-muted-foreground text-xs'>
                               {classItem.category}
                             </p>
                           </div>
@@ -275,7 +275,7 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
                                 )
                               }
                               onChange={() => {}} // Controlled by card click
-                              className='size-4 text-primary bg-background border-border rounded focus:ring-primary focus:ring-2'
+                              className='size-4 rounded border-border bg-background text-primary focus:ring-2 focus:ring-primary'
                             />
                           </div>
                         </div>
@@ -291,14 +291,14 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
               <h3 className='font-medium text-base text-muted-foreground'>
                 Turmas Selecionadas ({selectedClasses.length})
               </h3>
-              <div className='border rounded-lg p-4 bg-primary/5 min-h-[200px] max-h-80 overflow-y-auto'>
+              <div className='max-h-80 min-h-[200px] overflow-y-auto rounded-lg border bg-primary/5 p-4'>
                 {selectedClasses.length === 0 ? (
-                  <div className='flex items-center justify-center h-full min-h-[150px] text-center'>
+                  <div className='flex h-full min-h-[150px] items-center justify-center text-center'>
                     <div>
-                      <p className='text-muted-foreground text-sm mb-2'>
+                      <p className='mb-2 text-muted-foreground text-sm'>
                         Nenhuma turma selecionada
                       </p>
-                      <p className='text-xs text-muted-foreground'>
+                      <p className='text-muted-foreground text-xs'>
                         Clique nas turmas à esquerda para selecioná-las
                       </p>
                     </div>
@@ -308,15 +308,15 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
                     {selectedClasses.map(classItem => (
                       <Card
                         key={classItem.id}
-                        className='bg-primary/10 border-primary/20'
+                        className='border-primary/20 bg-primary/10'
                       >
                         <CardContent className='p-3'>
                           <div className='flex items-center justify-between'>
                             <div className='flex-1'>
-                              <h4 className='font-medium text-sm mb-1'>
+                              <h4 className='mb-1 font-medium text-sm'>
                                 {classItem.name}
                               </h4>
-                              <p className='text-xs text-muted-foreground'>
+                              <p className='text-muted-foreground text-xs'>
                                 {classItem.category}
                               </p>
                             </div>
@@ -327,12 +327,12 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
                                   prev.filter(c => c.id !== classItem.id)
                                 )
                               }}
-                              className='ml-2 text-destructive hover:bg-destructive/10 rounded-full p-1 transition-colors'
+                              className='ml-2 rounded-full p-1 text-destructive transition-colors hover:bg-destructive/10'
                               title={`Remover ${classItem.name}`}
                               aria-label={`Remover ${classItem.name}`}
                             >
                               <svg
-                                className='w-4 h-4'
+                                className='h-4 w-4'
                                 fill='none'
                                 stroke='currentColor'
                                 viewBox='0 0 24 24'
@@ -355,7 +355,7 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
               </div>
 
               {selectedClasses.length > 0 && (
-                <div className='text-center p-2 bg-primary/10 rounded text-sm text-primary font-medium'>
+                <div className='rounded bg-primary/10 p-2 text-center font-medium text-primary text-sm'>
                   ✓ {selectedClasses.length} turma
                   {selectedClasses.length > 1 ? 's' : ''} selecionada
                   {selectedClasses.length > 1 ? 's' : ''} para avaliação
@@ -365,17 +365,17 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
           </div>
         </section>
         {errors.classes && (
-          <p className='text-destructive text-sm pt-2.5 text-center'>
+          <p className='pt-2.5 text-center text-destructive text-sm'>
             {errors.classes.message}
           </p>
         )}
       </form>
       {/* ASSESSMENT QUESTIONS */}
-      <div className='flex flex-col space-y-6 pb-4 mt-8'>
+      <div className='mt-8 flex flex-col space-y-6 pb-4'>
         <div className='flex items-center justify-between'>
           <div>
             <h2 className='font-semibold text-lg'>Questões da Avaliação</h2>
-            <p className='text-sm text-muted-foreground'>
+            <p className='text-muted-foreground text-sm'>
               Soma atual das notas:{' '}
               <span className='font-medium text-primary'>
                 {getCurrentScore()}/{MAX_SCORE}
@@ -393,9 +393,9 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
         {/* QUESTIONS LIST */}
         <div className='space-y-4'>
           {fields.length === 0 && (
-            <Card className='border-dashed border-2 border-muted-foreground/25'>
+            <Card className='border-2 border-muted-foreground/25 border-dashed'>
               <CardContent className='p-8 text-center'>
-                <p className='text-muted-foreground mb-4'>
+                <p className='mb-4 text-muted-foreground'>
                   Nenhuma questão adicionada ainda.
                 </p>
                 <Button
@@ -409,7 +409,7 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
                   }
                   className='mx-auto'
                 >
-                  <Plus className='w-4 h-4 mr-2' />
+                  <Plus className='mr-2 h-4 w-4' />
                   Adicionar primeira questão
                 </Button>
               </CardContent>
@@ -420,9 +420,9 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
             <Card key={field.id} className='overflow-hidden'>
               <CardContent className='p-0'>
                 {/* Question Header */}
-                <div className='bg-muted/30 p-4 border-b'>
+                <div className='border-b bg-muted/30 p-4'>
                   <div className='flex items-center justify-between'>
-                    <h3 className='text-lg font-medium'>
+                    <h3 className='font-medium text-lg'>
                       Questão {field.questionNumber}
                     </h3>
                     <div className='flex items-center gap-2'>
@@ -434,7 +434,7 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
                           onClick={() => handleRemoveQuestion(questionIndex)}
                           className='text-destructive hover:text-destructive'
                         >
-                          <Trash2 className='w-4 h-4 mr-1' />
+                          <Trash2 className='mr-1 h-4 w-4' />
                           Remover questão
                         </Button>
                       )}
@@ -442,7 +442,7 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
                   </div>
 
                   {errors.questions?.[questionIndex]?.categories && (
-                    <p className='text-destructive text-sm mt-2'>
+                    <p className='mt-2 text-destructive text-sm'>
                       {errors.questions[questionIndex].categories.message}
                     </p>
                   )}
@@ -450,7 +450,7 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
 
                 {/* Categories Section */}
                 <div className='p-4'>
-                  <div className='flex items-center justify-between mb-4'>
+                  <div className='mb-4 flex items-center justify-between'>
                     <h4 className='font-medium text-base'>
                       Categorias de Avaliação
                     </h4>
@@ -471,7 +471,7 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
                   {/* Categories List */}
                   {watch(`questions.${questionIndex}.categories`, []).length ===
                   0 ? (
-                    <div className='text-center py-8 text-muted-foreground border-2 border-dashed border-muted-foreground/25 rounded-lg'>
+                    <div className='rounded-lg border-2 border-muted-foreground/25 border-dashed py-8 text-center text-muted-foreground'>
                       <p className='mb-2'>
                         Nenhuma categoria adicionada a esta questão.
                       </p>
@@ -485,10 +485,10 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
                         (category: QuestionCategoryType, categoryIndex) => (
                           <div
                             key={category.name}
-                            className='flex items-center justify-between p-3 bg-muted/20 rounded-lg border'
+                            className='flex items-center justify-between rounded-lg border bg-muted/20 p-3'
                           >
                             <div className='flex items-center gap-3'>
-                              <div className='bg-primary text-primary-foreground px-2 py-1 rounded text-sm font-medium min-w-[3rem] text-center'>
+                              <div className='min-w-[3rem] rounded bg-primary px-2 py-1 text-center font-medium text-primary-foreground text-sm'>
                                 {category.score}
                               </div>
                               <span className='font-medium'>
@@ -514,7 +514,7 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
                                 }
                                 className='text-destructive hover:text-destructive'
                               >
-                                <Trash2 className='w-4 h-4' />
+                                <Trash2 className='h-4 w-4' />
                               </Button>
                             </div>
                           </div>
@@ -540,9 +540,9 @@ export function AddAssessmentForm({ classList }: { classList: ClassType[] }) {
                   categories: [],
                 })
               }
-              className='border-dashed border-2'
+              className='border-2 border-dashed'
             >
-              <Plus className='w-4 h-4 mr-2' />
+              <Plus className='mr-2 h-4 w-4' />
               Adicionar nova questão
             </Button>
           </div>

@@ -1,13 +1,13 @@
 'use client'
 
 import { Title } from '@/components/title'
-import { isValid } from '@/helper/validate-uuid'
-import { redirect } from 'next/navigation'
-import { EditClassForm } from './_components/edit-class-form'
-import { useEditClass } from '@/hooks/useEditClass'
-import { EditClassSkeleton } from './_components/edit-class-skeleton'
 import { Button } from '@/components/ui/button'
+import { isValid } from '@/helper/validate-uuid'
+import { useEditClass } from '@/hooks/useEditClass'
+import { redirect } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { EditClassForm } from './_components/edit-class-form'
+import { EditClassSkeleton } from './_components/edit-class-skeleton'
 
 export default function EditClassPage({
   params,
@@ -33,9 +33,9 @@ export default function EditClassPage({
 
   if (error) {
     return (
-      <section className='max-w-[1440px] mx-auto w-full px-8 flex-grow'>
+      <section className='mx-auto w-full max-w-[1440px] flex-grow px-8'>
         <div className='flex flex-col items-center justify-center pt-16'>
-          <p className='text-red-500 mb-4'>{error}</p>
+          <p className='mb-4 text-red-500'>{error}</p>
           <Button onClick={() => window.location.reload()}>
             Tentar novamente
           </Button>
@@ -51,7 +51,7 @@ export default function EditClassPage({
   }
 
   return (
-    <section className='max-w-[1440px] mx-auto w-full h-full px-8 flex flex-col'>
+    <section className='mx-auto flex h-full w-full max-w-[1440px] flex-col px-8'>
       <Title>
         Editar turma <span className='italic'>{classInfo.details.name}</span>
       </Title>

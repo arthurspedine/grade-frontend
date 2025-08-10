@@ -1,12 +1,12 @@
 'use client'
 
 import { Title } from '@/components/title'
-import { AddAssessmentForm } from './_components/add-assessment-form'
-import { AddAssessmentSkeleton } from './_components/add-assessment-skeleton'
+import { Button } from '@/components/ui/button'
+import { encodeText } from '@/helper/base64-search-params'
 import { useAddAssessment } from '@/hooks/useAddAssessment'
 import { redirect } from 'next/navigation'
-import { encodeText } from '@/helper/base64-search-params'
-import { Button } from '@/components/ui/button'
+import { AddAssessmentForm } from './_components/add-assessment-form'
+import { AddAssessmentSkeleton } from './_components/add-assessment-skeleton'
 
 export default function AddAssessmentPage() {
   const { classList, loading, error, hasClasses } = useAddAssessment()
@@ -17,12 +17,12 @@ export default function AddAssessmentPage() {
 
   if (error) {
     return (
-      <section className='max-w-[1440px] mx-auto w-full h-full px-8 flex flex-col items-center justify-center'>
+      <section className='mx-auto flex h-full w-full max-w-[1440px] flex-col items-center justify-center px-8'>
         <div className='text-center'>
-          <h2 className='text-lg font-semibold text-destructive mb-2'>
+          <h2 className='mb-2 font-semibold text-destructive text-lg'>
             Erro ao carregar dados
           </h2>
-          <p className='text-muted-foreground mb-4'>{error}</p>
+          <p className='mb-4 text-muted-foreground'>{error}</p>
           <Button onClick={() => window.location.reload()} variant='outline'>
             Tentar novamente
           </Button>
@@ -33,12 +33,12 @@ export default function AddAssessmentPage() {
 
   if (!hasClasses) {
     return (
-      <section className='max-w-[1440px] mx-auto w-full h-full px-8 flex flex-col items-center justify-center'>
+      <section className='mx-auto flex h-full w-full max-w-[1440px] flex-col items-center justify-center px-8'>
         <div className='text-center'>
-          <h2 className='text-lg font-semibold mb-2'>
+          <h2 className='mb-2 font-semibold text-lg'>
             Nenhuma turma encontrada
           </h2>
-          <p className='text-muted-foreground mb-4'>
+          <p className='mb-4 text-muted-foreground'>
             Você precisa criar pelo menos uma turma antes de adicionar uma
             avaliação.
           </p>
@@ -57,7 +57,7 @@ export default function AddAssessmentPage() {
   }
 
   return (
-    <section className='max-w-[1440px] mx-auto w-full h-full px-8 flex flex-col'>
+    <section className='mx-auto flex h-full w-full max-w-[1440px] flex-col px-8'>
       <Title>Adicionar Avaliação</Title>
       <AddAssessmentForm classList={classList} />
     </section>

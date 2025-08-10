@@ -1,34 +1,34 @@
-import { Skeleton } from '@/components/ui/skeleton'
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import { Title } from '@/components/title'
 import {
   Accordion,
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
-import { Title } from '@/components/title'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 
 export function AssessmentsSkeleton() {
   return (
-    <section className='max-w-[1440px] mx-auto w-full px-8 flex-grow'>
+    <section className='mx-auto w-full max-w-[1440px] flex-grow px-8'>
       {/* Header */}
-      <div className='flex justify-between items-center mb-6'>
+      <div className='mb-6 flex items-center justify-between'>
         <Title>Avaliações</Title>
         <Skeleton className='h-10 w-40' /> {/* Nova Avaliação button */}
       </div>
 
       {/* Search and Filters */}
-      <div className='mb-6 flex flex-col sm:flex-row gap-4'>
-        <div className='relative flex-1 max-w-md'>
+      <div className='mb-6 flex flex-col gap-4 sm:flex-row'>
+        <div className='relative max-w-md flex-1'>
           <Skeleton className='h-9 w-full rounded-md' /> {/* Search input */}
         </div>
         {/* Status filter */}
-        <Skeleton className='h-9 w-full sm:w-48 rounded-md' />{' '}
+        <Skeleton className='h-9 w-full rounded-md sm:w-48' />{' '}
       </div>
 
-      <Skeleton className='h-5 w-48 mb-4' />
+      <Skeleton className='mb-4 h-5 w-48' />
 
       {/* Assessment Cards */}
-      <div className='grid gap-6 mb-8'>
+      <div className='mb-8 grid gap-6'>
         <AssessmentCardSkeleton />
         <AssessmentCardSkeleton />
       </div>
@@ -70,7 +70,7 @@ function AssessmentCardSkeleton() {
         {/* Accordion Details */}
         <Accordion type='single' collapsible className='w-full'>
           <AccordionItem value='details' className='border-none'>
-            <AccordionTrigger className='hover:no-underline py-2'>
+            <AccordionTrigger className='py-2 hover:no-underline'>
               <Skeleton className='h-4 w-36' />
             </AccordionTrigger>
           </AccordionItem>

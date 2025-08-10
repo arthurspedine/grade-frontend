@@ -3,6 +3,7 @@
 import { Title } from '@/components/title'
 import { Button } from '@/components/ui/button'
 import { formatUpcomingDate } from '@/helper/format-date'
+import { useDashboard } from '@/hooks/useDashboard'
 import {
   BarChart,
   BookOpen,
@@ -11,7 +12,6 @@ import {
   Users,
 } from 'lucide-react'
 import Link from 'next/link'
-import { useDashboard } from '@/hooks/useDashboard'
 import { DashboardSkeleton } from './_components/dashboard-skeleton'
 import { StatsCard } from './_components/stats-card'
 import { UpcomingAssessmentItem } from './_components/upcoming-assessment-item'
@@ -25,8 +25,8 @@ export default function DashboardPage() {
 
   if (error) {
     return (
-      <div className='flex flex-col flex-grow items-center justify-center'>
-        <p className='text-red-500 mb-4'>{error}</p>
+      <div className='flex flex-grow flex-col items-center justify-center'>
+        <p className='mb-4 text-red-500'>{error}</p>
         <Button onClick={() => window.location.reload()}>
           Tentar novamente
         </Button>
@@ -41,10 +41,10 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className='flex flex-col flex-grow'>
-      <section className='max-w-[1440px] mx-auto w-full px-4 sm:px-6 lg:px-8 pb-4'>
+    <div className='flex flex-grow flex-col'>
+      <section className='mx-auto w-full max-w-[1440px] px-4 pb-4 sm:px-6 lg:px-8'>
         <Title>Dashboard</Title>
-        <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4 my-4'>
+        <div className='my-4 grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-3'>
           <StatsCard
             icon={Users}
             title='Alunos'
@@ -64,11 +64,11 @@ export default function DashboardPage() {
             color='bg-purple-500'
           />
         </div>
-        <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
+        <div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
           {/* Coluna 1: Próximas avaliações */}
-          <div className='bg-accent rounded-lg shadow-md overflow-hidden'>
-            <div className='p-6 border-b border-card'>
-              <h2 className='font-semibold text-xl flex items-center'>
+          <div className='overflow-hidden rounded-lg bg-accent shadow-md'>
+            <div className='border-card border-b p-6'>
+              <h2 className='flex items-center font-semibold text-xl'>
                 <Calendar className='mr-2 text-bluecolor' size={20} />
                 Avaliações não finalizadas
               </h2>
@@ -87,10 +87,10 @@ export default function DashboardPage() {
                 <Link
                   href={'/assessments'}
                   type='button'
-                  className='text-bluecolor text-sm font-medium relative group'
+                  className='group relative font-medium text-bluecolor text-sm'
                 >
                   Ver todas as avaliações
-                  <span className='absolute h-0.5 bg-current left-0 -bottom-0.5 w-0 group-hover:w-full transition-all duration-300' />
+                  <span className='-bottom-0.5 absolute left-0 h-0.5 w-0 bg-current transition-all duration-300 group-hover:w-full' />
                 </Link>
               </div>
             </div>
@@ -98,14 +98,14 @@ export default function DashboardPage() {
 
           {/* Coluna 2: Performance */}
           <div>
-            <div className='bg-accent rounded-lg shadow-md overflow-hidden mb-4'>
-              <div className='p-6 border-b border-card'>
-                <h2 className='font-semibold text-xl flex items-center'>
+            <div className='mb-4 overflow-hidden rounded-lg bg-accent shadow-md'>
+              <div className='border-card border-b p-6'>
+                <h2 className='flex items-center font-semibold text-xl'>
                   <BarChart className='mr-2 text-bluecolor' size={20} />
                   Performance das turmas
                 </h2>
               </div>
-              <div className='p-6 space-y-4'>
+              <div className='space-y-4 p-6'>
                 {classes.map(c => {
                   const rate = c.performanceRate
                   let barColor = 'bg-red-400'
@@ -120,11 +120,11 @@ export default function DashboardPage() {
 
                   return (
                     <div key={c.id}>
-                      <div className='flex justify-between mb-1'>
-                        <span className='text-sm font-medium'>{c.name}</span>
-                        <span className='text-sm font-semibold'>{rate}%</span>
+                      <div className='mb-1 flex justify-between'>
+                        <span className='font-medium text-sm'>{c.name}</span>
+                        <span className='font-semibold text-sm'>{rate}%</span>
                       </div>
-                      <div className='w-full bg-gray-200 rounded-full h-2'>
+                      <div className='h-2 w-full rounded-full bg-gray-200'>
                         <div
                           className={`${barColor} h-2 rounded-full transition-all duration-300`}
                           style={{ width: `${rate}%` }}
@@ -137,21 +137,21 @@ export default function DashboardPage() {
             </div>
 
             {/* Ações rápidas */}
-            <div className='bg-accent rounded-lg shadow-md overflow-hidden'>
-              <div className='p-6 border-b border-card'>
-                <h2 className='font-semibold text-xl flex items-center'>
+            <div className='overflow-hidden rounded-lg bg-accent shadow-md'>
+              <div className='border-card border-b p-6'>
+                <h2 className='flex items-center font-semibold text-xl'>
                   <ClipboardCheck className='mr-2 text-bluecolor' size={20} />
                   Ações rápidas
                 </h2>
               </div>
-              <div className='p-4 space-y-2'>
+              <div className='space-y-2 p-4'>
                 <Button
                   variant={'ghost'}
                   asChild
-                  className='w-full hover:shadow-md dark:shadow-bluecolor hover:bg-card/15 flex justify-start py-6 transition-all duration-300'
+                  className='flex w-full justify-start py-6 transition-all duration-300 hover:bg-card/15 hover:shadow-md dark:shadow-bluecolor'
                 >
                   <Link href={'/assessments/add'}>
-                    <div className='bg-blue-100 p-2 rounded-md mr-3'>
+                    <div className='mr-3 rounded-md bg-blue-100 p-2'>
                       <ClipboardCheck size={20} className='text-bluecolor' />
                     </div>
                     <span>Criar nova avaliação</span>
@@ -160,10 +160,10 @@ export default function DashboardPage() {
                 <Button
                   variant={'ghost'}
                   asChild
-                  className='w-full hover:shadow-md dark:shadow-bluecolor hover:bg-card/15 flex justify-start py-6 transition-all duration-300'
+                  className='flex w-full justify-start py-6 transition-all duration-300 hover:bg-card/15 hover:shadow-md dark:shadow-bluecolor'
                 >
                   <Link href={'/classes/add'}>
-                    <div className='bg-green-100 p-2 rounded-md mr-3'>
+                    <div className='mr-3 rounded-md bg-green-100 p-2'>
                       <Users size={20} className='text-green-600' />
                     </div>
                     <span>Adicionar turma</span>

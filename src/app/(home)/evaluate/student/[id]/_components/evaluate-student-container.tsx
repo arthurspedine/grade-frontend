@@ -39,7 +39,7 @@ export function EvaluateStudentContainer({
   }, [initialData, loadData, evaluationData])
 
   if (!evaluationData) {
-    return <p className='text-muted-foreground text-center'>Carregando...</p>
+    return <p className='text-center text-muted-foreground'>Carregando...</p>
   }
 
   function handleScoreChange(
@@ -89,8 +89,8 @@ export function EvaluateStudentContainer({
   }
 
   return (
-    <Card className='hover:cursor-default px-8 py-6 w-full'>
-      <CardHeader className='flex-row justify-between space-y-0 py-2 px-0'>
+    <Card className='w-full px-8 py-6 hover:cursor-default'>
+      <CardHeader className='flex-row justify-between space-y-0 px-0 py-2'>
         <div>
           <CardTitle className='hover:cursor-text'>
             Avaliando: {initialData.student.name}
@@ -116,7 +116,7 @@ export function EvaluateStudentContainer({
       </CardHeader>
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <CardContent>
-          <TabsList className='grid grid-cols-3 lg:grid-cols-6 gap-2 mb-4'>
+          <TabsList className='mb-4 grid grid-cols-3 gap-2 lg:grid-cols-6'>
             {evaluationData.questions.map(question => {
               const questionNumber = question.questionNumber
               return (
@@ -141,15 +141,15 @@ export function EvaluateStudentContainer({
                 key={questionNumber}
                 value={questionNumber.toString()}
               >
-                <h3 className='text-lg font-medium mb-2 hover:cursor-text'>
+                <h3 className='mb-2 font-medium text-lg hover:cursor-text'>
                   Questão {question.questionNumber}
                 </h3>
                 {question.categories.map((category, index) => (
                   <div
                     key={category.id}
-                    className='border-b-2 border-border pb-2 py-4'
+                    className='border-border border-b-2 py-4 pb-2'
                   >
-                    <div className='flex justify-between mb-2'>
+                    <div className='mb-2 flex justify-between'>
                       <p className='font-medium text-lg hover:cursor-text'>
                         {category.name}
                       </p>
@@ -185,13 +185,13 @@ export function EvaluateStudentContainer({
             )
           })}
           {error && (
-            <p className='text-destructive text-sm pt-0.5 hover:cursor-text'>
+            <p className='pt-0.5 text-destructive text-sm hover:cursor-text'>
               {error}
             </p>
           )}
         </CardContent>
       </Tabs>
-      <CardFooter className='flex justify-between mt-4'>
+      <CardFooter className='mt-4 flex justify-between'>
         <Button
           variant={'outline'}
           onClick={handlePrevTab}
