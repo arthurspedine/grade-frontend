@@ -16,6 +16,7 @@ import Link from 'next/link'
 import { DashboardSkeleton } from './_components/dashboard-skeleton'
 import { StatsCard } from './_components/stats-card'
 import { UpcomingAssessmentItem } from './_components/upcoming-assessment-item'
+import { PerformanceBar } from '@/components/performance-bar'
 
 export default function DashboardPage() {
   const { data, loading, error } = useDashboard()
