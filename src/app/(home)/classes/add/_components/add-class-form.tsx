@@ -16,7 +16,10 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
+import { decodeText } from '@/helper/base64-search-params'
+import { useCategories } from '@/hooks/useCategories'
 import { useCSVValidation } from '@/hooks/useStudentUpload'
+import { addClass } from '@/http/handle-http-class'
 import { type AddClassFormType, addClassFormSchema } from '@/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FileQuestion } from 'lucide-react'
@@ -25,14 +28,10 @@ import { useEffect, useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { StudentsTable } from '../../_components/students-table'
-import { addClass } from '../../_http/handle-http-class'
-import { decodeText } from '@/helper/base64-search-params'
 
-type AddClassFormProps = {
-  categoryList: { key: string; label: string }[]
-}
-
-export function AddClassForm({ categoryList }: AddClassFormProps) {
+export function AddClassForm() {
+  const { categories: categoryList, loading: categoriesLoading } =
+    useCategories()
   const params = useSearchParams()
   const [returnTo, setReturnTo] = useState<string | null>(null)
   useEffect(() => {
@@ -113,10 +112,10 @@ export function AddClassForm({ categoryList }: AddClassFormProps) {
     >
       <div className='flex flex-col space-y-8'>
         {/* INPUTS */}
-        <div className='w-full flex space-x-2'>
-          <div className='w-1/2 flex flex-col space-y-1'>
+        <div className='flex w-full space-x-2'>
+          <div className='flex w-1/2 flex-col space-y-1'>
             <div className='flex items-center space-x-2'>
-              <label className='text-base font-medium' htmlFor='name'>
+              <label className='font-medium text-base' htmlFor='name'>
                 Nome:
               </label>
               <Input
@@ -132,14 +131,14 @@ export function AddClassForm({ categoryList }: AddClassFormProps) {
               />
             </div>
             {errors.name && (
-              <p className='text-destructive text-sm pt-0.5'>
+              <p className='pt-0.5 text-destructive text-sm'>
                 {errors.name.message}
               </p>
             )}
           </div>
-          <div className='w-1/2 flex flex-col items-end space-y-1'>
+          <div className='flex w-1/2 flex-col items-end space-y-1'>
             <div className='flex items-center space-x-2'>
-              <label className='text-base font-medium' htmlFor='category'>
+              <label className='font-medium text-base' htmlFor='category'>
                 Categoria:
               </label>
               <Controller
@@ -151,23 +150,34 @@ export function AddClassForm({ categoryList }: AddClassFormProps) {
                     {...field}
                     value={field.value || ''}
                     onValueChange={field.onChange}
+                    disabled={categoriesLoading}
                   >
                     <SelectTrigger className='w-[180px]' id='category'>
-                      <SelectValue placeholder='Selecione...' />
+                      <SelectValue
+                        placeholder={
+                          categoriesLoading ? 'Carregando...' : 'Selecione...'
+                        }
+                      />
                     </SelectTrigger>
                     <SelectContent>
-                      {categoryList.map(c => (
-                        <SelectItem key={c.key} value={c.key}>
-                          {c.label}
+                      {categoriesLoading ? (
+                        <SelectItem value='loading' disabled>
+                          Carregando categorias...
                         </SelectItem>
-                      ))}
+                      ) : (
+                        categoryList.map(c => (
+                          <SelectItem key={c.key} value={c.key}>
+                            {c.label}
+                          </SelectItem>
+                        ))
+                      )}
                     </SelectContent>
                   </Select>
                 )}
               />
             </div>
             {errors.category && (
-              <p className='text-destructive text-sm pt-0.5'>
+              <p className='pt-0.5 text-destructive text-sm'>
                 {errors.category.message}
               </p>
             )}
@@ -202,12 +212,14 @@ export function AddClassForm({ categoryList }: AddClassFormProps) {
               </TooltipProvider>
             </div>
             {(errors.csvFile || fileError) && (
-              <p className='text-destructive text-sm pb-2'>
+              <p className='pb-2 text-destructive text-sm'>
                 {errors.csvFile?.message || fileError}
               </p>
             )}
           </div>
-          <Button variant={'green'}>Adicionar Turma</Button>
+          <Button variant={'green'} disabled={categoriesLoading}>
+            Adicionar Turma
+          </Button>
         </div>
         <StudentsTable students={students} />
       </div>

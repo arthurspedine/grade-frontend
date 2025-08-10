@@ -33,7 +33,13 @@ export type AssessmentDetailsType = {
   }[]
 }
 
-export type AssessmentStudentType = { id: string; rm: string; name: string }
+export type AssessmentStudentType = {
+  id: string
+  assessmentId: string
+  classId: string
+  rm: string
+  name: string
+}
 
 export type AssessmentInfoType = {
   name: string

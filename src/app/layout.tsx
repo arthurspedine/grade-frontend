@@ -1,10 +1,10 @@
 import './globals.css'
+import { AuthProvider } from '@/components/auth-provider'
 import { ThemeProvider } from '@/components/theme-provider'
 import type { Metadata } from 'next'
 import { Poppins } from 'next/font/google'
 import type React from 'react'
 import { Toaster } from 'sonner'
-import { AuthProvider } from '@/components/auth-provider'
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -39,7 +39,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AuthProvider>
-            <main className='flex flex-col h-[calc(100dvh)] w-full scroll-smooth'>
+            <main className='flex h-[calc(100dvh)] w-full flex-col scroll-smooth'>
               {children}
               <Toaster richColors />
             </main>

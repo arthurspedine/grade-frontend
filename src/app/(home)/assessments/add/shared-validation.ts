@@ -1,7 +1,7 @@
 import type { QuestionCategoryType } from '@/schemas'
 import type { UseFormClearErrors, UseFormSetError } from 'react-hook-form'
-import { MAX_SCORE, MIN_SCORE } from '../_helper/score'
 import { toast } from 'sonner'
+import { MAX_SCORE, MIN_SCORE } from '../_helper/score'
 
 export interface ValidationResult {
   isValid: boolean

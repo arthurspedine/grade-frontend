@@ -23,10 +23,10 @@ const FeatureCard = ({
 }) => {
   const Icon = icon
   return (
-    <div className='bg-accent rounded-lg p-6 shadow-md'>
-      <div className='flex items-start sm:items-center gap-2 mb-2 flex-col sm:flex-row'>
+    <div className='rounded-lg bg-accent p-6 shadow-md'>
+      <div className='mb-2 flex flex-col items-start gap-2 sm:flex-row sm:items-center'>
         <Icon size={32} className='text-bluecolor' />
-        <h3 className='text-lg md:text-xl font-semibold'>{title}</h3>
+        <h3 className='font-semibold text-lg md:text-xl'>{title}</h3>
       </div>
       <p className='text-muted-foreground'>{description}</p>
     </div>
@@ -37,23 +37,23 @@ export default async function MainPage() {
   const session = await getServerSession(authOptions)
   const isAuthenticated = !!session
   return (
-    <div className='flex flex-col flex-grow'>
-      <section className='max-w-[1440px] mx-auto w-full px-4 sm:px-6 lg:px-8 pb-4'>
+    <div className='flex flex-grow flex-col'>
+      <section className='mx-auto w-full max-w-[1440px] px-4 pb-4 sm:px-6 lg:px-8'>
         {/* HERO SECTION */}
-        <div className='bg-gradient-to-b from-bluecolor via-blue-700 to-blue-900 py-16 px-4 sm:px-6 rounded-xl text-white shadow-lg shadow-blue-900'>
-          <div className='max-w-4xl mx-auto text-center flex flex-col items-center'>
-            <h1 className='text-3xl md:text-4xl font-bold mb-4'>
+        <div className='rounded-xl bg-gradient-to-b from-bluecolor via-blue-700 to-blue-900 px-4 py-16 text-white shadow-blue-900 shadow-lg sm:px-6'>
+          <div className='mx-auto flex max-w-4xl flex-col items-center text-center'>
+            <h1 className='mb-4 font-bold text-3xl md:text-4xl'>
               Revolucione a forma de avaliar seus alunos
             </h1>
-            <p className='max-w-3xl text-lg md:text-xl mb-8 opacity-90'>
+            <p className='mb-8 max-w-3xl text-lg opacity-90 md:text-xl'>
               Gerencie turmas, crie avaliações e obtenha insights com
               inteligência artificial para fornecer feedbacks personalizados aos
               seus alunos.
             </p>
-            <div className='flex flex-col sm:flex-row gap-4 justify-center'>
+            <div className='flex flex-col justify-center gap-4 sm:flex-row'>
               <Link
                 href={'/dashboard'}
-                className='bg-white text-bluecolor font-medium py-3 px-6 hover:scale-105 rounded-lg flex items-center justify-center transition-all duration-300'
+                className='flex items-center justify-center rounded-lg bg-white px-6 py-3 font-medium text-bluecolor transition-all duration-300 hover:scale-105'
               >
                 <LogIn className='mr-2' size={20} />
                 Acessar plataforma
@@ -61,7 +61,7 @@ export default async function MainPage() {
               {!isAuthenticated && (
                 <Link
                   href={'/auth/signin'}
-                  className='bg-bluecolor text-white font-medium py-3 px-6 rounded-lg hover:scale-105 flex items-center justify-center transition-all duration-300'
+                  className='flex items-center justify-center rounded-lg bg-bluecolor px-6 py-3 font-medium text-white transition-all duration-300 hover:scale-105'
                 >
                   <UserPlus className='mr-2' size={20} />
                   Criar conta
@@ -72,15 +72,15 @@ export default async function MainPage() {
         </div>
         {/* CONTENT */}
         <div className='py-16'>
-          <h2 className='text-center text-lg md:text-2xl font-bold mb-4 sm:mb-8 lg:mb-12'>
+          <h2 className='mb-4 text-center font-bold text-lg sm:mb-8 md:text-2xl lg:mb-12'>
             Como o{' '}
-            <span className='font-bold text-xl md:text-3xl italic mr-1'>
+            <span className='mr-1 font-bold text-xl italic md:text-3xl'>
               Grade
             </span>{' '}
             pode te ajudar
           </h2>
           {/* CARDS */}
-          <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
+          <div className='grid grid-cols-1 gap-8 md:grid-cols-3'>
             <FeatureCard
               icon={BookOpen}
               title='Gerenciamento de Turmas'

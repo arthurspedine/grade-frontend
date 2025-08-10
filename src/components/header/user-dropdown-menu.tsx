@@ -2,9 +2,9 @@
 
 import { ChevronDown, LogOut } from 'lucide-react'
 import type { DefaultSession } from 'next-auth'
+import { signOut } from 'next-auth/react'
 import { useEffect, useRef, useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
-import { signOut } from 'next-auth/react'
 
 export function UserDropdownMenu({
   user,
@@ -15,7 +15,6 @@ export function UserDropdownMenu({
 }) {
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement | null>(null)
-  const buttonRef = useRef<HTMLButtonElement | null>(null)
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -63,11 +62,11 @@ export function UserDropdownMenu({
   }
 
   return (
-    <div className='relative' ref={dropdownRef}>
+    <div className='relative mx-2' ref={dropdownRef}>
       <button
         type='button'
         onClick={() => setIsOpen(!isOpen)}
-        className='flex items-center space-x-3 py-2 rounded-lg hover:bg-secondary transition-colors duration-200 focus:outline-none'
+        className='flex items-center space-x-3 rounded-lg px-2 py-2 transition-colors duration-200 hover:bg-secondary focus:outline-none'
       >
         {/* Avatar */}
         <Avatar className='size-8'>
@@ -75,12 +74,12 @@ export function UserDropdownMenu({
           <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
         </Avatar>
 
-        <div className='flex items-center space-x-2 min-w-0'>
-          <span className='text-sm font-medium text-primary truncate max-w-32'>
+        <div className='flex min-w-0 items-center space-x-2'>
+          <span className='max-w-32 truncate font-medium text-primary text-sm'>
             {getFirstAndLastName(user.name)}
           </span>
           <ChevronDown
-            className={`w-4 h-4 text-secondary-foreground transition-transform duration-200 ${
+            className={`h-4 w-4 text-secondary-foreground transition-transform duration-200 ${
               isOpen ? 'rotate-180' : ''
             }`}
           />
@@ -89,14 +88,14 @@ export function UserDropdownMenu({
 
       {/* Dropdown Menu */}
       <div
-        className={`absolute right-0 mt-2 w-fit bg-background rounded-lg shadow-lg border border-border pt-2 z-50 transition-all duration-200 transform origin-top-right ${
+        className={`absolute right-0 z-50 mt-2 w-fit origin-top-right transform rounded-lg border border-border bg-background pt-2 shadow-lg transition-all duration-200 ${
           isOpen
-            ? 'opacity-100 scale-100 translate-y-0'
-            : 'opacity-0 scale-95 -translate-y-2 pointer-events-none'
+            ? 'translate-y-0 scale-100 opacity-100'
+            : '-translate-y-2 pointer-events-none scale-95 opacity-0'
         }`}
       >
         {/* User info */}
-        <div className='px-4 py-3 border-b border-border'>
+        <div className='border-border border-b px-4 py-3'>
           <div className='flex items-center space-x-3'>
             {/* Bigger Avatar */}
             <Avatar className='size-12'>
@@ -104,16 +103,15 @@ export function UserDropdownMenu({
                 src={user.image || ''}
                 alt={`Foto de ${user.name}`}
               />
-              {/* <AvatarFallback>{getInitials(user.name)}</AvatarFallback> */}
-              <AvatarFallback>SI</AvatarFallback>
+              <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
             </Avatar>
 
             {/* Info */}
-            <div className='flex-1 min-w-0'>
-              <p className='text-sm font-semibold text-primary text-nowrap'>
+            <div className='min-w-0 flex-1'>
+              <p className='text-nowrap font-semibold text-primary text-sm'>
                 {user.name}
               </p>
-              <p className='text-xs text-muted-foreground'>{user.email}</p>
+              <p className='text-muted-foreground text-xs'>{user.email}</p>
             </div>
           </div>
         </div>
@@ -124,9 +122,9 @@ export function UserDropdownMenu({
         <button
           type='button'
           onClick={() => signOut({ callbackUrl: '/' })}
-          className='flex items-center w-full px-4 py-3 text-sm text-red-600'
+          className='flex w-full items-center px-4 py-3 text-red-600 text-sm'
         >
-          <LogOut className='w-4 h-4 mr-3' />
+          <LogOut className='mr-3 h-4 w-4' />
           Sair
         </button>
       </div>

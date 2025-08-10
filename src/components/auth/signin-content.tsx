@@ -1,10 +1,10 @@
 'use client'
 
 import { useAuth } from '@/hooks/useAuth'
+import { useSearchParams } from 'next/navigation'
+import { Suspense } from 'react'
 import { LoadingSpinner } from '../loading-spinner'
 import { GoogleSignInButton } from './google-signin-button'
-import { Suspense } from 'react'
-import { useSearchParams } from 'next/navigation'
 
 interface SignInContentProps {
   redirectOnSuccess?: string
@@ -30,7 +30,7 @@ function SignInSearchParamsWrapper({
 
   if (isCheckingSession) {
     return (
-      <div className='flex justify-center items-center py-8'>
+      <div className='flex items-center justify-center py-8'>
         <LoadingSpinner />
       </div>
     )
@@ -52,11 +52,11 @@ export function SignInContent({
   description = 'Faça login com sua conta Google.',
 }: SignInContentProps) {
   return (
-    <div className='space-y-6 w-full'>
+    <div className='w-full space-y-6'>
       {showTitle && (
         <div className='text-center'>
-          <h2 className='text-3xl font-extrabold'>{title}</h2>
-          <p className='mt-2 text-sm text-muted-foreground'>{description}</p>
+          <h2 className='font-extrabold text-3xl'>{title}</h2>
+          <p className='mt-2 text-muted-foreground text-sm'>{description}</p>
         </div>
       )}
       <Suspense>

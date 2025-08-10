@@ -8,9 +8,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
+import { disableClass } from '@/http/handle-http-class'
 import type { ClassType } from '@/types'
 import { toast } from 'sonner'
-import { disableClass } from '../_http/handle-http-class'
 
 export function DisableClassDialog({ id, name, active }: ClassType) {
   function handleButtonClick() {
@@ -18,6 +18,7 @@ export function DisableClassDialog({ id, name, active }: ClassType) {
     toast.promise(handleRequest, {
       loading: 'Desativando turma...',
       success: () => {
+        window.location.reload()
         return 'Turma desativada com sucesso.'
       },
       error: 'Algo deu errado. Por favor, tente novamente mais tarde.',
@@ -36,25 +37,27 @@ export function DisableClassDialog({ id, name, active }: ClassType) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            Desativar turma <span className='italic font-semibold'>{name}</span>
+            Desativar turma <span className='font-semibold italic'>{name}</span>
           </DialogTitle>
           <DialogDescription>
             Você tem certeza que deseja desativar está turma?
           </DialogDescription>
         </DialogHeader>
-        <div className='w-full flex space-x-4'>
+        <div className='flex w-full space-x-4'>
           <DialogTrigger asChild>
             <Button variant={'green'} className='grow'>
               Cancelar
             </Button>
           </DialogTrigger>
-          <Button
-            onClick={handleButtonClick}
-            variant={'destructive'}
-            className='grow'
-          >
-            Desativar
-          </Button>
+          <DialogTrigger asChild>
+            <Button
+              onClick={handleButtonClick}
+              variant={'destructive'}
+              className='grow'
+            >
+              Desativar
+            </Button>
+          </DialogTrigger>
         </div>
       </DialogContent>
     </Dialog>

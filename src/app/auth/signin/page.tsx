@@ -2,8 +2,8 @@ import { SignInContent } from '@/components/auth/signin-content'
 
 export default function SignInPage() {
   return (
-    <div className='flex justify-center py-2 px-4 sm:px-6 lg:px-8'>
-      <div className='max-w-md w-full space-y-8'>
+    <div className='flex justify-center px-4 py-2 sm:px-6 lg:px-8'>
+      <div className='w-full max-w-md space-y-8'>
         <SignInContent
           redirectOnSuccess='/dashboard'
           autoRedirectIfAuthenticated={true}

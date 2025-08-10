@@ -12,11 +12,11 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
-import { MAX_SCORE, MIN_SCORE } from '../../_helper/score'
-import { questionCategorySchema, type QuestionCategoryType } from '@/schemas'
-import { Plus } from 'lucide-react'
+import { type QuestionCategoryType, questionCategorySchema } from '@/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Plus } from 'lucide-react'
 import { useForm } from 'react-hook-form'
+import { MAX_SCORE, MIN_SCORE } from '../../_helper/score'
 import { validateCategoryForm, validateNewScore } from '../shared-validation'
 
 interface AddCategoryDialogProps {
@@ -105,9 +105,9 @@ export function AddCategoryDialog({
         <form className='space-y-4'>
           {/* CATEGORY NAME */}
           <div className='w-full'>
-            <div className='flex flex-col w-full space-y-1'>
+            <div className='flex w-full flex-col space-y-1'>
               <label
-                className='text-base font-medium flex-shrink-0'
+                className='flex-shrink-0 font-medium text-base'
                 htmlFor='name'
               >
                 Categoria de avaliação:
@@ -121,15 +121,15 @@ export function AddCategoryDialog({
               />
             </div>
             {errors.name && (
-              <p className='text-destructive text-sm pt-0.5'>
+              <p className='pt-0.5 text-destructive text-sm'>
                 {errors.name.message}
               </p>
             )}
           </div>
           {/* CATEGORY SCORE */}
           <div>
-            <div className='flex items-center w-full space-x-2'>
-              <label className='text-base font-medium' htmlFor='score'>
+            <div className='flex w-full items-center space-x-2'>
+              <label className='font-medium text-base' htmlFor='score'>
                 Nota:
               </label>
               <Input
@@ -151,7 +151,7 @@ export function AddCategoryDialog({
               />
             </div>
             {errors.score && (
-              <p className='text-destructive text-sm pt-0.5'>
+              <p className='pt-0.5 text-destructive text-sm'>
                 {errors.score.message}
               </p>
             )}

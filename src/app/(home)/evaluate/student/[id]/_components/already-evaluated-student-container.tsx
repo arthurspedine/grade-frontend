@@ -1,3 +1,19 @@
+import { EvaluationResultsViewer } from '@/components/evaluation-result-viewer'
+import { GoBackButton } from '@/components/go-back-button'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import { Progress } from '@/components/ui/progress'
 import { formatDate } from '@/helper/format-date'
 import type { StudentFinishedEvaluationInfo } from '@/interfaces'
 import {
@@ -5,25 +21,12 @@ import {
   Calendar,
   CheckCircle,
   FileText,
+  Hash,
+  MessageSquare,
+  Target,
+  TrendingUp,
   User,
-  CornerDownRight,
 } from 'lucide-react'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import { Progress } from '@/components/ui/progress'
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion'
-import { GoBackButton } from '@/components/go-back-button'
 
 export function AlreadyEvaluatedStudentContainer({
   initialData,
@@ -36,150 +39,161 @@ export function AlreadyEvaluatedStudentContainer({
       )
     }, 0)
 
-    return Math.round((initialData.totalScore / maxPossibleScore) * 100)
+    return (initialData.totalScore / maxPossibleScore) * 100
   }
 
   const totalPercentage = calculateTotalPercentage()
 
   return (
-    <Card className='shadow-md pb-6 px-10'>
-      <CardHeader className='border-b px-0'>
-        <div className='flex items-start justify-between'>
-          <div>
-            <CardTitle className='text-xl flex items-center gap-2'>
-              <CheckCircle
-                className='text-green-500 dark:text-green-400'
-                size={24}
-              />
-              Avaliação Finalizada
-            </CardTitle>
-            <CardDescription className='flex flex-col mt-2'>
-              <div className='flex items-center'>
-                <User className='text-primary mr-2' size={24} />
-                <h2 className='text-xl font-bold text-primary'>
-                  {initialData.student.name}
-                </h2>
-              </div>
-              <span className='text-muted-foreground text-base'>
-                RM: {initialData.student.rm}
-              </span>
-            </CardDescription>
-          </div>
-          <div className='flex items-center space-x-2'>
-            <div className='flex items-center gap-1 px-3 py-1 rounded-md border border-input bg-background shadow-sm hover:bg-accent/30 hover:text-accent-foreground'>
-              Avaliado: <Calendar size={14} />
-              {formatDate(initialData.finishedDate)}
-            </div>
-            <GoBackButton />
-          </div>
-        </div>
-
-        <div className='mt-4'>
-          <div className='flex justify-between items-center mb-2'>
-            <div className='font-semibold flex items-center gap-2'>
-              <Award size={18} />
-              Pontuação total: {initialData.totalScore} pontos
-            </div>
-            <span className='text-sm text-muted-foreground'>
-              {totalPercentage}%
-            </span>
-          </div>
-          <Progress value={totalPercentage} className='h-2' />
-        </div>
-      </CardHeader>
-
-      <CardContent>
-        <Accordion type='multiple' className='w-full'>
-          {initialData.answers.map(question => (
-            <AccordionItem
-              key={question.questionNumber}
-              value={`question-${question.questionNumber}`}
-            >
-              <AccordionTrigger className='py-4 font-semibold'>
-                Questão Nº {question.questionNumber}
-              </AccordionTrigger>
-              <AccordionContent>
-                <div className='space-y-4 pl-2 pt-2'>
-                  {question.categories.map(category => {
-                    const categoryPercentage = Math.round(
-                      (category.answeredScore / category.score) * 100
-                    )
-                    const scoreColor =
-                      categoryPercentage >= 70
-                        ? 'text-green-600 dark:text-green-500'
-                        : categoryPercentage >= 50
-                          ? 'text-amber-600 dark:text-amber-500'
-                          : 'text-rose-600 dark:text-rose-500'
-
-                    const progressBgClasses =
-                      categoryPercentage >= 70
-                        ? 'bg-emerald-100 dark:bg-emerald-950'
-                        : categoryPercentage >= 50
-                          ? 'bg-amber-100 dark:bg-amber-950'
-                          : 'bg-rose-100 dark:bg-rose-950'
-
-                    return (
-                      <Card key={category.id} className='bg-accent/30'>
-                        <CardContent className='py-1'>
-                          <div className='font-bold dark:font-medium flex items-center gap-2 mb-2'>
-                            <CornerDownRight size={16} />
-                            {category.name}
-                          </div>
-
-                          <div className='pl-6 space-y-3'>
-                            <div className='flex justify-between items-center text-sm'>
-                              <span>Pontuação máxima: {category.score}</span>
-                              <span
-                                className={`font-bold dark:font-medium ${scoreColor}`}
-                              >
-                                Obtido: {category.answeredScore}
-                              </span>
-                            </div>
-
-                            <Progress
-                              value={categoryPercentage}
-                              className={`h-1.5 ${progressBgClasses}`}
-                            />
-                          </div>
-                        </CardContent>
-                      </Card>
-                    )
-                  })}
+    <div className='container mx-auto max-w-4xl space-y-6 px-4 py-6'>
+      {/* Header Card */}
+      <Card>
+        <CardHeader className='pb-4'>
+          <div className='flex items-start justify-between'>
+            <div className='space-y-2'>
+              <CardTitle className='flex items-center gap-2 text-2xl'>
+                <CheckCircle className='h-6 w-6 text-green-600 dark:text-green-400' />
+                Avaliação Finalizada
+              </CardTitle>
+              <CardDescription className='space-y-1'>
+                <div className='flex items-center gap-2 text-lg'>
+                  <User className='h-5 w-5 text-primary' />
+                  <span className='font-semibold text-foreground'>
+                    {initialData.student.name}
+                  </span>
                 </div>
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
-      </CardContent>
-
-      <CardFooter className='flex flex-col items-start pt-6 border-t border-border'>
-        <div className='w-full space-y-4'>
-          <div className='flex items-center gap-2'>
-            <FileText size={18} />
-            <h2 className='text-lg font-semibold'>Feedback</h2>
+                <div className='flex items-center gap-4 text-base'>
+                  <span className='flex items-center gap-1'>
+                    <Hash className='h-4 w-4' />
+                    RM: {initialData.student.rm}
+                  </span>
+                  <span className='flex items-center gap-1'>
+                    <Calendar className='h-4 w-4' />
+                    Avaliado em: {formatDate(initialData.finishedDate)}
+                  </span>
+                </div>
+              </CardDescription>
+            </div>
+            <GoBackButton
+              goBackUrl={`/evaluate/${initialData.student.assessmentId}/${initialData.student.classId}`}
+            />
           </div>
 
-          <div className='space-y-4 pl-6'>
-            <div>
-              <h3 className='text-sm font-medium text-muted-foreground mb-1'>
-                Feedback Inicial:
-              </h3>
-              <p className='bg-accent/30 p-3 rounded-md whitespace-pre-line'>
+          {/* Score Summary */}
+          <div className='space-y-3 pt-4'>
+            <div className='flex items-center justify-between'>
+              <div className='flex items-center gap-2'>
+                <Award className='h-5 w-5 text-primary' />
+                <span className='font-semibold text-lg'>
+                  Pontuação Final: {initialData.totalScore.toFixed(2)}
+                </span>
+              </div>
+              <span className='font-medium text-muted-foreground'>
+                {totalPercentage.toFixed(1)}%
+              </span>
+            </div>
+            <Progress value={totalPercentage} className='h-3' />
+          </div>
+        </CardHeader>
+      </Card>
+
+      {/* Detailed Scores Card */}
+      <Card>
+        <CardHeader>
+          <CardTitle className='flex items-center gap-2'>
+            <TrendingUp className='h-5 w-5 text-primary' />
+            Detalhamento das Notas
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Accordion type='multiple' className='w-full space-y-2'>
+            {initialData.answers.map(question => {
+              const questionTotal = question.categories.reduce(
+                (sum, category) => sum + category.answeredScore,
+                0
+              )
+              const questionMax = question.categories.reduce(
+                (sum, category) => sum + category.score,
+                0
+              )
+              const questionPercentage = (questionTotal / questionMax) * 100
+
+              return (
+                <AccordionItem
+                  key={question.questionNumber}
+                  value={`question-${question.questionNumber}`}
+                  className='rounded-lg border px-4'
+                >
+                  <AccordionTrigger className='py-4 hover:no-underline'>
+                    <div className='flex w-full items-center justify-between pr-4'>
+                      <span className='font-semibold text-lg'>
+                        Questão {question.questionNumber}
+                      </span>
+                      <div className='flex items-center gap-2 text-sm'>
+                        <Target className='h-4 w-4 text-muted-foreground' />
+                        <span className='font-medium'>
+                          {questionTotal.toFixed(2)} / {questionMax} pontos
+                        </span>
+                        <span className='text-muted-foreground'>
+                          ({questionPercentage.toFixed(1)}%)
+                        </span>
+                      </div>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent className='pt-2 pb-4'>
+                    <div className='space-y-3'>
+                      <Progress value={questionPercentage} className='h-2' />
+                      <div className='grid gap-3 md:grid-cols-2'>
+                        {question.categories.map(category => (
+                          <EvaluationResultsViewer
+                            key={category.id}
+                            {...category}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              )
+            })}
+          </Accordion>
+        </CardContent>
+      </Card>
+
+      {/* Feedback Card */}
+      <Card>
+        <CardHeader>
+          <CardTitle className='flex items-center gap-2'>
+            <MessageSquare className='h-5 w-5 text-primary' />
+            Feedback da Avaliação
+          </CardTitle>
+        </CardHeader>
+        <CardContent className='space-y-6'>
+          <div className='space-y-3'>
+            <div className='flex items-center gap-2'>
+              <FileText className='h-4 w-4 text-blue-600 dark:text-blue-400' />
+              <h3 className='font-semibold text-base'>Feedback Inicial</h3>
+            </div>
+            <div className='rounded-lg border bg-muted/30 p-4'>
+              <p className='whitespace-pre-line text-foreground'>
                 {initialData.rawFeedback}
               </p>
             </div>
+          </div>
 
-            <div>
-              <h3 className='text-sm font-medium text-muted-foreground mb-1'>
-                Feedback Final:
-              </h3>
-              <p className='bg-accent/30 p-3 rounded-md whitespace-pre-line'>
+          <div className='space-y-3'>
+            <div className='flex items-center gap-2'>
+              <CheckCircle className='h-4 w-4 text-green-600 dark:text-green-400' />
+              <h3 className='font-semibold text-base'>Feedback Final</h3>
+            </div>
+            <div className='rounded-lg border bg-muted/30 p-4'>
+              <p className='whitespace-pre-line text-foreground'>
                 {initialData.finalFeedback}
               </p>
             </div>
           </div>
-        </div>
-      </CardFooter>
-    </Card>
+        </CardContent>
+      </Card>
+    </div>
   )
 }

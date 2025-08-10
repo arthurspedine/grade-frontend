@@ -1,5 +1,8 @@
+'use client'
+
 import { Title } from '@/components/title'
 import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 import {
   Table,
   TableBody,
@@ -9,31 +12,46 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import type { ClassType } from '@/types'
+import { useClasses } from '@/hooks/useClasses'
+import { Plus } from 'lucide-react'
 import Link from 'next/link'
+import { ClassesSkeleton } from './_components/classes-skeleton'
 import { DisableClassDialog } from './_components/disable-class-dialog'
-import getCategoryOptions from './_http/handle-category-options'
-import { handleClassesList } from './_http/handle-http-class'
 
-export const dynamic = 'force-dynamic'
+export default function ClassesPage() {
+  const { data, loading, error } = useClasses()
 
-export default async function ClassesPage() {
-  const classesList: ClassType[] = await handleClassesList()
-  const categoryList: { key: string; label: string }[] =
-    await getCategoryOptions()
+  if (loading) {
+    return <ClassesSkeleton />
+  }
+
+  if (error) {
+    return (
+      <section className='mx-auto w-full max-w-[1440px] flex-grow px-8'>
+        <div className='flex flex-col items-center justify-center pt-16'>
+          <p className='mb-4 text-red-500'>{error}</p>
+          <Button onClick={() => window.location.reload()}>
+            Tentar novamente
+          </Button>
+        </div>
+      </section>
+    )
+  }
+
+  const { classesList, categoryList } = data
 
   return (
-    <section className='max-w-[1440px] mx-auto w-full px-8 flex-grow'>
+    <section className='mx-auto w-full max-w-[1440px] flex-grow px-8'>
       <div className='flex justify-between'>
         <Title>Turmas</Title>
         {classesList.length > 0 && (
-          <Link href={'/classes/add'} className='hover:underline text'>
+          <Link href={'/classes/add'} className='text hover:underline'>
             Adicionar turma
           </Link>
         )}
       </div>
 
-      <div>
+      <div className='mt-4'>
         {classesList.length > 0 ? (
           // WHEN THE USER HAS AT LEAST ONE CLASS
           <Table>
@@ -57,8 +75,8 @@ export default async function ClassesPage() {
                         ?.label
                     }
                   </TableCell>
-                  <TableCell className='w-full flex justify-end'>
-                    <div className='max-w-72 flex-grow flex space-x-2'>
+                  <TableCell className='flex w-full justify-end'>
+                    <div className='mr-2 flex max-w-72 flex-grow space-x-2'>
                       <Button variant={'secondary'} asChild>
                         <Link href={`/classes/${c.id}`}>Ver turma</Link>
                       </Button>
@@ -73,16 +91,25 @@ export default async function ClassesPage() {
             </TableBody>
           </Table>
         ) : (
-          // WHEN THE USER DOESN'T HAVE ANY CLASSES
-          <p className='text-muted-foreground text-center pt-16'>
-            Parece que você ainda não adicionou turmas na sua conta.{' '}
-            <Link
-              href={'/classes/add'}
-              className='text-primary hover:underline'
-            >
-              Adicionar uma nova turma
-            </Link>
-          </p>
+          <Card className='mt-8'>
+            <CardContent className='p-12 text-center'>
+              <div className='mx-auto max-w-md'>
+                <h3 className='mb-2 font-semibold text-lg'>
+                  Nenhuma turma criada
+                </h3>
+                <p className='mb-6 text-muted-foreground'>
+                  Comece criando sua primeira turma para organizar e acompanhar
+                  o progresso dos seus alunos.
+                </p>
+                <Button asChild>
+                  <Link href={'/classes/add'}>
+                    <Plus className='mr-2 h-4 w-4' />
+                    Criar primeira turma
+                  </Link>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
         )}
       </div>
     </section>

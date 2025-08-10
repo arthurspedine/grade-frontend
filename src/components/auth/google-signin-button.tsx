@@ -1,8 +1,8 @@
 'use client'
-import { Button } from '@/components/ui/button'
 import { LoadingSpinner } from '@/components/loading-spinner'
-import { GoogleIcon } from '../google-icon'
+import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { GoogleIcon } from '../google-icon'
 
 interface GoogleSignInButtonProps {
   isLoading: boolean
@@ -25,7 +25,7 @@ export function GoogleSignInButton({
       disabled={isLoading || disabled}
       variant='secondary'
       className={cn(
-        'group relative w-full flex justify-center px-4 border border-transparent font-medium rounded-md disabled:opacity-50 disabled:cursor-not-allowed [&_svg]:size-6 py-6 text-base',
+        'group relative flex w-full justify-center rounded-md border border-transparent px-4 py-6 font-medium text-base disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:size-6',
         className
       )}
     >

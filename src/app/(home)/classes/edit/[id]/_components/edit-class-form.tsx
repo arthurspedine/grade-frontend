@@ -1,7 +1,6 @@
 'use client'
 
 import { StudentsTable } from '@/app/(home)/classes/_components/students-table'
-import { updateClass } from '@/app/(home)/classes/_http/handle-http-class'
 import { GoBackButton } from '@/components/go-back-button'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -20,6 +19,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip'
 import { useCSVValidation } from '@/hooks/useStudentUpload'
+import { updateClass } from '@/http/handle-http-class'
 import { type EditClassFormType, editClassFormSchema } from '@/schemas'
 import type { ClassType, StudentType } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -135,10 +135,10 @@ export function EditClassForm({
     >
       <div className='flex flex-col space-y-8'>
         {/* INPUTS */}
-        <div className='w-full flex space-x-2'>
-          <div className='w-1/2 flex flex-col space-y-1'>
+        <div className='flex w-full space-x-2'>
+          <div className='flex w-1/2 flex-col space-y-1'>
             <div className='flex items-center space-x-2'>
-              <label className='text-base font-medium' htmlFor='name'>
+              <label className='font-medium text-base' htmlFor='name'>
                 Nome:
               </label>
               <Input
@@ -155,14 +155,14 @@ export function EditClassForm({
               />
             </div>
             {errors.name && (
-              <p className='text-destructive text-sm pt-0.5'>
+              <p className='pt-0.5 text-destructive text-sm'>
                 {errors.name.message}
               </p>
             )}
           </div>
-          <div className='w-1/2 flex flex-col items-end space-y-1'>
+          <div className='flex w-1/2 flex-col items-end space-y-1'>
             <div className='flex items-center space-x-2'>
-              <label className='text-base font-medium' htmlFor='category'>
+              <label className='font-medium text-base' htmlFor='category'>
                 Categoria:
               </label>
               <Controller
@@ -175,7 +175,7 @@ export function EditClassForm({
                     onValueChange={field.onChange}
                   >
                     <SelectTrigger className='w-[180px]' id='category'>
-                      <SelectValue placeholder='Selecione...' />
+                      <SelectValue placeholder={'Selecione...'} />
                     </SelectTrigger>
                     <SelectContent>
                       {categoryList.map(c => (
@@ -189,7 +189,7 @@ export function EditClassForm({
               />
             </div>
             {errors.category && (
-              <p className='text-destructive text-sm pt-0.5'>
+              <p className='pt-0.5 text-destructive text-sm'>
                 {errors.category.message}
               </p>
             )}
@@ -224,7 +224,7 @@ export function EditClassForm({
               </TooltipProvider>
             </div>
             {(errors.csvFile || fileError) && (
-              <p className='text-destructive text-sm pb-2'>
+              <p className='pb-2 text-destructive text-sm'>
                 {errors.csvFile?.message || fileError}
               </p>
             )}
