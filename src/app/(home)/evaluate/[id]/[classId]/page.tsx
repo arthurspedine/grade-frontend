@@ -2,13 +2,11 @@
 
 import { GoBackButton } from '@/components/go-back-button'
 import { Title } from '@/components/title'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { Progress } from '@/components/ui/progress'
 import { useEvaluateAssessmentInfo } from '@/hooks/useEvaluateAssessmentInfo'
 import type { AssessmentStudentType } from '@/types'
-import { AlertCircle, CheckCircle, GraduationCap } from 'lucide-react'
+import { AlertCircle, BarChart, CheckCircle, GraduationCap } from 'lucide-react'
 import { redirect } from 'next/navigation'
 import { use } from 'react'
 import { EvaluatePageSkeleton } from './_components/evaluate-page-skeleton'
@@ -72,29 +70,35 @@ export default function EvaluateInfoAssessmentPage({
         <p className='text-muted-foreground'>Gerenciar avaliações dos alunos</p>
         {/* Progress Summary */}
         <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-4'>
-          <SummaryCard>
+          <SummaryCard bgColor='bg-blue-500'>
             <div className='flex items-center justify-between'>
-              <h3 className='font-medium'>Total de Alunos</h3>
-              <GraduationCap className='h-4 w-4 text-muted-foreground' />
+              <h3 className='font-medium text-white'>Total de Alunos</h3>
+              <div className='rounded-full bg-white/20 p-2'>
+                <GraduationCap className='h-4 w-4 text-white' />
+              </div>
             </div>
             <div>
-              <div className='font-bold text-2xl'>{totalStudents}</div>
-              <p className='text-muted-foreground text-xs'>
+              <div className='font-bold text-2xl text-white'>
+                {totalStudents}
+              </div>
+              <p className='text-blue-100 text-xs'>
                 Alunos cadastrados na turma
               </p>
             </div>
           </SummaryCard>
 
-          <SummaryCard>
+          <SummaryCard bgColor='bg-green-500'>
             <div className='flex items-center justify-between'>
-              <h3 className='font-medium'>Avaliados</h3>
-              <CheckCircle className='h-4 w-4 text-green-600' />
+              <h3 className='font-medium text-white'>Avaliados</h3>
+              <div className='rounded-full bg-white/20 p-2'>
+                <CheckCircle className='h-4 w-4 text-white' />
+              </div>
             </div>
             <div>
-              <div className='font-bold text-2xl text-green-600'>
+              <div className='font-bold text-2xl text-white'>
                 {evaluatedStudents}
               </div>
-              <p className='text-muted-foreground text-xs'>
+              <p className='text-green-100 text-xs'>
                 {evaluatedStudents > 0
                   ? `${Math.round((evaluatedStudents / totalStudents) * 100)}% concluído`
                   : 'Nenhum aluno avaliado'}
@@ -102,16 +106,18 @@ export default function EvaluateInfoAssessmentPage({
             </div>
           </SummaryCard>
 
-          <SummaryCard>
+          <SummaryCard bgColor='bg-orange-500'>
             <div className='flex items-center justify-between'>
-              <h3 className='font-medium'>Pendentes</h3>
-              <AlertCircle className='h-4 w-4 text-orange-600' />
+              <h3 className='font-medium text-white'>Pendentes</h3>
+              <div className='rounded-full bg-white/20 p-2'>
+                <AlertCircle className='h-4 w-4 text-white' />
+              </div>
             </div>
             <div>
-              <div className='font-bold text-2xl text-orange-600'>
+              <div className='font-bold text-2xl text-white'>
                 {pendingStudents}
               </div>
-              <p className='text-muted-foreground text-xs'>
+              <p className='text-orange-100 text-xs'>
                 {pendingStudents > 0
                   ? `${Math.round((pendingStudents / totalStudents) * 100)}% restante`
                   : 'Todos os alunos avaliados'}
@@ -119,21 +125,18 @@ export default function EvaluateInfoAssessmentPage({
             </div>
           </SummaryCard>
 
-          <SummaryCard>
+          <SummaryCard bgColor='bg-purple-500'>
             <div className='flex items-center justify-between'>
-              <h3 className='font-medium'>Progresso</h3>
-              <div className='flex items-center gap-2'>
-                <Badge
-                  variant={progress === 100 ? 'default' : 'outline'}
-                  className='text-xs'
-                >
-                  {Math.round(progress)}%
-                </Badge>
+              <h3 className='font-medium text-white'>Progresso</h3>
+              <div className='rounded-full bg-white/20 p-2'>
+                <BarChart className='h-4 w-4 text-white' />
               </div>
             </div>
             <div>
-              <Progress value={progress} className='h-2' />
-              <p className='mt-2 text-muted-foreground text-xs'>
+              <div className='font-bold text-2xl text-white'>
+                {Math.round(progress)}%
+              </div>
+              <p className='mt-2 text-purple-100 text-xs'>
                 {progress === 100
                   ? 'Avaliação concluída!'
                   : `${Math.round(100 - progress)}% para completar`}
@@ -153,12 +156,16 @@ export default function EvaluateInfoAssessmentPage({
   )
 }
 
-function SummaryCard({ children }: { children: React.ReactNode }) {
+function SummaryCard({
+  children,
+  bgColor = 'bg-card',
+}: {
+  children: React.ReactNode
+  bgColor?: string
+}) {
   return (
-    <Card className='flex h-[120px] flex-col'>
-      <CardContent className='flex flex-1 flex-col justify-between py-2'>
-        {children}
-      </CardContent>
+    <Card className={`${bgColor} border shadow-md`}>
+      <CardContent className='p-4'>{children}</CardContent>
     </Card>
   )
 }

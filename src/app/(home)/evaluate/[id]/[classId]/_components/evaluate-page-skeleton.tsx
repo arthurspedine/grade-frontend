@@ -19,9 +19,10 @@ export function EvaluatePageSkeleton() {
         <Skeleton className='h-5 w-64' />
         {/* Progress Summary Skeleton */}
         <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-4'>
-          {Array.from({ length: 4 }).map((_, i) => (
-            <SummaryCardSkeleton key={`summary-card-${i + 1}`} />
-          ))}
+          <SummaryCardSkeleton bgColor='bg-blue-500' />
+          <SummaryCardSkeleton bgColor='bg-green-500' />
+          <SummaryCardSkeleton bgColor='bg-orange-500' />
+          <SummaryCardSkeleton bgColor='bg-purple-500' />
         </div>
       </div>
 
@@ -67,17 +68,23 @@ export function EvaluatePageSkeleton() {
   )
 }
 
-function SummaryCardSkeleton() {
+function SummaryCardSkeleton({
+  bgColor = 'bg-card',
+}: {
+  bgColor?: string
+}) {
   return (
-    <Card className='flex h-[120px] flex-col'>
+    <Card className={`flex h-[120px] flex-col ${bgColor} shadow-md`}>
       <CardContent className='flex flex-1 flex-col justify-between py-2'>
         <div className='flex items-center justify-between'>
-          <Skeleton className='h-4 w-24' />
-          <Skeleton className='h-4 w-4 rounded-full' />
+          <Skeleton className='h-4 w-24 bg-white/20' />
+          <div className='rounded-full bg-white/20 p-2'>
+            <Skeleton className='h-4 w-4 rounded-full bg-white/30' />
+          </div>
         </div>
         <div>
-          <Skeleton className='mb-2 h-8 w-12' />
-          <Skeleton className='h-3 w-full' />
+          <Skeleton className='mb-2 h-8 w-12 bg-white/20' />
+          <Skeleton className='h-3 w-full bg-white/20' />
         </div>
       </CardContent>
     </Card>

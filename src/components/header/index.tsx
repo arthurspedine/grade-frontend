@@ -43,7 +43,7 @@ export function Header() {
             <Skeleton className='h-6 w-20' />
           </ul>
 
-          <Skeleton className='h-12 w-12 rounded-full' />
+          <Skeleton className='h-12 w-48' />
           <Skeleton className='size-8' />
         </div>
       )}

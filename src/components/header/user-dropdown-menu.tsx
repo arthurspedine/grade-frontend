@@ -15,7 +15,6 @@ export function UserDropdownMenu({
 }) {
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement | null>(null)
-  const buttonRef = useRef<HTMLButtonElement | null>(null)
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -104,8 +103,7 @@ export function UserDropdownMenu({
                 src={user.image || ''}
                 alt={`Foto de ${user.name}`}
               />
-              {/* <AvatarFallback>{getInitials(user.name)}</AvatarFallback> */}
-              <AvatarFallback>SI</AvatarFallback>
+              <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
             </Avatar>
 
             {/* Info */}

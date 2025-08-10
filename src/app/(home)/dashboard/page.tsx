@@ -1,5 +1,6 @@
 'use client'
 
+import { PerformanceBar } from '@/components/performance-bar'
 import { Title } from '@/components/title'
 import { Button } from '@/components/ui/button'
 import { formatUpcomingDate } from '@/helper/format-date'
@@ -15,7 +16,6 @@ import Link from 'next/link'
 import { DashboardSkeleton } from './_components/dashboard-skeleton'
 import { StatsCard } from './_components/stats-card'
 import { UpcomingAssessmentItem } from './_components/upcoming-assessment-item'
-import { PerformanceBar } from '@/components/performance-bar'
 
 export default function DashboardPage() {
   const { data, loading, error } = useDashboard()
@@ -129,7 +129,7 @@ export default function DashboardPage() {
                 <Button
                   variant={'ghost'}
                   asChild
-                  className='flex w-full justify-start py-6 transition-all duration-300 hover:bg-card/15 hover:shadow-md dark:shadow-bluecolor'
+                  className='flex w-full justify-start py-6 transition-all duration-300 hover:bg-card/15 hover:shadow-md dark:shadow-white/10'
                 >
                   <Link href={'/assessments/add'}>
                     <div className='mr-3 rounded-md bg-blue-100 p-2'>
@@ -141,7 +141,7 @@ export default function DashboardPage() {
                 <Button
                   variant={'ghost'}
                   asChild
-                  className='flex w-full justify-start py-6 transition-all duration-300 hover:bg-card/15 hover:shadow-md dark:shadow-bluecolor'
+                  className='flex w-full justify-start py-6 transition-all duration-300 hover:bg-card/15 hover:shadow-md dark:shadow-white/10'
                 >
                   <Link href={'/classes/add'}>
                     <div className='mr-3 rounded-md bg-green-100 p-2'>

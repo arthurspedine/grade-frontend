@@ -257,7 +257,7 @@ export default function AssessmentsPage() {
                 return (
                   <Card
                     key={assessment.id}
-                    className='overflow-hidden transition-shadow hover:shadow-lg'
+                    className='overflow-hidden transition-shadow hover:shadow-lg dark:shadow-white/10'
                   >
                     <CardHeader className='pb-3'>
                       <div className='flex items-start justify-between'>
