@@ -62,7 +62,7 @@ export function UserDropdownMenu({
   }
 
   return (
-    <div className='relative mx-2' ref={dropdownRef}>
+    <div className='relative lg:mx-2' ref={dropdownRef}>
       <button
         type='button'
         onClick={() => setIsOpen(!isOpen)}
@@ -74,7 +74,7 @@ export function UserDropdownMenu({
           <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
         </Avatar>
 
-        <div className='flex min-w-0 items-center space-x-2'>
+        <div className='hidden min-w-0 items-center space-x-2 lg:flex'>
           <span className='max-w-32 truncate font-medium text-primary text-sm'>
             {getFirstAndLastName(user.name)}
           </span>

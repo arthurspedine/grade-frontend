@@ -1,4 +1,5 @@
 import { Header } from '@/components/header'
+import { MobileNavbar } from '@/components/mobile-navbar'
 
 export default function HomeLayout({
   children,
@@ -7,6 +8,7 @@ export default function HomeLayout({
     <>
       <Header />
       {children}
+      <MobileNavbar />
     </>
   )
 }
