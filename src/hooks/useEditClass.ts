@@ -30,9 +30,6 @@ export function useEditClass(id: string): UseEditClassReturn {
         setLoading(true)
         setError(null)
 
-        // Artificial delay to see loading state
-        await new Promise(resolve => setTimeout(resolve, 1000))
-
         const [classInfo, categoryResponse] = await Promise.all([
           authenticatedFetch<ClassInfoType>(`/classes/${id}`),
           getCategoryOptions(),
