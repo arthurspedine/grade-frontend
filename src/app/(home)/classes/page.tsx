@@ -2,7 +2,7 @@
 
 import { Title } from '@/components/title'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
+import {} from '@/components/ui/card'
 import {
   Table,
   TableBody,
@@ -26,23 +26,14 @@ export default function ClassesPage() {
   }
 
   if (error) {
-    return (
-      <section className='mx-auto w-full max-w-[1440px] flex-grow px-8'>
-        <div className='flex flex-col items-center justify-center pt-16'>
-          <p className='mb-4 text-red-500'>{error}</p>
-          <Button onClick={() => window.location.reload()}>
-            Tentar novamente
-          </Button>
-        </div>
-      </section>
-    )
+    return <ErrorMessageContainer message={error} />
   }
 
   const { classesList, categoryList } = data
 
   return (
-    <section className='mx-auto w-full max-w-[1440px] flex-grow px-8'>
-      <div className='flex justify-between'>
+    <>
+      <div className='flex items-center justify-between'>
         <Title>Turmas</Title>
         {classesList.length > 0 && (
           <Link href={'/classes/add'} className='text hover:underline'>
@@ -91,27 +82,15 @@ export default function ClassesPage() {
             </TableBody>
           </Table>
         ) : (
-          <Card className='mt-8'>
-            <CardContent className='p-12 text-center'>
-              <div className='mx-auto max-w-md'>
-                <h3 className='mb-2 font-semibold text-lg'>
-                  Nenhuma turma criada
-                </h3>
-                <p className='mb-6 text-muted-foreground'>
-                  Comece criando sua primeira turma para organizar e acompanhar
-                  o progresso dos seus alunos.
-                </p>
-                <Button asChild>
-                  <Link href={'/classes/add'}>
-                    <Plus className='mr-2 h-4 w-4' />
-                    Criar primeira turma
-                  </Link>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+          <NoItemsCard
+            title='Nenhuma turma encontrada'
+            description='Comece criando uma turma ou avaliação para iniciar o acompanhamento.'
+            buttonText='Criar nova turma'
+            buttonLink='/classes/add'
+            Icon={Plus}
+          />
         )}
       </div>
-    </section>
+    </>
   )
 }

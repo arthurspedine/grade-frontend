@@ -1,5 +1,6 @@
 'use client'
 import { Button } from '@/components/ui/button'
+import { pageLinks } from '@/helper/page-links'
 import { useSession } from 'next-auth/react'
 import { useTheme } from 'next-themes'
 import Image from 'next/image'
@@ -37,37 +38,27 @@ export function Header() {
       </Link>
       {isLoading && (
         <div className='flex items-center gap-4'>
-          <ul className='flex space-x-4'>
+          <ul className='hidden space-x-4 md:flex'>
             <Skeleton className='h-6 w-20' />
             <Skeleton className='h-6 w-20' />
             <Skeleton className='h-6 w-20' />
           </ul>
 
-          <Skeleton className='h-12 w-48' />
+          <Skeleton className='size-10 rounded-full md:h-12 md:w-48 md:rounded-md' />
           <Skeleton className='size-8' />
         </div>
       )}
       {user && !isLoading && (
         <div className='flex items-center gap-2'>
-          <ul className='flex space-x-4'>
-            <li>
-              <Link href={'/dashboard'} className='group relative'>
-                Dashboard
-                <span className='-bottom-0.5 absolute left-0 h-0.5 w-0 bg-current transition-all duration-300 group-hover:w-full' />
-              </Link>
-            </li>
-            <li>
-              <Link href={'/classes'} className='group relative'>
-                Turmas
-                <span className='-bottom-0.5 absolute left-0 h-0.5 w-0 bg-current transition-all duration-300 group-hover:w-full' />
-              </Link>
-            </li>
-            <li>
-              <Link href={'/assessments'} className='group relative'>
-                Avaliações
-                <span className='-bottom-0.5 absolute left-0 h-0.5 w-0 bg-current transition-all duration-300 group-hover:w-full' />
-              </Link>
-            </li>
+          <ul className='hidden space-x-4 md:flex'>
+            {pageLinks.map(link => (
+              <li key={link.name}>
+                <Link href={link.path} className='group relative'>
+                  {link.name}
+                  <span className='-bottom-0.5 absolute left-0 h-0.5 w-0 bg-current transition-all duration-300 group-hover:w-full' />
+                </Link>
+              </li>
+            ))}
           </ul>
 
           <UserDropdownMenu user={user} />

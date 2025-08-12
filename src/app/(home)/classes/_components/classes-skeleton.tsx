@@ -12,8 +12,8 @@ import {
 
 export function ClassesSkeleton() {
   return (
-    <section className='mx-auto w-full max-w-[1440px] flex-grow px-8'>
-      <div className='flex justify-between'>
+    <>
+      <div className='flex items-center justify-between'>
         <Title>Turmas</Title>
         <Skeleton className='h-5 w-32' /> {/* Add class link */}
       </div>
@@ -37,7 +37,7 @@ export function ClassesSkeleton() {
           </TableBody>
         </Table>
       </div>
-    </section>
+    </>
   )
 }
 

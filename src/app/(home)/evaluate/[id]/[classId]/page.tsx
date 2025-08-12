@@ -2,7 +2,6 @@
 
 import { GoBackButton } from '@/components/go-back-button'
 import { Title } from '@/components/title'
-import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { useEvaluateAssessmentInfo } from '@/hooks/useEvaluateAssessmentInfo'
 import type { AssessmentStudentType } from '@/types'
@@ -11,6 +10,7 @@ import { redirect } from 'next/navigation'
 import { use } from 'react'
 import { EvaluatePageSkeleton } from './_components/evaluate-page-skeleton'
 import { StudentsFilterableList } from './_components/students-filterable-list'
+import { ErrorMessageContainer } from '@/components/error-message-container'
 
 export default function EvaluateInfoAssessmentPage({
   params,
@@ -27,18 +27,7 @@ export default function EvaluateInfoAssessmentPage({
   }
 
   if (error) {
-    return (
-      <div className='container mx-auto px-4 py-8'>
-        <div className='flex flex-col items-center gap-4 py-12'>
-          <AlertCircle className='h-12 w-12 text-destructive' />
-          <h2 className='font-semibold text-lg'>Erro ao carregar</h2>
-          <p className='text-center text-muted-foreground'>{error}</p>
-          <Button onClick={() => window.location.reload()} variant='outline'>
-            Tentar novamente
-          </Button>
-        </div>
-      </div>
-    )
+    return <ErrorMessageContainer message={error} />
   }
 
   if (!assessmentInfo) {
@@ -57,7 +46,7 @@ export default function EvaluateInfoAssessmentPage({
     totalStudents > 0 ? (evaluatedStudents / totalStudents) * 100 : 0
 
   return (
-    <div className='container mx-auto flex flex-col gap-6 px-4 pb-4'>
+    <>
       {/* Header */}
 
       <div className='flex justify-between'>
@@ -74,7 +63,7 @@ export default function EvaluateInfoAssessmentPage({
             <div className='flex items-center justify-between'>
               <h3 className='font-medium text-white'>Total de Alunos</h3>
               <div className='rounded-full bg-white/20 p-2'>
-                <GraduationCap className='h-4 w-4 text-white' />
+                <GraduationCap className='size-4 text-white' />
               </div>
             </div>
             <div>
@@ -91,7 +80,7 @@ export default function EvaluateInfoAssessmentPage({
             <div className='flex items-center justify-between'>
               <h3 className='font-medium text-white'>Avaliados</h3>
               <div className='rounded-full bg-white/20 p-2'>
-                <CheckCircle className='h-4 w-4 text-white' />
+                <CheckCircle className='size-4 text-white' />
               </div>
             </div>
             <div>
@@ -110,7 +99,7 @@ export default function EvaluateInfoAssessmentPage({
             <div className='flex items-center justify-between'>
               <h3 className='font-medium text-white'>Pendentes</h3>
               <div className='rounded-full bg-white/20 p-2'>
-                <AlertCircle className='h-4 w-4 text-white' />
+                <AlertCircle className='size-4 text-white' />
               </div>
             </div>
             <div>
@@ -129,7 +118,7 @@ export default function EvaluateInfoAssessmentPage({
             <div className='flex items-center justify-between'>
               <h3 className='font-medium text-white'>Progresso</h3>
               <div className='rounded-full bg-white/20 p-2'>
-                <BarChart className='h-4 w-4 text-white' />
+                <BarChart className='size-4 text-white' />
               </div>
             </div>
             <div>
@@ -152,7 +141,7 @@ export default function EvaluateInfoAssessmentPage({
         assessmentId={assessmentId}
         classId={classId}
       />
-    </div>
+    </>
   )
 }
 

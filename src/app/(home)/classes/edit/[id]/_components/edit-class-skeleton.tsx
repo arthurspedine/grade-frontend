@@ -6,7 +6,7 @@ import { StudentTablesSkeleton } from '../../../_components/students-table-skele
 
 export function EditClassSkeleton() {
   return (
-    <section className='mx-auto flex h-full w-full max-w-[1440px] flex-col px-8'>
+    <>
       {/* Title skeleton */}
       <div className='flex items-center gap-2'>
         <Title>Editar turma</Title>
@@ -14,38 +14,46 @@ export function EditClassSkeleton() {
       </div>
 
       {/* Form skeleton */}
-      <div className='w-full space-y-6 px-8 py-4'>
+      <div className='flex flex-col gap-4 px-2 py-4 lg:gap-8 lg:px-6'>
         {/* Name and Category row */}
-        <div className='flex w-full items-start justify-between'>
-          <div className='flex w-1/2 items-center gap-2'>
-            <span className='font-medium text-base'>Nome:</span>
-            <Skeleton className='h-10 w-full' /> {/* Name input */}
+        <div className='flex w-full flex-col gap-2 lg:flex-row'>
+          {/* Name input */}
+          <div className='flex w-full flex-col gap-1 lg:w-1/2'>
+            <div className='flex items-center space-x-2'>
+              <span className='font-medium text-base'>Nome:</span>
+              <Skeleton className='h-9 flex-1' />
+            </div>
           </div>
-          <div className='flex w-1/2 flex-col items-end space-y-1'>
+
+          {/* Category select */}
+          <div className='flex w-full flex-col gap-1 lg:w-1/2'>
             <div className='flex items-center space-x-2'>
               <span className='font-medium text-base'>Categoria:</span>
-              <Skeleton className='h-10 w-[180px]' /> {/* Category select */}
+              <Skeleton className='h-9 flex-1' />
             </div>
           </div>
         </div>
 
-        {/* CSV upload section */}
-        <div className='flex justify-between'>
-          <div className='flex items-center gap-2'>
-            <Skeleton className='h-10 w-60' /> {/* "Arquivo CSV" label */}
-            <Skeleton className='size-9' /> {/* Info icon */}
+        {/* CSV upload section and buttons */}
+        <div className='flex flex-col-reverse justify-between gap-4 sm:flex-row sm:gap-0'>
+          <div className='space-y-1'>
+            <div className='flex items-center space-x-2'>
+              <Skeleton className='h-9 w-full sm:w-60' /> {/* CSV file input */}
+              <Skeleton className='size-10 lg:size-6' /> {/* Question icon */}
+            </div>
           </div>
-          <div className='flex gap-2'>
-            <GoBackButton goBackUrl='/classes' />
-            <Skeleton className='h-9 w-32' />
+          <div className='flex space-x-2'>
+            <GoBackButton
+              className='grow justify-center text-center'
+              goBackUrl='/classes'
+            />
+            <Skeleton className='h-9 grow sm:h-10' /> {/* Save button */}
           </div>
         </div>
 
         {/* Students table skeleton */}
-        <div className='space-y-4'>
-          <StudentTablesSkeleton />
-        </div>
+        <StudentTablesSkeleton />
       </div>
-    </section>
+    </>
   )
 }

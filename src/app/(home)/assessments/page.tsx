@@ -1,5 +1,7 @@
 'use client'
 
+import { ErrorMessageContainer } from '@/components/error-message-container'
+import { NoItemsCard } from '@/components/no-items-card'
 import { Title } from '@/components/title'
 import {
   Accordion,
@@ -148,26 +150,17 @@ export default function AssessmentsPage() {
   }
 
   if (error) {
-    return (
-      <section className='mx-auto w-full max-w-[1440px] flex-grow px-8'>
-        <div className='flex flex-col items-center justify-center pt-16'>
-          <p className='mb-4 text-red-500'>{error}</p>
-          <Button onClick={() => window.location.reload()}>
-            Tentar novamente
-          </Button>
-        </div>
-      </section>
-    )
+    return <ErrorMessageContainer message={error} />
   }
 
   return (
-    <section className='mx-auto w-full max-w-[1440px] flex-grow px-8'>
+    <>
       {/* Header */}
       <div className='mb-6 flex items-center justify-between'>
         <Title>Avaliações</Title>
         <Button asChild>
           <Link href={'/assessments/add'}>
-            <Plus className='mr-2 h-4 w-4' />
+            <Plus className='mr-2 size-4' />
             Nova Avaliação
           </Link>
         </Button>
@@ -178,7 +171,7 @@ export default function AssessmentsPage() {
           {/* Search and Filters */}
           <div className='mb-6 flex flex-col gap-4 sm:flex-row'>
             <div className='relative max-w-md flex-1'>
-              <Search className='-translate-y-1/2 absolute top-1/2 left-3 h-4 w-4 transform text-muted-foreground' />
+              <Search className='-translate-y-1/2 absolute top-1/2 left-3 size-4 transform text-muted-foreground' />
               <Input
                 placeholder='Buscar avaliação...'
                 value={searchTerm}
@@ -204,7 +197,7 @@ export default function AssessmentsPage() {
                 onClick={clearAllFilters}
                 className='flex items-center gap-2 whitespace-nowrap'
               >
-                <X className='h-4 w-4' />
+                <X className='size-4' />
                 Limpar filtros
               </Button>
             )}
@@ -267,11 +260,11 @@ export default function AssessmentsPage() {
                           </h3>
                           <div className='mb-3 flex items-center gap-4 text-muted-foreground text-sm'>
                             <div className='flex items-center gap-1'>
-                              <Calendar className='h-4 w-4' />
+                              <Calendar className='size-4' />
                               {formatDate(assessment.assessmentDate)}
                             </div>
                             <div className='flex items-center gap-1'>
-                              <Users className='h-4 w-4' />
+                              <Users className='size-4' />
                               {assessment.classes.length} turma
                               {assessment.classes.length !== 1 ? 's' : ''}
                             </div>
@@ -287,7 +280,7 @@ export default function AssessmentsPage() {
                                 variant={status.variant}
                                 className='flex items-center gap-1'
                               >
-                                <StatusIcon className='h-3 w-3' />
+                                <StatusIcon className='size-3' />
                                 {status.label}
                               </Badge>
                             </div>
@@ -385,26 +378,14 @@ export default function AssessmentsPage() {
           </div>
         </>
       ) : (
-        <Card className='mt-8'>
-          <CardContent className='p-12 text-center'>
-            <div className='mx-auto max-w-md'>
-              <h3 className='mb-2 font-semibold text-lg'>
-                Nenhuma avaliação criada
-              </h3>
-              <p className='mb-6 text-muted-foreground'>
-                Comece criando sua primeira avaliação para organizar e
-                acompanhar o progresso dos seus alunos.
-              </p>
-              <Button asChild>
-                <Link href={'/assessments/add'}>
-                  <Plus className='mr-2 h-4 w-4' />
-                  Criar primeira avaliação
-                </Link>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+        <NoItemsCard
+          title='Nenhuma avaliação encontrada'
+          description='Comece criando uma avaliação para iniciar o acompanhamento.'
+          buttonText='Criar nova avaliação'
+          buttonLink='/assessments/add'
+          Icon={Plus}
+        />
       )}
-    </section>
+    </>
   )
 }

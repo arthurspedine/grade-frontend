@@ -130,112 +130,117 @@ export function EditClassForm({
 
   return (
     <form
-      className='flex flex-col px-8 py-4'
+      className='flex flex-col gap-4 px-2 py-4 lg:gap-8 lg:px-6'
       onSubmit={handleSubmit(handleSubmitEditClass)}
     >
-      <div className='flex flex-col space-y-8'>
-        {/* INPUTS */}
-        <div className='flex w-full space-x-2'>
-          <div className='flex w-1/2 flex-col space-y-1'>
-            <div className='flex items-center space-x-2'>
-              <label className='font-medium text-base' htmlFor='name'>
-                Nome:
-              </label>
-              <Input
-                id='name'
-                type='text'
-                placeholder='Digite aqui'
-                autoCapitalize='on'
-                {...register('name')}
-                defaultValue={name}
-                onChange={e => {
-                  const { value } = e.target
-                  e.target.value = value.toUpperCase()
-                }}
-              />
-            </div>
-            {errors.name && (
-              <p className='pt-0.5 text-destructive text-sm'>
-                {errors.name.message}
-              </p>
-            )}
+      {/* INPUTS NAME AND CATEGORY */}
+      <div className='flex w-full flex-col gap-2 lg:flex-row'>
+        {/* NAME */}
+        <div className='flex w-full flex-col gap-1 lg:w-1/2'>
+          <div className='flex items-center space-x-2'>
+            <label className='font-medium text-base' htmlFor='name'>
+              Nome:
+            </label>
+            <Input
+              id='name'
+              type='text'
+              placeholder='Digite aqui'
+              autoCapitalize='on'
+              {...register('name')}
+              defaultValue={name}
+              onChange={e => {
+                const { value } = e.target
+                e.target.value = value.toUpperCase()
+              }}
+            />
           </div>
-          <div className='flex w-1/2 flex-col items-end space-y-1'>
-            <div className='flex items-center space-x-2'>
-              <label className='font-medium text-base' htmlFor='category'>
-                Categoria:
-              </label>
-              <Controller
-                name='category'
-                control={control}
-                render={({ field }) => (
-                  <Select
-                    {...field}
-                    value={field.value || ''}
-                    onValueChange={field.onChange}
-                  >
-                    <SelectTrigger className='w-[180px]' id='category'>
-                      <SelectValue placeholder={'Selecione...'} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {categoryList.map(c => (
-                        <SelectItem key={c.key} value={c.key}>
-                          {c.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                )}
-              />
-            </div>
-            {errors.category && (
-              <p className='pt-0.5 text-destructive text-sm'>
-                {errors.category.message}
-              </p>
-            )}
-          </div>
+          {errors.name && (
+            <p className='pt-0.5 text-destructive text-sm'>
+              {errors.name.message}
+            </p>
+          )}
         </div>
-
-        <div className='flex justify-between'>
-          <div className='space-y-1'>
-            <div className='flex items-center space-x-2'>
-              <Input
-                type='file'
-                accept='.csv'
-                className={`w-60 ${students.length > 0 ? 'border-green-600' : ''}`}
-                {...register('csvFile', {
-                  onChange: handleFileChange,
-                })}
-                ref={e => {
-                  register('csvFile').ref(e)
-                  fileInputRef.current = e
-                }}
-              />
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger type='button'>
-                    <FileQuestion />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Arquivo no formato .csv, separado por vírgulas.</p>
-                    <p>Colunas: rm, name</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </div>
-            {(errors.csvFile || fileError) && (
-              <p className='pb-2 text-destructive text-sm'>
-                {errors.csvFile?.message || fileError}
-              </p>
-            )}
+        {/* CATEGORY */}
+        <div className='flex w-full flex-col gap-1 lg:w-1/2 lg:items-end'>
+          <div className='flex items-center space-x-2'>
+            <label className='font-medium text-base' htmlFor='category'>
+              Categoria:
+            </label>
+            <Controller
+              name='category'
+              control={control}
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  value={field.value || ''}
+                  onValueChange={field.onChange}
+                >
+                  <SelectTrigger className='w-[180px]' id='category'>
+                    <SelectValue placeholder={'Selecione...'} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {categoryList.map(c => (
+                      <SelectItem key={c.key} value={c.key}>
+                        {c.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
           </div>
-          <div className='flex space-x-2'>
-            <GoBackButton goBackUrl='/classes' />
-            <Button variant={'green'}>Salvar Turma</Button>
-          </div>
+          {errors.category && (
+            <p className='pt-0.5 text-destructive text-sm'>
+              {errors.category.message}
+            </p>
+          )}
         </div>
-        <StudentsTable students={students} />
       </div>
+
+      <div className='flex flex-col-reverse justify-between gap-4 sm:flex-row sm:gap-0'>
+        <div className='space-y-1'>
+          <div className='flex items-center space-x-2'>
+            <Input
+              type='file'
+              accept='.csv'
+              className='w-full sm:w-60'
+              {...register('csvFile', {
+                onChange: handleFileChange,
+              })}
+              ref={e => {
+                register('csvFile').ref(e)
+                fileInputRef.current = e
+              }}
+            />
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger type='button'>
+                  <FileQuestion />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Arquivo no formato .csv, separado por vírgulas.</p>
+                  <p>Colunas: rm, name</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+          {(errors.csvFile || fileError) && (
+            <p className='pb-2 text-destructive text-sm'>
+              {errors.csvFile?.message || fileError}
+            </p>
+          )}
+        </div>
+        <div className='flex space-x-2'>
+          <GoBackButton
+            className='grow justify-center text-center'
+            goBackUrl='/classes'
+          />
+          <Button variant={'green'} className='grow'>
+            Salvar Turma
+          </Button>
+        </div>
+      </div>
+      <StudentsTable students={students} />
     </form>
   )
 }

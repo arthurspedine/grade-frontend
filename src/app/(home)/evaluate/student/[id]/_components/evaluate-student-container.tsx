@@ -115,34 +115,34 @@ export function EvaluateStudentContainer({
   const progressPercentage = (completedQuestions / totalQuestions) * 100
 
   return (
-    <div className='container mx-auto max-w-4xl space-y-6 px-4 py-6'>
+    <div className='container mx-auto max-w-4xl space-y-6'>
       {/* Header com informações do aluno */}
       <Card>
         <CardHeader className='pb-4'>
-          <div className='flex items-start justify-between'>
-            <div className='space-y-2'>
-              <CardTitle className='flex items-center gap-2 text-2xl'>
-                <User className='h-6 w-6 text-primary' />
+          <div className='w-full space-y-1'>
+            <CardTitle className='flex w-full justify-between text-2xl'>
+              <div className='flex items-start gap-2'>
+                <User className='size-6 text-primary' />
                 {initialData.student.name}
-              </CardTitle>
-              <CardDescription className='flex items-center gap-4 text-base'>
-                <span className='flex items-center gap-1'>
-                  <Hash className='h-4 w-4' />
-                  RM: {initialData.student.rm}
-                </span>
-                <span className='flex items-center gap-1'>
-                  <Award className='h-4 w-4' />
-                  Nota: {totalScore.toFixed(2)} / {MAX_SCORE}
-                </span>
-              </CardDescription>
-            </div>
-            <GoBackButton
-              goBackUrl={`/evaluate/${initialData.student.assessmentId}/${evaluationData.student.classId}`}
-            />
+              </div>
+              <GoBackButton
+                goBackUrl={`/evaluate/${initialData.student.assessmentId}/${evaluationData.student.classId}`}
+              />
+            </CardTitle>
+            <CardDescription className='flex flex-col gap-1 text-base sm:flex-row sm:items-center sm:gap-4'>
+              <span className='flex items-center gap-1'>
+                <Hash className='h-4 w-4' />
+                RM: {initialData.student.rm}
+              </span>
+              <span className='flex items-center gap-1'>
+                <Award className='h-4 w-4' />
+                Nota: {totalScore.toFixed(2)} / {MAX_SCORE}
+              </span>
+            </CardDescription>
           </div>
 
           {/* Progress indicator */}
-          <div className='space-y-2 pt-4'>
+          <div className='space-y-2 pt-2'>
             <div className='flex justify-between text-sm'>
               <span>Progresso da Avaliação</span>
               <span>
@@ -170,7 +170,7 @@ export function EvaluateStudentContainer({
                     setCurrentQuestionIndex(index)
                     setError(null)
                   }}
-                  className={`flex h-8 w-8 items-center justify-center rounded-full font-medium text-xs transition-colors ${
+                  className={`flex size-8 items-center justify-center rounded-full font-medium text-xs transition-colors ${
                     index === currentQuestionIndex
                       ? 'bg-primary text-primary-foreground'
                       : isQuestionComplete(index)
@@ -204,7 +204,7 @@ export function EvaluateStudentContainer({
                   <div className='space-y-4'>
                     {/* Controles de pontuação */}
                     <div className='space-y-3'>
-                      <div className='flex items-center justify-between'>
+                      <div className='flex flex-col items-center justify-between sm:flex-row'>
                         <span className='font-medium text-sm'>Pontuação:</span>
                         <div className='flex items-center gap-1'>
                           {/* Botões de diminuir */}
@@ -222,10 +222,10 @@ export function EvaluateStudentContainer({
                               )
                             }}
                             disabled={(category.answeredScore || 0) < 1}
-                            className='h-8 w-8 p-0'
+                            className='hidden size-8 p-0 sm:flex'
                             title='Diminuir 1 ponto'
                           >
-                            <ChevronsLeft className='h-3 w-3' />
+                            <ChevronsLeft className='size-3' />
                           </Button>
 
                           <Button
@@ -242,10 +242,10 @@ export function EvaluateStudentContainer({
                               )
                             }}
                             disabled={(category.answeredScore || 0) < 0.5}
-                            className='h-8 w-8 p-0'
+                            className='size-8 p-0'
                             title='Diminuir 0.5 pontos'
                           >
-                            <ChevronLeft className='h-3 w-3' />
+                            <ChevronLeft className='size-3' />
                           </Button>
 
                           <Button
@@ -262,10 +262,10 @@ export function EvaluateStudentContainer({
                               )
                             }}
                             disabled={(category.answeredScore || 0) < 0.25}
-                            className='h-8 w-8 p-0'
+                            className='size-8 p-0'
                             title='Diminuir 0.25 pontos'
                           >
-                            <Minus className='h-3 w-3' />
+                            <Minus className='size-3' />
                           </Button>
 
                           {/* Display da nota */}
@@ -295,10 +295,10 @@ export function EvaluateStudentContainer({
                             disabled={
                               (category.answeredScore || 0) >= category.score
                             }
-                            className='h-8 w-8 p-0'
+                            className='size-8 p-0'
                             title='Aumentar 0.25 pontos'
                           >
-                            <Plus className='h-3 w-3' />
+                            <Plus className='size-3' />
                           </Button>
 
                           <Button
@@ -320,10 +320,10 @@ export function EvaluateStudentContainer({
                             disabled={
                               (category.answeredScore || 0) >= category.score
                             }
-                            className='h-8 w-8 p-0'
+                            className='size-8 p-0'
                             title='Aumentar 0.5 pontos'
                           >
-                            <ChevronRight className='h-3 w-3' />
+                            <ChevronRight className='size-3' />
                           </Button>
 
                           <Button
@@ -345,10 +345,10 @@ export function EvaluateStudentContainer({
                             disabled={
                               (category.answeredScore || 0) >= category.score
                             }
-                            className='h-8 w-8 p-0'
+                            className='hidden size-8 p-0 sm:flex'
                             title='Aumentar 1 ponto'
                           >
-                            <ChevronsRight className='h-3 w-3' />
+                            <ChevronsRight className='size-3' />
                           </Button>
                         </div>
                       </div>
@@ -382,14 +382,14 @@ export function EvaluateStudentContainer({
                   {/* Display da nota atual */}
                   <div className='flex items-center gap-2 rounded-md bg-muted/50 p-2'>
                     <Circle
-                      className={`h-4 w-4 ${
+                      className={`size-3 sm:size-4 ${
                         typeof category.answeredScore === 'number' &&
                         category.answeredScore >= 0
                           ? 'fill-green-500 text-green-500'
                           : 'text-muted-foreground'
                       }`}
                     />
-                    <span className='text-sm'>
+                    <span className='text-xs sm:text-sm'>
                       Nota atribuída:{' '}
                       <strong>
                         {category.answeredScore?.toFixed(2) || '0.00'}

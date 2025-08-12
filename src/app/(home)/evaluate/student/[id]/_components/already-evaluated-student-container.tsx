@@ -45,45 +45,45 @@ export function AlreadyEvaluatedStudentContainer({
   const totalPercentage = calculateTotalPercentage()
 
   return (
-    <div className='container mx-auto max-w-4xl space-y-6 px-4 py-6'>
+    <div className='container mx-auto max-w-4xl space-y-6'>
       {/* Header Card */}
       <Card>
         <CardHeader className='pb-4'>
-          <div className='flex items-start justify-between'>
-            <div className='space-y-2'>
-              <CardTitle className='flex items-center gap-2 text-2xl'>
-                <CheckCircle className='h-6 w-6 text-green-600 dark:text-green-400' />
+          <div className='w-full space-y-1'>
+            <CardTitle className='flex items-center justify-between text-2xl'>
+              <h2 className='flex items-center gap-2'>
+                <CheckCircle className='size-6 text-green-600 dark:text-green-400' />
                 Avaliação Finalizada
-              </CardTitle>
-              <CardDescription className='space-y-1'>
-                <div className='flex items-center gap-2 text-lg'>
-                  <User className='h-5 w-5 text-primary' />
-                  <span className='font-semibold text-foreground'>
-                    {initialData.student.name}
-                  </span>
-                </div>
-                <div className='flex items-center gap-4 text-base'>
-                  <span className='flex items-center gap-1'>
-                    <Hash className='h-4 w-4' />
-                    RM: {initialData.student.rm}
-                  </span>
-                  <span className='flex items-center gap-1'>
-                    <Calendar className='h-4 w-4' />
-                    Avaliado em: {formatDate(initialData.finishedDate)}
-                  </span>
-                </div>
-              </CardDescription>
-            </div>
-            <GoBackButton
-              goBackUrl={`/evaluate/${initialData.student.assessmentId}/${initialData.student.classId}`}
-            />
+              </h2>
+              <GoBackButton
+                goBackUrl={`/evaluate/${initialData.student.assessmentId}/${initialData.student.classId}`}
+              />
+            </CardTitle>
+            <CardDescription className='flex flex-col gap-1'>
+              <div className='flex items-center gap-2 text-lg'>
+                <User className='size-5 text-primary' />
+                <span className='text-nowrap font-semibold text-foreground'>
+                  {initialData.student.name}
+                </span>
+              </div>
+              <div className='flex flex-col text-base sm:flex-row sm:items-center sm:gap-4'>
+                <span className='flex items-center gap-1 text-nowrap'>
+                  <Hash className='h-4 w-4' />
+                  RM: {initialData.student.rm}
+                </span>
+                <span className='flex items-center gap-1 text-nowrap'>
+                  <Calendar className='h-4 w-4' />
+                  Avaliado em: {formatDate(initialData.finishedDate)}
+                </span>
+              </div>
+            </CardDescription>
           </div>
 
           {/* Score Summary */}
-          <div className='space-y-3 pt-4'>
+          <div className='space-y-3'>
             <div className='flex items-center justify-between'>
               <div className='flex items-center gap-2'>
-                <Award className='h-5 w-5 text-primary' />
+                <Award className='size-5 text-primary' />
                 <span className='font-semibold text-lg'>
                   Pontuação Final: {initialData.totalScore.toFixed(2)}
                 </span>
@@ -101,7 +101,7 @@ export function AlreadyEvaluatedStudentContainer({
       <Card>
         <CardHeader>
           <CardTitle className='flex items-center gap-2'>
-            <TrendingUp className='h-5 w-5 text-primary' />
+            <TrendingUp className='size-5 text-primary' />
             Detalhamento das Notas
           </CardTitle>
         </CardHeader>
@@ -125,15 +125,17 @@ export function AlreadyEvaluatedStudentContainer({
                   className='rounded-lg border px-4'
                 >
                   <AccordionTrigger className='py-4 hover:no-underline'>
-                    <div className='flex w-full items-center justify-between pr-4'>
+                    <div className='flex w-full flex-col justify-between gap-1 pr-2 sm:flex-row sm:items-center'>
                       <span className='font-semibold text-lg'>
                         Questão {question.questionNumber}
                       </span>
-                      <div className='flex items-center gap-2 text-sm'>
-                        <Target className='h-4 w-4 text-muted-foreground' />
-                        <span className='font-medium'>
-                          {questionTotal.toFixed(2)} / {questionMax} pontos
-                        </span>
+                      <div className='flex items-center justify-between gap-2 text-sm sm:justify-normal'>
+                        <div className='flex items-center gap-1'>
+                          <Target className='size-4 text-muted-foreground' />
+                          <span className='font-medium'>
+                            {questionTotal.toFixed(2)} / {questionMax} pontos
+                          </span>
+                        </div>
                         <span className='text-muted-foreground'>
                           ({questionPercentage.toFixed(1)}%)
                         </span>
@@ -164,14 +166,14 @@ export function AlreadyEvaluatedStudentContainer({
       <Card>
         <CardHeader>
           <CardTitle className='flex items-center gap-2'>
-            <MessageSquare className='h-5 w-5 text-primary' />
+            <MessageSquare className='size-5 text-primary' />
             Feedback da Avaliação
           </CardTitle>
         </CardHeader>
         <CardContent className='space-y-6'>
           <div className='space-y-3'>
             <div className='flex items-center gap-2'>
-              <FileText className='h-4 w-4 text-blue-600 dark:text-blue-400' />
+              <FileText className='size-4 text-blue-600 dark:text-blue-400' />
               <h3 className='font-semibold text-base'>Feedback Inicial</h3>
             </div>
             <div className='rounded-lg border bg-muted/30 p-4'>
@@ -183,7 +185,7 @@ export function AlreadyEvaluatedStudentContainer({
 
           <div className='space-y-3'>
             <div className='flex items-center gap-2'>
-              <CheckCircle className='h-4 w-4 text-green-600 dark:text-green-400' />
+              <CheckCircle className='size-4 text-green-600 dark:text-green-400' />
               <h3 className='font-semibold text-base'>Feedback Final</h3>
             </div>
             <div className='rounded-lg border bg-muted/30 p-4'>

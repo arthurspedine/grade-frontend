@@ -1,10 +1,7 @@
-'use client'
-
 import { Title } from '@/components/title'
-import { Button } from '@/components/ui/button'
 import { encodeText } from '@/helper/base64-search-params'
 import { useAddAssessment } from '@/hooks/useAddAssessment'
-import { redirect } from 'next/navigation'
+import { Plus } from 'lucide-react'
 import { AddAssessmentForm } from './_components/add-assessment-form'
 import { AddAssessmentSkeleton } from './_components/add-assessment-skeleton'
 
@@ -16,50 +13,25 @@ export default function AddAssessmentPage() {
   }
 
   if (error) {
-    return (
-      <section className='mx-auto flex h-full w-full max-w-[1440px] flex-col items-center justify-center px-8'>
-        <div className='text-center'>
-          <h2 className='mb-2 font-semibold text-destructive text-lg'>
-            Erro ao carregar dados
-          </h2>
-          <p className='mb-4 text-muted-foreground'>{error}</p>
-          <Button onClick={() => window.location.reload()} variant='outline'>
-            Tentar novamente
-          </Button>
-        </div>
-      </section>
-    )
+    return <ErrorMessageContainer message={error} />
   }
 
   if (!hasClasses) {
     return (
-      <section className='mx-auto flex h-full w-full max-w-[1440px] flex-col items-center justify-center px-8'>
-        <div className='text-center'>
-          <h2 className='mb-2 font-semibold text-lg'>
-            Nenhuma turma encontrada
-          </h2>
-          <p className='mb-4 text-muted-foreground'>
-            Você precisa criar pelo menos uma turma antes de adicionar uma
-            avaliação.
-          </p>
-          <Button
-            onClick={() => {
-              redirect(
-                `/classes/add?returnTo=${encodeText('/assessments/add')}`
-              )
-            }}
-          >
-            Criar primeira turma
-          </Button>
-        </div>
-      </section>
+      <NoItemsCard
+        title='Nenhuma turma encontrada'
+        description='Você precisa criar pelo menos uma turma antes de adicionar uma avaliação.'
+        buttonText='Criar primeira turma'
+        buttonLink={`/classes/add?returnTo=${encodeText('/assessments/add')}`}
+        Icon={Plus}
+      />
     )
   }
 
   return (
-    <section className='mx-auto flex h-full w-full max-w-[1440px] flex-col px-8'>
+    <>
       <Title>Adicionar Avaliação</Title>
       <AddAssessmentForm classList={classList} />
-    </section>
+    </>
   )
 }
