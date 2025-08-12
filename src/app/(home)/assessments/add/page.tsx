@@ -1,9 +1,13 @@
+'use client'
+
 import { Title } from '@/components/title'
 import { encodeText } from '@/helper/base64-search-params'
 import { useAddAssessment } from '@/hooks/useAddAssessment'
 import { Plus } from 'lucide-react'
 import { AddAssessmentForm } from './_components/add-assessment-form'
 import { AddAssessmentSkeleton } from './_components/add-assessment-skeleton'
+import { ErrorMessageContainer } from '@/components/error-message-container'
+import { NoItemsCard } from '@/components/no-items-card'
 
 export default function AddAssessmentPage() {
   const { classList, loading, error, hasClasses } = useAddAssessment()
