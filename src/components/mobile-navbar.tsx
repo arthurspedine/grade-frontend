@@ -27,7 +27,7 @@ export function MobileNavbar() {
   }
 
   return (
-    <nav className='-bottom-1 fixed right-0 left-0 z-50 border-t bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60 lg:hidden'>
+    <nav className='-bottom-1 fixed right-0 left-0 z-50 border-t bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60 md:hidden'>
       <ul className='flex h-16 items-center justify-around px-2 pb-1'>
         {pageLinks.map(link => {
           const Icon = navIcons[link.path as keyof typeof navIcons]
@@ -38,7 +38,7 @@ export function MobileNavbar() {
             <li key={link.name} className='flex-1'>
               <Link
                 href={link.path}
-                className={`flex flex-col items-center justify-center gap-1 rounded-lg px-3 py-2 text-xs transition-colors ${
+                className={`flex flex-col items-center justify-center gap-1 rounded-md px-3 py-2 text-xs transition-colors ${
                   isActive
                     ? 'bg-primary/10 text-primary'
                     : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'

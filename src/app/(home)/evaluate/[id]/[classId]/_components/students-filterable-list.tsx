@@ -92,9 +92,9 @@ export function StudentsFilterableList({
   return (
     <>
       {/* Search and Filters */}
-      <div className='flex flex-col gap-4 sm:flex-row'>
+      <div className='my-4 flex flex-col gap-4 sm:flex-row'>
         <div className='relative max-w-md flex-1'>
-          <Search className='-translate-y-1/2 absolute top-1/2 left-3 h-4 w-4 transform text-muted-foreground' />
+          <Search className='-translate-y-1/2 absolute top-1/2 left-3 size-4 transform text-muted-foreground' />
           <Input
             placeholder='Buscar por nome ou RM...'
             value={searchTerm}
@@ -172,7 +172,7 @@ export function StudentsFilterableList({
                   <TableRow>
                     <TableCell colSpan={5} className='py-8 text-center'>
                       <div className='flex flex-col items-center gap-2'>
-                        <Users className='h-8 w-8 text-muted-foreground' />
+                        <Users className='size-8 text-muted-foreground' />
                         <p className='text-muted-foreground'>
                           Nenhum aluno encontrado
                           {searchTerm && ` para "${searchTerm}"`}
@@ -198,7 +198,7 @@ export function StudentsFilterableList({
                             variant='default'
                             className='flex items-center gap-1'
                           >
-                            <CheckCircle className='h-3 w-3' />
+                            <CheckCircle className='size-3' />
                             Avaliado
                           </Badge>
                         ) : (
@@ -206,7 +206,7 @@ export function StudentsFilterableList({
                             variant='outline'
                             className='flex items-center gap-1'
                           >
-                            <AlertCircle className='h-3 w-3' />
+                            <AlertCircle className='size-3' />
                             Pendente
                           </Badge>
                         )}

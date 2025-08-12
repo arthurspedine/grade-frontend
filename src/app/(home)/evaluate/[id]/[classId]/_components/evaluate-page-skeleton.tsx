@@ -5,7 +5,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 
 export function EvaluatePageSkeleton() {
   return (
-    <div className='container mx-auto flex flex-col gap-6 px-4 pb-4'>
+    <>
       {/* Header Skeleton */}
       <div className='flex justify-between'>
         <div className='flex gap-1'>
@@ -27,7 +27,7 @@ export function EvaluatePageSkeleton() {
       </div>
 
       {/* Filters Skeleton */}
-      <div className='flex flex-col gap-4 sm:flex-row'>
+      <div className='my-4 flex flex-col gap-4 sm:flex-row'>
         <Skeleton className='h-10 w-full max-w-md' />
         <Skeleton className='h-10 w-full sm:w-48' />
       </div>
@@ -50,8 +50,7 @@ export function EvaluatePageSkeleton() {
             </div>
             {Array.from({ length: 5 }).map((_, i) => (
               <div
-                // biome-ignore lint/suspicious/noArrayIndexKey: Static skeleton items
-                key={i}
+                key={`index-${i + 1}`}
                 className='flex h-16 items-center border-b px-4 last:border-b-0'
               >
                 <Skeleton className='h-4 w-6' />
@@ -64,7 +63,7 @@ export function EvaluatePageSkeleton() {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </>
   )
 }
 
@@ -79,7 +78,7 @@ function SummaryCardSkeleton({
         <div className='flex items-center justify-between'>
           <Skeleton className='h-4 w-24 bg-white/20' />
           <div className='rounded-full bg-white/20 p-2'>
-            <Skeleton className='h-4 w-4 rounded-full bg-white/30' />
+            <Skeleton className='size-4 rounded-full bg-white/30' />
           </div>
         </div>
         <div>

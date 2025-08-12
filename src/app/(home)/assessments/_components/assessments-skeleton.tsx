@@ -9,11 +9,11 @@ import { Skeleton } from '@/components/ui/skeleton'
 
 export function AssessmentsSkeleton() {
   return (
-    <section className='mx-auto w-full max-w-[1440px] flex-grow px-8'>
+    <>
       {/* Header */}
       <div className='mb-6 flex items-center justify-between'>
         <Title>Avaliações</Title>
-        <Skeleton className='h-10 w-40' /> {/* Nova Avaliação button */}
+        <Skeleton className='h-10 w-44' /> {/* Nova Avaliação button */}
       </div>
 
       {/* Search and Filters */}
@@ -32,7 +32,7 @@ export function AssessmentsSkeleton() {
         <AssessmentCardSkeleton />
         <AssessmentCardSkeleton />
       </div>
-    </section>
+    </>
   )
 }
 

@@ -68,7 +68,7 @@ export function EditCategoryItem({
       <DialogTrigger asChild>
         <Button variant={'secondary'}>
           <Pen />
-          Editar
+          <p className='hidden sm:flex'>Editar</p>
         </Button>
       </DialogTrigger>
       <DialogContent>

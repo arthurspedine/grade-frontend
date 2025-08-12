@@ -1,8 +1,8 @@
 'use client'
 
+import { ErrorMessageContainer } from '@/components/error-message-container'
 import { GoBackButton } from '@/components/go-back-button'
 import { Title } from '@/components/title'
-import { Button } from '@/components/ui/button'
 import { isValid } from '@/helper/validate-uuid'
 import { useClassDetails } from '@/hooks/useClassDetails'
 import { redirect } from 'next/navigation'
@@ -35,16 +35,7 @@ export default function ClassInfoPage({
   }
 
   if (error) {
-    return (
-      <section className='mx-auto w-full max-w-[1440px] flex-grow px-8'>
-        <div className='flex flex-col items-center justify-center pt-16'>
-          <p className='mb-4 text-red-500'>{error}</p>
-          <Button onClick={() => window.location.reload()}>
-            Tentar novamente
-          </Button>
-        </div>
-      </section>
-    )
+    return <ErrorMessageContainer message={error} />
   }
 
   const { classInfo, categoryList } = data
@@ -53,7 +44,7 @@ export default function ClassInfoPage({
     return <ClassDetailsSkeleton />
   }
   return (
-    <section className='mx-auto max-h-screen w-full max-w-[1440px] flex-grow px-8'>
+    <>
       <div className='flex items-center justify-between'>
         <Title>
           Turma <span className='italic'>{classInfo.details.name}</span>
@@ -65,6 +56,6 @@ export default function ClassInfoPage({
         {categoryList.find(c => c.key === classInfo.details.category)?.label}
       </p>
       <StudentsTable students={classInfo.students} className='my-8' />
-    </section>
+    </>
   )
 }

@@ -38,19 +38,19 @@ export function Header() {
       </Link>
       {isLoading && (
         <div className='flex items-center gap-4'>
-          <ul className='hidden space-x-4 lg:flex'>
+          <ul className='hidden space-x-4 md:flex'>
             <Skeleton className='h-6 w-20' />
             <Skeleton className='h-6 w-20' />
             <Skeleton className='h-6 w-20' />
           </ul>
 
-          <Skeleton className='size-10 rounded-full lg:h-12 lg:w-48 lg:rounded-md' />
+          <Skeleton className='size-10 rounded-full md:h-12 md:w-48 md:rounded-md' />
           <Skeleton className='size-8' />
         </div>
       )}
       {user && !isLoading && (
         <div className='flex items-center gap-2'>
-          <ul className='hidden space-x-4 lg:flex'>
+          <ul className='hidden space-x-4 md:flex'>
             {pageLinks.map(link => (
               <li key={link.name}>
                 <Link href={link.path} className='group relative'>
