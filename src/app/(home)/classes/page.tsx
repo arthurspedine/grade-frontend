@@ -1,5 +1,7 @@
 'use client'
 
+import { ErrorMessageContainer } from '@/components/error-message-container'
+import { NoItemsCard } from '@/components/no-items-card'
 import { Title } from '@/components/title'
 import { Button } from '@/components/ui/button'
 import {} from '@/components/ui/card'
@@ -17,8 +19,6 @@ import { Plus } from 'lucide-react'
 import Link from 'next/link'
 import { ClassesSkeleton } from './_components/classes-skeleton'
 import { DisableClassDialog } from './_components/disable-class-dialog'
-import { NoItemsCard } from '@/components/no-items-card'
-import { ErrorMessageContainer } from '@/components/error-message-container'
 
 export default function ClassesPage() {
   const { data, loading, error } = useClasses()

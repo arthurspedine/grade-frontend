@@ -1,5 +1,6 @@
 'use client'
 
+import { ErrorMessageContainer } from '@/components/error-message-container'
 import { GoBackButton } from '@/components/go-back-button'
 import { Title } from '@/components/title'
 import { Card, CardContent } from '@/components/ui/card'
@@ -10,7 +11,6 @@ import { redirect } from 'next/navigation'
 import { use } from 'react'
 import { EvaluatePageSkeleton } from './_components/evaluate-page-skeleton'
 import { StudentsFilterableList } from './_components/students-filterable-list'
-import { ErrorMessageContainer } from '@/components/error-message-container'
 
 export default function EvaluateInfoAssessmentPage({
   params,
