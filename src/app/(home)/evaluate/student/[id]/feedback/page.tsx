@@ -264,7 +264,7 @@ export default function FeedbackPage() {
                     </label>
                   </div>
                   <div className='flex flex-wrap items-center gap-2'>
-                    {!aiFeedback && (
+                    {aiFeedback && (
                       <Button
                         variant={'outline'}
                         onClick={() => updateFeedback(aiFeedback, 'final')}
