@@ -1,0 +1,52 @@
+name: grade
+services:
+  mysql:
+    image: mysql:8.0.40
+    container_name: grade-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${GRADE_DB_PASSWORD}
+      MYSQL_USER: ${GRADE_DB_USER}
+      MYSQL_PASSWORD: ${GRADE_DB_PASSWORD}
+      MYSQL_DATABASE: grade
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    image: grade/server
+    container_name: grade-backend
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      GRADE_DB_URL: jdbc:mysql://mysql:3306/grade
+      GRADE_DB_USER: ${GRADE_DB_USER}
+      GRADE_DB_PASSWORD: ${GRADE_DB_PASSWORD}
+      GRADE_OPENAI_KEY: ${GRADE_OPENAI_KEY}
+      PORT: 3010
+      SPRING_PROFILES_ACTIVE: prod
+    ports:
+      - "3010:3010"
+
+  frontend:
+    image: grade/web
+    container_name: grade-frontend
+    depends_on:
+      - backend
+    environment:
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      NEXTAUTH_URL: ${NEXTAUTH_URL}
+      BACKEND_URL: http://backend:3010
+    ports:
+      - "3000:3000"
+
+volumes:
+  mysql_data:
