@@ -3,6 +3,8 @@ import {
   BookOpen,
   Brain,
   ClipboardCheck,
+  ExternalLink,
+  Github,
   LogIn,
   type LucideProps,
   UserPlus,
@@ -71,7 +73,7 @@ export default async function MainPage() {
           </div>
         </div>
         {/* CONTENT */}
-        <div className='py-16'>
+        <div className='pt-16 pb-4'>
           <h2 className='mb-4 text-center font-bold text-lg sm:mb-8 md:text-2xl lg:mb-12'>
             Como o{' '}
             <span className='mr-1 font-bold text-xl italic md:text-3xl'>
@@ -99,6 +101,41 @@ export default async function MainPage() {
           </div>
         </div>
       </section>
+
+      {/* FOOTER */}
+      <footer className='mx-auto w-full max-w-[1440px] px-4 pb-24 sm:px-6 sm:pb-8 lg:px-8'>
+        <div className='border-border border-t pt-8'>
+          <div className='flex items-center justify-between gap-4 text-center sm:text-left'>
+            <div className='flex flex-col gap-1'>
+              <p className='font-medium text-foreground text-sm'>Grade</p>
+            </div>
+
+            <div className='flex items-center gap-6'>
+              <a
+                href='https://github.com/tiago-ferrer/grade-frontend'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='flex items-center gap-2 text-muted-foreground text-sm transition-colors hover:text-foreground'
+              >
+                <Github size={16} />
+                <span>Frontend</span>
+                <ExternalLink size={12} />
+              </a>
+
+              <a
+                href='https://github.com/tiago-ferrer/grade'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='flex items-center gap-2 text-muted-foreground text-sm transition-colors hover:text-foreground'
+              >
+                <Github size={16} />
+                <span>Backend</span>
+                <ExternalLink size={12} />
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }
