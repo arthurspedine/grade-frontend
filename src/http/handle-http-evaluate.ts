@@ -35,10 +35,13 @@ export async function getChatFeedback(
   answeredCategories: string,
   rawFeedback: string
 ) {
-  return await authenticatedFetch<AiGeneratedFeedbackType>('/evaluate/chat', {
-    method: 'POST',
-    body: { answeredCategories, rawFeedback },
-  })
+  return await authenticatedFetch<AiGeneratedFeedbackType>(
+    '/evaluate/feedback',
+    {
+      method: 'POST',
+      body: { answeredCategories, rawFeedback },
+    }
+  )
 }
 
 export async function handleFinishEvaluation(formData: StudentEvaluationInfo) {
