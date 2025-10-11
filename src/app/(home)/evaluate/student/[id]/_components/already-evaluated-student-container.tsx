@@ -27,6 +27,7 @@ import {
   TrendingUp,
   User,
 } from 'lucide-react'
+import { DownloadPdfButton } from './download-pdf-button'
 
 export function AlreadyEvaluatedStudentContainer({
   initialData,
@@ -50,14 +51,17 @@ export function AlreadyEvaluatedStudentContainer({
       <Card>
         <CardHeader className='pb-4'>
           <div className='w-full space-y-1'>
-            <CardTitle className='flex items-center justify-between text-2xl'>
+            <CardTitle className='flex items-start justify-between text-2xl sm:items-center'>
               <h2 className='flex items-center gap-2'>
                 <CheckCircle className='size-6 text-green-600 dark:text-green-400' />
                 Avaliação Finalizada
               </h2>
-              <GoBackButton
-                goBackUrl={`/evaluate/${initialData.student.assessmentId}/${initialData.student.classId}`}
-              />
+              <div className='flex flex-col-reverse items-end gap-2 sm:flex-row sm:items-center'>
+                <DownloadPdfButton id={initialData.student.id} />
+                <GoBackButton
+                  goBackUrl={`/evaluate/${initialData.student.assessmentId}/${initialData.student.classId}`}
+                />
+              </div>
             </CardTitle>
             <CardDescription className='flex flex-col gap-1'>
               <div className='flex items-center gap-2 text-lg'>
