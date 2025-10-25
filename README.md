@@ -10,7 +10,7 @@
 
 Grade is a modern, responsive web application for comprehensive assessment management, designed to streamline the process of creating, managing, and evaluating student assessments. This repository contains the **frontend application** built with Next.js that provides an intuitive user interface for the Grade platform.
 
-> **Note**: This is the frontend repository. The backend API is available in a separate repository: [Grade Backend Repository](https://github.com/tiago-ferrer/grade)
+> **Note**: This is the frontend repository. The backend API is available in a separate repository: [Grade Backend Repository](https://github.com/arthurspedine/grade)
 
 ## 🚀 Live Application
 
@@ -85,7 +85,7 @@ Before running this application, ensure you have the following installed:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/tiago-ferrer/grade-frontend.git
+git clone https://github.com/arthurspedine/grade-frontend.git
 cd grade-frontend
 ```
 
@@ -306,6 +306,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 If you encounter any issues or have questions:
 
-1. Check the [Issues](https://github.com/tiago-ferrer/grade-frontend/issues) page
+1. Check the [Issues](https://github.com/arthurspedine/grade-frontend/issues) page
 2. Create a new issue with detailed information about your problem
 3. Include relevant error messages and system information
