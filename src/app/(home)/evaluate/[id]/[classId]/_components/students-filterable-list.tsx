@@ -26,14 +26,10 @@ import { useMemo, useState } from 'react'
 
 interface StudentsFilterableListProps {
   assessmentInfo: AssessmentInfoType
-  assessmentId: string
-  classId: string
 }
 
 export function StudentsFilterableList({
   assessmentInfo,
-  assessmentId,
-  classId,
 }: StudentsFilterableListProps) {
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')

@@ -59,7 +59,7 @@ export default function EvaluateInfoAssessmentPage({
         <p className='text-muted-foreground'>Gerenciar avaliações dos alunos</p>
         {/* Progress Summary */}
         <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-4'>
-          <SummaryCard bgColor='bg-blue-500'>
+          <SummaryCard bgColor='bg-blue-600'>
             <div className='flex items-center justify-between'>
               <h3 className='font-medium text-white'>Total de Alunos</h3>
               <div className='rounded-full bg-white/20 p-2'>
@@ -76,7 +76,7 @@ export default function EvaluateInfoAssessmentPage({
             </div>
           </SummaryCard>
 
-          <SummaryCard bgColor='bg-green-500'>
+          <SummaryCard bgColor='bg-green-600'>
             <div className='flex items-center justify-between'>
               <h3 className='font-medium text-white'>Avaliados</h3>
               <div className='rounded-full bg-white/20 p-2'>
@@ -95,7 +95,7 @@ export default function EvaluateInfoAssessmentPage({
             </div>
           </SummaryCard>
 
-          <SummaryCard bgColor='bg-orange-500'>
+          <SummaryCard bgColor='bg-orange-600'>
             <div className='flex items-center justify-between'>
               <h3 className='font-medium text-white'>Pendentes</h3>
               <div className='rounded-full bg-white/20 p-2'>
@@ -114,7 +114,7 @@ export default function EvaluateInfoAssessmentPage({
             </div>
           </SummaryCard>
 
-          <SummaryCard bgColor='bg-purple-500'>
+          <SummaryCard bgColor='bg-purple-600'>
             <div className='flex items-center justify-between'>
               <h3 className='font-medium text-white'>Progresso</h3>
               <div className='rounded-full bg-white/20 p-2'>
@@ -136,11 +136,7 @@ export default function EvaluateInfoAssessmentPage({
       </div>
 
       {/* Students List with Filters */}
-      <StudentsFilterableList
-        assessmentInfo={assessmentInfo}
-        assessmentId={assessmentId}
-        classId={classId}
-      />
+      <StudentsFilterableList assessmentInfo={assessmentInfo} />
     </>
   )
 }

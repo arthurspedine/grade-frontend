@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/dialog'
 import { disableClass } from '@/http/handle-http-class'
 import type { ClassType } from '@/types'
+import { Ban } from 'lucide-react'
 import { toast } from 'sonner'
 
 export function DisableClassDialog({ id, name, active }: ClassType) {
@@ -30,8 +31,14 @@ export function DisableClassDialog({ id, name, active }: ClassType) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant={'destructive'} className='w-full' disabled={!active}>
-          Desativar
+        <Button
+          variant='ghost'
+          size='sm'
+          disabled={!active}
+          className='text-destructive hover:bg-destructive/10 hover:text-destructive'
+          title='Desativar turma'
+        >
+          <Ban className='size-4' />
         </Button>
       </DialogTrigger>
       <DialogContent>

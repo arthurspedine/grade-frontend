@@ -19,10 +19,10 @@ export function EvaluatePageSkeleton() {
         <Skeleton className='h-5 w-64' />
         {/* Progress Summary Skeleton */}
         <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-4'>
-          <SummaryCardSkeleton bgColor='bg-blue-500' />
-          <SummaryCardSkeleton bgColor='bg-green-500' />
-          <SummaryCardSkeleton bgColor='bg-orange-500' />
-          <SummaryCardSkeleton bgColor='bg-purple-500' />
+          <SummaryCardSkeleton bgColor='bg-blue-600' />
+          <SummaryCardSkeleton bgColor='bg-green-600' />
+          <SummaryCardSkeleton bgColor='bg-orange-600' />
+          <SummaryCardSkeleton bgColor='bg-purple-600' />
         </div>
       </div>
 

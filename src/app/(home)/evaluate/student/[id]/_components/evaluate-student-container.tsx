@@ -170,12 +170,12 @@ export function EvaluateStudentContainer({
                     setCurrentQuestionIndex(index)
                     setError(null)
                   }}
-                  className={`flex size-8 items-center justify-center rounded-full font-medium text-xs transition-colors ${
+                  className={`flex size-9 items-center justify-center rounded-full font-semibold text-xs transition-all ${
                     index === currentQuestionIndex
-                      ? 'bg-primary text-primary-foreground'
+                      ? 'bg-emerald-600 text-white shadow-md ring-2 ring-emerald-300 ring-offset-2 dark:bg-emerald-500 dark:ring-emerald-700'
                       : isQuestionComplete(index)
-                        ? 'bg-green-100 text-green-700 hover:bg-green-200'
-                        : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                        ? 'bg-green-100 text-green-700 shadow-sm hover:bg-green-200 dark:bg-green-900 dark:text-green-300 dark:hover:bg-green-800'
+                        : 'bg-muted text-muted-foreground shadow-sm hover:bg-muted/80'
                   }`}
                 >
                   {isQuestionComplete(index) ? (
@@ -191,7 +191,10 @@ export function EvaluateStudentContainer({
 
         <CardContent className='space-y-6'>
           {currentQuestion.categories.map((category, categoryIndex) => (
-            <Card key={category.id} className='border-l-4 border-l-primary/30'>
+            <Card
+              key={category.id}
+              className='border-l-4 border-l-green-600/30'
+            >
               <CardContent className='p-4'>
                 <div className='space-y-4'>
                   <div className='flex items-center justify-between'>
@@ -391,7 +394,7 @@ export function EvaluateStudentContainer({
                     />
                     <span className='text-xs sm:text-sm'>
                       Nota atribuída:{' '}
-                      <strong>
+                      <strong className='text-green-500'>
                         {category.answeredScore?.toFixed(2) || '0.00'}
                       </strong>{' '}
                       pontos

@@ -1,4 +1,5 @@
 import { Title } from '@/components/title'
+import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import {
   Table,
@@ -9,21 +10,50 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { LayoutGrid, LayoutList } from 'lucide-react'
 
 export function ClassesSkeleton() {
   return (
     <>
-      <div className='flex items-center justify-between'>
+      {/* Header */}
+      <div className='mb-6 flex items-center justify-between'>
         <Title>Turmas</Title>
-        <Skeleton className='h-5 w-32' /> {/* Add class link */}
+        <Skeleton className='h-10 w-32' /> {/* Nova Turma button */}
       </div>
 
-      <div className='mt-4'>
+      {/* Search, Filters and View Toggle */}
+      <div className='mb-6 flex flex-col gap-4'>
+        <div className='flex flex-col gap-4 sm:flex-row'>
+          {/* Search */}
+          <div className='relative max-w-md flex-1'>
+            <Skeleton className='h-10 w-full rounded-md' />
+          </div>
+
+          {/* Category filter */}
+          <Skeleton className='h-10 w-full rounded-md sm:w-48' />
+
+          {/* View toggle buttons */}
+          <div className='flex gap-2'>
+            <Button variant='outline' size='icon' disabled>
+              <LayoutList className='size-4' />
+            </Button>
+            <Button variant='outline' size='icon' disabled>
+              <LayoutGrid className='size-4' />
+            </Button>
+          </div>
+        </div>
+
+        {/* Results Counter */}
+        <Skeleton className='h-4 w-48' />
+      </div>
+
+      {/* Table View */}
+      <div className='overflow-hidden rounded-lg bg-accent p-2 shadow-md'>
         <Table>
           <TableCaption>Lista de turmas</TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead className='w-[100px]'>Turma</TableHead>
+              <TableHead className='w-[200px]'>Turma</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Categoria</TableHead>
               <TableHead className='text-right'>Opções</TableHead>
@@ -45,19 +75,22 @@ function ClassRowSkeleton() {
   return (
     <TableRow>
       <TableCell className='font-medium'>
-        <Skeleton className='h-4 w-20' />
+        <div className='flex items-center gap-3'>
+          <Skeleton className='size-8 rounded-full' /> {/* Green icon */}
+          <Skeleton className='h-4 w-32' />
+        </div>
       </TableCell>
       <TableCell>
-        <Skeleton className='h-4 w-16' />
+        <Skeleton className='h-6 w-20 rounded-full' /> {/* Badge */}
       </TableCell>
       <TableCell>
-        <Skeleton className='h-4 w-24' />
+        <Skeleton className='h-4 w-32' />
       </TableCell>
-      <TableCell className='flex w-full justify-end'>
-        <div className='mr-2 flex max-w-72 flex-grow space-x-2'>
-          <Skeleton className='h-9 w-24' /> {/* Ver turma button */}
-          <Skeleton className='h-9 w-20' /> {/* Editar button */}
-          <Skeleton className='h-9 w-24' /> {/* Disable button */}
+      <TableCell>
+        <div className='flex justify-end gap-2'>
+          <Skeleton className='h-8 w-20' /> {/* Ver turma button */}
+          <Skeleton className='h-8 w-16' /> {/* Editar button */}
+          <Skeleton className='size-8 rounded-md' /> {/* Icon button */}
         </div>
       </TableCell>
     </TableRow>

@@ -123,8 +123,8 @@ export default function DashboardPage() {
                 className='flex w-full justify-start py-6 transition-all duration-300 hover:bg-card/15 hover:shadow-md dark:shadow-white/10'
               >
                 <Link href={'/assessments/add'}>
-                  <div className='mr-3 rounded-md bg-blue-100 p-2'>
-                    <ClipboardCheck size={20} className='text-bluecolor' />
+                  <div className='mr-3 rounded-md bg-purple-100 p-2'>
+                    <ClipboardCheck size={20} className='text-purple-700' />
                   </div>
                   <span>Criar nova avaliação</span>
                 </Link>

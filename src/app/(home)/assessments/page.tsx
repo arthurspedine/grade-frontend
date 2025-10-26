@@ -26,10 +26,13 @@ import { useAssessments } from '@/hooks/useAssessments'
 import type { AssessmentDetailsType } from '@/types'
 import {
   AlertCircle,
+  BookOpen,
   Calendar,
   CheckCircle,
+  ClipboardCheck,
   Plus,
   Search,
+  TrendingUp,
   Users,
   X,
 } from 'lucide-react'
@@ -250,64 +253,86 @@ export default function AssessmentsPage() {
                 return (
                   <Card
                     key={assessment.id}
-                    className='overflow-hidden transition-shadow hover:shadow-lg dark:shadow-white/10'
+                    className='group overflow-hidden transition-all hover:shadow-lg dark:shadow-white/10'
                   >
-                    <CardHeader className='pb-3'>
-                      <div className='flex items-start justify-between'>
-                        <div className='flex-1'>
-                          <h3 className='mb-2 font-semibold text-lg'>
-                            {assessment.name}
-                          </h3>
-                          <div className='mb-3 flex items-center gap-4 text-muted-foreground text-sm'>
-                            <div className='flex items-center gap-1'>
-                              <Calendar className='size-4' />
-                              {formatDate(assessment.assessmentDate)}
-                            </div>
-                            <div className='flex items-center gap-1'>
-                              <Users className='size-4' />
-                              {assessment.classes.length} turma
-                              {assessment.classes.length !== 1 ? 's' : ''}
-                            </div>
+                    <CardHeader className='rounded-t-md border-b bg-gradient-to-r from-purple-50 to-violet-50 pb-4 dark:from-purple-900/20 dark:to-violet-900/20'>
+                      <div className='flex items-start justify-between gap-4'>
+                        <div className='flex flex-1 items-start gap-3'>
+                          <div className='rounded-lg bg-purple-500 p-2.5 transition-colors group-hover:bg-purple-600'>
+                            <ClipboardCheck className='size-5 text-white' />
                           </div>
-
-                          {/* Progress Summary */}
-                          <div className='space-y-2'>
-                            <div className='flex items-center justify-between'>
-                              <span className='font-medium text-sm'>
-                                Progresso Geral
-                              </span>
-                              <Badge
-                                variant={status.variant}
-                                className='flex items-center gap-1'
-                              >
-                                <StatusIcon className='size-3' />
-                                {status.label}
-                              </Badge>
+                          <div className='flex-1 space-y-1'>
+                            <h3 className='font-semibold text-lg leading-tight'>
+                              {assessment.name}
+                            </h3>
+                            <div className='flex flex-wrap items-center gap-x-4 gap-y-1 text-muted-foreground text-sm'>
+                              <div className='flex items-center gap-1.5'>
+                                <Calendar className='size-4' />
+                                <span>
+                                  {formatDate(assessment.assessmentDate)}
+                                </span>
+                              </div>
+                              <div className='flex items-center gap-1.5'>
+                                <Users className='size-4' />
+                                <span>
+                                  {assessment.classes.length} turma
+                                  {assessment.classes.length !== 1 ? 's' : ''}
+                                </span>
+                              </div>
                             </div>
-                            <Progress
-                              value={progress.percentage}
-                              className='h-2'
-                            />
-                            <p className='text-muted-foreground text-xs'>
-                              {progress.evaluatedStudents} de{' '}
-                              {progress.totalStudents} alunos avaliados (
-                              {Math.round(progress.percentage)}%)
-                            </p>
                           </div>
                         </div>
+                        <Badge
+                          variant={status.variant}
+                          className='flex shrink-0 items-center gap-1.5 px-3 py-1'
+                        >
+                          <StatusIcon className='size-3.5' />
+                          <span className='font-medium'>{status.label}</span>
+                        </Badge>
                       </div>
                     </CardHeader>
 
-                    <CardContent className='pt-0'>
+                    <CardContent className='rounded-b-md bg-accent p-5'>
+                      {/* Progress Summary */}
+                      <div className='mb-4 space-y-3'>
+                        <div className='flex items-center justify-between'>
+                          <div className='flex items-center gap-2'>
+                            <TrendingUp className='size-4 text-purple-600 dark:text-purple-400' />
+                            <span className='font-medium text-sm'>
+                              Progresso Geral
+                            </span>
+                          </div>
+                          <span className='font-semibold text-sm'>
+                            {Math.round(progress.percentage)}%
+                          </span>
+                        </div>
+                        <Progress
+                          value={progress.percentage}
+                          className='h-2.5'
+                        />
+                        <p className='text-muted-foreground text-xs'>
+                          <span className='font-medium text-foreground'>
+                            {progress.evaluatedStudents}
+                          </span>{' '}
+                          de{' '}
+                          <span className='font-medium text-foreground'>
+                            {progress.totalStudents}
+                          </span>{' '}
+                          alunos avaliados
+                        </p>
+                      </div>
                       {/* Classes Details */}
                       <Accordion type='single' collapsible className='w-full'>
                         <AccordionItem value='details' className='border-none'>
-                          <AccordionTrigger className='py-2 hover:no-underline'>
-                            <span className='font-medium text-sm'>
-                              Ver detalhes das turmas
-                            </span>
+                          <AccordionTrigger className='rounded-md py-3 hover:bg-muted/50 hover:no-underline'>
+                            <div className='flex items-center gap-2'>
+                              <BookOpen className='size-4 text-primary' />
+                              <span className='font-medium text-sm'>
+                                Ver detalhes das turmas
+                              </span>
+                            </div>
                           </AccordionTrigger>
-                          <AccordionContent className='pt-2'>
+                          <AccordionContent className='pt-3'>
                             <div className='space-y-3'>
                               {assessment.classes.map(classItem => {
                                 const classProgress =
@@ -321,30 +346,47 @@ export default function AssessmentsPage() {
                                 return (
                                   <div
                                     key={classItem.id}
-                                    className='rounded-lg border bg-muted/20 p-3'
+                                    className='group/class rounded-lg border bg-muted/30 p-4 transition-colors hover:bg-muted/50'
                                   >
-                                    <div className='mb-2 flex items-center justify-between'>
-                                      <h4 className='font-medium'>
+                                    <div className='mb-3 flex items-center justify-between'>
+                                      <h4 className='font-semibold text-base'>
                                         {classItem.name}
                                       </h4>
                                       <Badge
                                         variant={
                                           isCompleted ? 'default' : 'secondary'
                                         }
+                                        className='flex items-center gap-1'
                                       >
-                                        {isCompleted ? 'Concluída' : 'Pendente'}
+                                        {isCompleted ? (
+                                          <>
+                                            <CheckCircle className='size-3' />
+                                            Concluída
+                                          </>
+                                        ) : (
+                                          <>
+                                            <AlertCircle className='size-3' />
+                                            Pendente
+                                          </>
+                                        )}
                                       </Badge>
                                     </div>
 
-                                    <div className='space-y-2'>
+                                    <div className='space-y-2.5'>
                                       <Progress
                                         value={classProgress}
-                                        className='h-1.5'
+                                        className='h-2'
                                       />
-                                      <div className='flex items-center justify-between'>
-                                        <span className='text-muted-foreground text-xs'>
-                                          {classItem.countEvaluatedStudents} /{' '}
-                                          {classItem.countStudents} alunos
+                                      <div className='flex items-center justify-between gap-4'>
+                                        <span className='text-muted-foreground text-sm'>
+                                          <span className='font-medium text-foreground'>
+                                            {classItem.countEvaluatedStudents}
+                                          </span>{' '}
+                                          de{' '}
+                                          <span className='font-medium text-foreground'>
+                                            {classItem.countStudents}
+                                          </span>{' '}
+                                          alunos ({Math.round(classProgress)}%)
                                         </span>
                                         <Button
                                           variant={
@@ -352,6 +394,7 @@ export default function AssessmentsPage() {
                                           }
                                           size='sm'
                                           asChild
+                                          className='shrink-0'
                                         >
                                           <Link
                                             href={`/evaluate/${assessment.id}/${classItem.id}`}
